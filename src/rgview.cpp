@@ -2,9 +2,9 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <GL/glut.h>
-#include "../include/rgdefines.hpp"
-#include "../include/option.hpp"
-#include "../include/rgview.hpp"
+#include "rgdefines.hpp"
+#include "option.hpp"
+#include "rgview.hpp"
 
 namespace eRG
 {
@@ -17,10 +17,10 @@ namespace eRG
 	* @brief Builds %View from passed vectors.
 	*/
 	View::View(glm::vec3 eye, glm::vec3 center, glm::vec3 normal)
-		:	eye_{std::move(eye)}, center_{std::move(center + eye)}, normal_{std::move(normal)},
+		:	eye_{std::move(eye)}, center_{std::move(center)}, normal_{std::move(normal)},
 			theta_{pi}, phi_{pi/2},
 			d_theta_{0.0f}, d_phi_{0.0f},
-			msp_{0.2f}, lsp_{pi/90.0f}
+			msp_{0.1f}, lsp_{pi/80.0f}
 	{
 		std::clog << "View: Default contructor" << std::endl;
 	}

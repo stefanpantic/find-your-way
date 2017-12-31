@@ -1,8 +1,8 @@
 #include <iostream>
 #include <GL/glut.h>
 #include <glm/vec3.hpp>
-#include "../include/option.hpp"
-#include "../include/rghub.hpp"
+#include "option.hpp"
+#include "rghub.hpp"
 
 namespace eRG
 {
@@ -51,7 +51,7 @@ namespace eRG
 		View::viewport(	glm::vec2{0, 0},
 						glm::vec2{w, h});
 
-		View::perspective(60.0f, static_cast<float>(w)/h, 1.0f, 100.0f);
+		View::perspective(60.0f, static_cast<float>(w)/h, 0.1f, 100.0f);
 		View::matrix_mode(opt::Transform::MODELVIEW);
 	}
 
