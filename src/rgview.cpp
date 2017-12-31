@@ -17,7 +17,7 @@ namespace eRG
 	* @brief Builds %View from passed vectors.
 	*/
 	View::View(glm::vec3 eye, glm::vec3 center, glm::vec3 normal)
-		:	eye_{std::move(eye)}, center_{std::move(center)}, normal_{std::move(normal)},
+		:	eye_{std::move(eye)}, center_{std::move(center + eye)}, normal_{std::move(normal)},
 			theta_{pi}, phi_{pi/2},
 			d_theta_{0.0f}, d_phi_{0.0f},
 			msp_{0.2f}, lsp_{pi/90.0f}
@@ -54,7 +54,6 @@ namespace eRG
 		// TODO: find a workaround!!!
 		auto tmp{eye_ + center_};
 
-		identity_matrix();
 		gluLookAt(	eye_.x, eye_.y, eye_.z,
 					tmp.x, tmp.y, tmp.z,
 					normal_.x, normal_.y, normal_.z);
@@ -106,10 +105,35 @@ namespace eRG
 
 	/*
 	* @brief Set the perspective view frustrum.
+	*
+	* First parameter is the field of view, second is the aspect ratio of the display
+	* and the final two parameters are the near and far clipping planes.
 	*/
 	void View::perspective(double fov, double aspect_ratio, double z_near, double z_far)
 	{
 		gluPerspective(fov, aspect_ratio, z_near, z_far);
+	}
+
+	/*
+	* @brief Sets the paralel projection square.
+	*
+	* Parameters are as follows: left clipping plane, right clipping plane,
+	* bottom clipping plane, top clipping plane.
+	*/
+	void View::ortho2D(double left, double right, double bottom, double top)
+	{
+		gluOrtho2D(left, right, bottom, top);
+	}
+
+	/*
+	* @brief Sets the paralel projection volume.
+	*
+	* Parameters are as follows: left clipping plane, right clipping plane,
+	* bottom clipping plane, top clipping plane, z near plane, z far plane.
+	*/
+	void View::ortho(double left, double right, double bottom, double top, double z_near, double z_far)
+	{
+		glOrtho(left, right, bottom, top, z_near, z_far);
 	}
 	/* @} */
 

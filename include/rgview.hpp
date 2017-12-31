@@ -12,7 +12,7 @@ namespace eRG
 	/* View declaration: */
 	/* @{ */
 	/*
-	*	@brief Class used for handing visual rendering options.
+	*	@brief Class used for handing MVP matrix options.
 	*/
 	class View
 	{
@@ -25,12 +25,16 @@ namespace eRG
 			explicit View(const View &other);
 
 			/* Set matrix transformations */
-			void identity_matrix();
 			void look_at();
 			void look_at(glm::vec3 eye, glm::vec3 center, glm::vec3 normal);
-			void matrix_mode(opt::Transform mode);
-			void viewport(glm::vec2 lower_left, glm::vec2 upper_right);
-			void perspective(double fov, double aspect_ratio, double z_near, double z_far);
+
+			/* Matrix mode */
+			static void identity_matrix();
+			static void matrix_mode(opt::Transform mode);
+			static void viewport(glm::vec2 lower_left, glm::vec2 upper_right);
+			static void perspective(double fov, double aspect_ratio, double z_near, double z_far);
+			static void ortho2D(double left, double right, double bottom, double top);
+			static void ortho(double left, double right, double bottom, double top, double z_near, double z_far);
 
 			/* Get stored vectors */
 			const glm::vec3 &get_eye();
