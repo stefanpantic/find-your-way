@@ -4,8 +4,9 @@ DEBUG 		= -g
 INCLUDE 	= -I./include
 CXXFLAGS 	= -Wall -Wextra $(STANDARD) $(INCLUDE) $(DEBUG)
 LDFLAGS 	= -lGL -lGLU -lglut -lm
+BIN			= build
 MAIN		= main.cpp
-MAINOBJ 	= $(MAIN:.cpp=.o)
+MAINOBJ 	= $(BIN)/$(MAIN:.cpp=.o)
 SRC 		= src/rgview.cpp \
 			  src/rghub.cpp
 HEAD 		= $(SRC:.cpp=.hpp)
@@ -13,22 +14,27 @@ HEADONLY 	= include/rgwindow.hpp \
 			  include/rgdefines.hpp \
 			  include/option.hpp \
 			  include/opt/*.hpp
-OBJ 		= $(SRC:.cpp=.o)
+OBJ 		= $(patsubst src/%.cpp, $(BIN)/%.o, $(SRC))
 TARGET 		= find-your-way
 
 .PHONY: clean zip
 
+all: $(BIN) $(TARGET)
+
 $(TARGET): $(OBJ) $(MAINOBJ)
-	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o $(BIN)/$@ $^ $(LDFLAGS)
 
 $(MAINOBJ): $(MAIN) $(HEADONLY)
 	$(CXX) $(CXXFLAGS) -o $@ -c $< $(LDFLAGS)
 
-%.o: %.cpp %.hpp
-	$(CXX) $(CXXFLAGS) -o $@ -c $<
+$(BIN)/%.o: src/%.cpp include/%.hpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+$(BIN):
+	@test ! -d $@ && mkdir $@
 
 clean:
-	rm -f $(OBJ) $(MAINOBJ)
+	rm -rf $(BIN)
 	rm -f ~*
 	rm -f $(TARGET)
 
