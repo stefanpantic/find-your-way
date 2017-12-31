@@ -13,7 +13,7 @@ namespace eRG
 	/* @{ */
 	int Hub::width_{0}, Hub::height_{0};
 	int Hub::d_x_{0}, Hub::d_y_{0};
-	View Hub::view_{};
+	View Hub::mview{};
 	/* @} */
 
 	/* Initializer: */
@@ -40,40 +40,40 @@ namespace eRG
 	/*
 	* TODO: @brief decription
 	*/
-	void Hub::display()
-	{
-		glClear(GL_COLOR_BUFFER_BIT |
-				GL_DEPTH_BUFFER_BIT);
-
-		view_.reposition_view();
-		view_.look_at();
-
-		glPushMatrix();
-			glColor3f(1,1,0);
-			glutWireTeapot(2);
-		glPopMatrix();
-
-		glutSwapBuffers();
-	}
-
-	/*
-	* TODO: @brief decription
-	*/
 	void Hub::reshape(int w, int h)
 	{
 		width_ = w;
 		height_ = h;
 
-		view_.matrix_mode(opt::Transform::PROJECTION);
-		view_.identity_matrix();
+		View::matrix_mode(opt::Transform::PROJECTION);
+		View::identity_matrix();
 
-		view_.viewport(
-				glm::vec2{0, 0},
-				glm::vec2{w, h}
-				);
+		View::viewport(	glm::vec2{0, 0},
+						glm::vec2{w, h});
 
-		view_.perspective(60.0f, static_cast<float>(w)/h, 1.0f, 100.0f);
-		view_.matrix_mode(opt::Transform::MODELVIEW);
+		View::perspective(60.0f, static_cast<float>(w)/h, 1.0f, 100.0f);
+		View::matrix_mode(opt::Transform::MODELVIEW);
+	}
+
+	/*
+	* TODO: @brief decription
+	*/
+	void Hub::display()
+	{
+		glClear(GL_COLOR_BUFFER_BIT |
+				GL_DEPTH_BUFFER_BIT);
+
+		View::identity_matrix();
+
+		mview.reposition_view();
+		mview.look_at();
+
+		glPushMatrix();
+			glColor3f(1,1,0);
+			glutWireTeapot(1);
+		glPopMatrix();
+
+		glutSwapBuffers();
 	}
 	/* @} */
 
@@ -90,16 +90,16 @@ namespace eRG
 		switch(key)
 		{
 			case 'w':
-				view_.center_move(opt::View::UP);
+				mview.center_move(opt::View::UP);
 				break;
 			case 's':
-				view_.center_move(opt::View::DOWN);
+				mview.center_move(opt::View::DOWN);
 				break;
 			case 'a':
-				view_.center_move(opt::View::LEFT);
+				mview.center_move(opt::View::LEFT);
 				break;
 			case 'd':
-				view_.center_move(opt::View::RIGHT);
+				mview.center_move(opt::View::RIGHT);
 				break;
 		}
 	}
@@ -118,11 +118,11 @@ namespace eRG
 				std::exit(0);
 			case 'w':
 			case 's':
-				view_.center_move(opt::View::STOP_VERTICAL);
+				mview.center_move(opt::View::STOP_VERTICAL);
 				break;
 			case 'a':
 			case 'd':
-				view_.center_move(opt::View::STOP_HORIZONTAL);
+				mview.center_move(opt::View::STOP_HORIZONTAL);
 				break;
 		}
 	}
@@ -138,16 +138,16 @@ namespace eRG
 		switch(key)
 		{
 			case GLUT_KEY_UP:
-				view_.eye_move(opt::Position::UP);
+				mview.eye_move(opt::Position::UP);
 				break;
 			case GLUT_KEY_DOWN:
-				view_.eye_move(opt::Position::DOWN);
+				mview.eye_move(opt::Position::DOWN);
 				break;
 			case GLUT_KEY_LEFT:
-				view_.eye_move(opt::Position::LEFT);
+				mview.eye_move(opt::Position::LEFT);
 				break;
 			case GLUT_KEY_RIGHT:
-				view_.eye_move(opt::Position::RIGHT);
+				mview.eye_move(opt::Position::RIGHT);
 				break;
 		}
 	}
@@ -164,11 +164,11 @@ namespace eRG
 		{
 			case GLUT_KEY_UP:
 			case GLUT_KEY_DOWN:
-				view_.eye_move(opt::Position::STOP_FORWARD);
+				mview.eye_move(opt::Position::STOP_FORWARD);
 				break;
 			case GLUT_KEY_LEFT:
 			case GLUT_KEY_RIGHT:
-				view_.eye_move(opt::Position::STOP_SIDEWAYS);
+				mview.eye_move(opt::Position::STOP_SIDEWAYS);
 				break;
 		}
 	}

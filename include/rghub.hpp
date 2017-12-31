@@ -9,6 +9,8 @@
 namespace eRG
 {
 
+	/* Hub declaration: */
+	/* @{ */
 	/*
 	* @brief Central Hub in charge of handling OpenGL functionality.
 	*/
@@ -20,8 +22,8 @@ namespace eRG
 			static void initialize();
 
 			/* Display callbacks */
-			static void display();
 			static void reshape(int w, int h);
+			static void display();
 
 			/* Keyboard callbacks */
 			static void keyboard(unsigned char key, int x, int y);
@@ -51,8 +53,8 @@ namespace eRG
 			static int d_x_, d_y_;
 
 			/* Camera */
-			static View view_;
-
+			static View mview;
 	}; /* class Hub */
+	/* @} */
 
 }; /* namespace eRG */
