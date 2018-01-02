@@ -6,7 +6,7 @@
 namespace eRG
 {
 
-	/* Window declaration : */
+	/* Window declaration: */
 	/* @{ */
 	/*
 	* @brief Abstraction of OpenGL and GLUT window manipulation.
@@ -25,11 +25,7 @@ namespace eRG
 
 			/* Show window */
 			void show();
-		/* Private member variables */
-		private:
-			/* Unique pointer to RGHub */
-			std::unique_ptr<RGHub> mframe_;
-	}; /* class Window */
+	}; /* class eRG::Window */
 	/* @} */
 
 	/* Window implementation: */
@@ -37,13 +33,12 @@ namespace eRG
 	/* Construction: */
 	/* @{ */
 	/*
-	* @brief Builds instance of Window.
+	* @brief Builds instance of %Window.
 	*/
 	template<class RGHub>
 	Window<RGHub>::Window(	int &argc, char **argv, int display_mode,
 							size_t width, size_t height,
 							size_t x, size_t y)
-		:	mframe_{new RGHub}
 	{
 		/* Initialize GLUT */
 		glutInit(&argc, argv);
@@ -52,47 +47,34 @@ namespace eRG
 		glutInitWindowPosition(x, y);
 		glutCreateWindow(argv[0] + 2);
 
-		/* Initialize %mframe_ */
-		mframe_->initialize();
+		/* Initialize %RGHub */
+		RGHub::initialize();
 
 		/* Display callbacks */
-		glutDisplayFunc(mframe_->display);
-		glutReshapeFunc(mframe_->reshape);
+		glutDisplayFunc(RGHub::display);
+		glutReshapeFunc(RGHub::reshape);
 
 		/* Keyboard callbacks */
-		glutKeyboardFunc(mframe_->keyboard);
-		glutKeyboardUpFunc(mframe_->keyboard_up);
-		glutSpecialFunc(mframe_->special);
-		glutSpecialUpFunc(mframe_->special_up);
+		glutKeyboardFunc(RGHub::keyboard);
+		glutKeyboardUpFunc(RGHub::keyboard_up);
+		glutSpecialFunc(RGHub::special);
+		glutSpecialUpFunc(RGHub::special_up);
 
 		///* Mouse callbacks */
-		//glutMouseFunc(mframe_->mouse);
-		//glutMotionFunc(mframe_->motion);
-		//glutPassiveMotionFunc(mframe_->passive_motion);
+		glutMouseFunc(RGHub::mouse);
+		glutMotionFunc(RGHub::motion);
+		glutPassiveMotionFunc(RGHub::passive_motion);
 
 		///* Timer registration */
-		glutTimerFunc(mframe_->TIMER0_INTERVAL, mframe_->timer, mframe_->TIMER0);
-		//glutIdleFunc(mframe_->idle);
-
-		/*
-		*	glutButtonBoxFunc(*mframe_->button_box);
-		*	glutDialsFunc(*mframe_->dials);
-		*	glutEntryFunc(*mframe_->entry);
-		*	glutMenuStatusFunc(*mframe_->menu_status);
-		*	glutSpaceballButtonFunc(*mframe_->spaceball_button);
-		*	glutSpaceballMotionFunc(*mframe_->spaceball_motion);
-		*	glutSpaceballRotateFunc(*mframe_->spaceball_rotate);
-		*	glutTabletButtonFunc(*mframe_->tablet_button);
-		*	glutTabletMotionFunc(*mframe_->tablet_motion);
-		*	glutVisibilityFunc(*mframe_->visibility);
-		*/
+		glutTimerFunc(RGHub::TIMER0_INTERVAL, RGHub::timer, RGHub::TIMER0);
+		glutIdleFunc(RGHub::idle);
 	}
 	/* @} */
 
 	/* Show window: */
 	/* @{ */
 	/*
-	* @brief Show window.
+	* @brief Enter the 'Game loop'.
 	*/
 	template<class RGHub>
 	void Window<RGHub>::show()
