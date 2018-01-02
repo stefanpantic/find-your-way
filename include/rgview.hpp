@@ -20,7 +20,7 @@ namespace eRG
 		public:
 			/* Construction */
 			explicit View(	glm::vec3 eye 	 = {0, 0, -1},	/* Eye point */
-							glm::vec3 center = {0, 0, -1},	/* To point */
+							glm::vec3 center = {0, 0, 0},	/* To point */
 							glm::vec3 normal = {0, 1, 0});	/* Normal vector */
 			explicit View(const View &other);
 

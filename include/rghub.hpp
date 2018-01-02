@@ -36,19 +36,20 @@ namespace eRG
 			static void motion(int x, int y);
 			static void passive_motion(int x, int y);
 
-			/* Timer functions */
+			/* Timer callbacks */
 			static void timer(int timer_id);
 			static void idle();
 
 		/* Public member variables */
 		public:
 			static const int TIMER0{0};
-			static const int TIMER0_INTERVAL{30};
+			static const int TIMER0_INTERVAL{16};
 
 		/* Private member variables */
 		private:
 			/* Window width and height */
 			static int width_, height_;
+
 			/* Delta x, y */
 			static int d_x_, d_y_;
 
