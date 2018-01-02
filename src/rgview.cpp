@@ -18,11 +18,11 @@ namespace eRG
 	*/
 	View::View(glm::vec3 eye, glm::vec3 center, glm::vec3 normal)
 		:	eye_{std::move(eye)}, center_{std::move(center)}, normal_{std::move(normal)},
-			theta_{pi}, phi_{pi/2},
+			theta_{pi/4}, phi_{pi/2},
 			d_theta_{0.0f}, d_phi_{0.0f},
 			msp_{0.1f}, lsp_{pi/80.0f}
 	{
-		std::clog << "View: Default contructor" << std::endl;
+		std::clog << "eRG::View: Default contructor" << std::endl;
 	}
 
 	/*
@@ -32,7 +32,7 @@ namespace eRG
 		:	eye_{other.eye_}, center_{other.center_}, normal_{other.normal_},
 			msp_{other.msp_}, lsp_{other.lsp_}
 	{
-		std::clog << "View: Copy contructor" << std::endl;
+		std::clog << "eRG::View: Copy contructor" << std::endl;
 	}
 	/* @} */
 
@@ -51,7 +51,7 @@ namespace eRG
 	*/
 	void View::look_at()
 	{
-		// TODO: find a workaround!!!
+		// TODO: find an elegant workaround.
 		auto tmp{eye_ + center_};
 
 		gluLookAt(	eye_.x, eye_.y, eye_.z,
