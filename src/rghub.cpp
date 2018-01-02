@@ -3,6 +3,7 @@
 #include <glm/vec3.hpp>
 #include "option.hpp"
 #include "rghub.hpp"
+#include "debug.hpp"
 
 namespace eRG
 {
@@ -13,7 +14,9 @@ namespace eRG
 	/* @{ */
 	int Hub::width_{0}, Hub::height_{0};
 	int Hub::d_x_{0}, Hub::d_y_{0};
-	View Hub::mview{};
+	View Hub::mview{glm::vec3{0, 1, 0},
+					glm::vec3{1, 1, 1},
+					glm::vec3{0, 1, 0}};
 	/* @} */
 
 	/* Initializer: */
@@ -69,15 +72,14 @@ namespace eRG
 		mview.look_at();
 
 		glPushMatrix();
-			glColor3f(1,1,0);
-			glutWireTeapot(1);
+			DEBUG::coordinate_system();
 		glPopMatrix();
 
 		glutSwapBuffers();
 	}
 	/* @} */
 
-	/* Keyboard callbacks */
+	/* Keyboard callbacks: */
 	/* @{ */
 	/*
 	* TODO: @brief decription
@@ -174,8 +176,39 @@ namespace eRG
 	}
 	/* @} */
 
+	/* Mouse callbacks: */
+	/* @{ */
+	/*
+	* TODO: Implement mouse function.
+	*/
+	void Hub::mouse(int key, int state, int x, int y)
+	{
+		static_cast<void>(key);
+		static_cast<void>(state);
+		static_cast<void>(x);
+		static_cast<void>(y);
+	}
 
-	/* Timer functions */
+	/*
+	* TODO: Implement motion function
+	*/
+	void Hub::motion(int x, int y)
+	{
+		static_cast<void>(x);
+		static_cast<void>(y);
+	}
+
+	/*
+	* TODO: Implement passive motion function.
+	*/
+	void Hub::passive_motion(int x, int y)
+	{
+		static_cast<void>(x);
+		static_cast<void>(y);
+	}
+	/* @} */
+
+	/* Timer callbacks: */
 	/* @{ */
 	/*
 	* TODO: @brief decription
@@ -190,6 +223,12 @@ namespace eRG
 				break;
 		}
 	}
+
+	/*
+	* TODO: Implement idle function.
+	*/
+	void Hub::idle()
+	{}
 	/* @} */
 	/* @@} */
 
