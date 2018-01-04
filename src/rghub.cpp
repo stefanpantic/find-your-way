@@ -1,8 +1,10 @@
 #include <iostream>
 #include <GL/glut.h>
 #include <glm/vec3.hpp>
-#include "option.hpp"
 #include "rghub.hpp"
+#include "rgview.hpp"
+#include "rgdefines.hpp"
+#include "option.hpp"
 #include "debug.hpp"
 
 namespace eRG
@@ -48,6 +50,8 @@ namespace eRG
 		width_ = w;
 		height_ = h;
 
+		glutWarpPointer(w/2, h/2);
+
 		View::matrix_mode(opt::Transform::PROJECTION);
 		View::identity_matrix();
 
@@ -71,8 +75,12 @@ namespace eRG
 		mview.reposition_view();
 		mview.look_at();
 
+		/* Temporary */
 		glPushMatrix();
-			DEBUG::coordinate_system();
+			glLineWidth(5);
+				DEBUG::coordinate_system();
+			glLineWidth(1);
+			DEBUG::first_octant(5);
 		glPopMatrix();
 
 		glutSwapBuffers();
@@ -190,7 +198,7 @@ namespace eRG
 	}
 
 	/*
-	* TODO: Implement motion function
+	* TODO: Implement motion function.
 	*/
 	void Hub::motion(int x, int y)
 	{
@@ -199,12 +207,22 @@ namespace eRG
 	}
 
 	/*
-	* TODO: Implement passive motion function.
+	* TODO: @brief decription.
 	*/
 	void Hub::passive_motion(int x, int y)
 	{
-		static_cast<void>(x);
-		static_cast<void>(y);
+		y = height_ - y;
+
+		mview.d_theta_ = mview.get_lspeed() * (d_x_ - x);
+		mview.d_phi_ = mview.get_lspeed() * (d_y_ - y);
+
+		d_x_ = x;
+		d_y_ = y;
+
+		mview.reposition_view();
+
+		mview.center_move(opt::View::STOP_VERTICAL);
+		mview.center_move(opt::View::STOP_HORIZONTAL);
 	}
 	/* @} */
 
