@@ -4,10 +4,12 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
-#include "rgview.hpp"
 
 namespace eRG
 {
+
+	/* Forward declaration of eRG::View */
+	class View;
 
 	/* Hub declaration: */
 	/* @{ */
