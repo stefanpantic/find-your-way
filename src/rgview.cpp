@@ -3,8 +3,8 @@
 #include <glm/vec3.hpp>
 #include <GL/glut.h>
 #include "rgdefines.hpp"
-#include "option.hpp"
 #include "rgview.hpp"
+#include "option.hpp"
 
 namespace eRG
 {
@@ -18,9 +18,9 @@ namespace eRG
 	*/
 	View::View(glm::vec3 eye, glm::vec3 center, glm::vec3 normal)
 		:	eye_{std::move(eye)}, center_{std::move(center)}, normal_{std::move(normal)},
-			theta_{pi/4}, phi_{pi/2},
+			theta_{util::pi/4}, phi_{util::pi/2},
 			d_theta_{0.0f}, d_phi_{0.0f},
-			msp_{0.1f}, lsp_{pi/80.0f}
+			msp_{0.1f}, lsp_{util::pi/180.0f}
 	{
 		std::clog << "eRG::View: Default contructor" << std::endl;
 	}
@@ -306,18 +306,18 @@ namespace eRG
 	{
 		/* Update @theta and bind it to [0, 2*pi] */
 		theta_ += d_theta_;
-		if(theta_ >= 2*pi) {
+		if(theta_ >= 2*util::pi) {
 			theta_ = 0;
 		} else if(theta_ <= 0) {
-			theta_ = 2*pi;
+			theta_ = 2*util::pi;
 		}
 
 		/* Update @phi and bind it to [0, pi] */
 		phi_ += d_phi_;
-		if(phi_ >= pi - pi/90) {
-			phi_ = pi - pi/90;
-		} else if(phi_ <= pi/90) {
-			phi_ = pi/90;
+		if(phi_ >= util::pi - util::pi/90) {
+			phi_ = util::pi - util::pi/90;
+		} else if(phi_ <= util::pi/90) {
+			phi_ = util::pi/90;
 		}
 
 		/* Update center point */
