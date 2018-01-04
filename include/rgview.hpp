@@ -2,12 +2,14 @@
 
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
-#include <glm/mat4x4.hpp>
 #include <cmath>
 #include "option.hpp"
 
 namespace eRG
 {
+
+	/* Forward declaration of eRG::Hub */
+	class Hub;
 
 	/* View declaration: */
 	/* @{ */
@@ -16,6 +18,9 @@ namespace eRG
 	*/
 	class View
 	{
+		/* Friend class */
+		friend class Hub;
+
 		/* Public member functions */
 		public:
 			/* Construction */
