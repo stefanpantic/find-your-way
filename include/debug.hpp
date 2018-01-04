@@ -33,4 +33,17 @@ namespace eRG::DEBUG
 		glEnd();
 	}
 
+	/*
+	* @brief Draw cube of size %n in first octant.
+	*/
+	void first_octant(float n)
+	{
+		glPushMatrix();
+			glColor3f(1, 1, 1);
+			glTranslatef(n/2, n/2, n/2);
+			glutWireCube(n);
+		glPopMatrix();
+	}
+
+
 }; /* namespace eRG::DEBUG */
