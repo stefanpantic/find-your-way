@@ -47,7 +47,7 @@ Ubuntu:
  * Minor refactoring and reformating,
  * Improved Makefile.
  
- ## Version 0.3:
+ ### Version 0.3:
  **Date:** 05-01-2018  
  **Progress made:**
  * Implemented JUMP ability,
