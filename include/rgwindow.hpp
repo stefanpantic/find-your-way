@@ -66,7 +66,7 @@ namespace eRG
 		glutPassiveMotionFunc(RGHub::passive_motion);
 
 		///* Timer registration */
-		glutTimerFunc(RGHub::TIMER0_INTERVAL, RGHub::timer, RGHub::TIMER0);
+		glutTimerFunc(RGHub::TIMER_REDISPLAY_INTERVAL, RGHub::timer, RGHub::TIMER_REDISPLAY);
 		glutIdleFunc(RGHub::idle);
 	}
 	/* @} */
