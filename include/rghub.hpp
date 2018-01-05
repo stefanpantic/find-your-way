@@ -44,8 +44,15 @@ namespace eRG
 
 		/* Public member variables */
 		public:
-			static const int TIMER0{0};
-			static const int TIMER0_INTERVAL{16};
+			/* Redisplay timer */
+			static const int TIMER_REDISPLAY{0};
+			static const int TIMER_REDISPLAY_INTERVAL{16};
+
+			/* Ability timers */
+			static const int TIMER_BLINK{1};
+			static const int TIMER_BLINK_INTERVAL{160};
+			static const int TIMER_JUMP{2};
+			static const int TIMER_JUMP_INTERVAL{320};
 
 		/* Private member variables */
 		private:

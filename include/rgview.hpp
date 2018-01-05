@@ -54,23 +54,27 @@ namespace eRG
 			void set_mspeed(float msp);
 			void set_lspeed(float lsp);
 
+			/* Set world height */
+			void set_world_height(float wh);
+
 			/* Move center point */
-			virtual void center_move(opt::View direction);
+			void center_move(opt::View direction);
 
 			/* Move eye point */
-			virtual void eye_move(opt::Position direction);
+			void eye_move(opt::Position direction);
 
 			/* Special motion */
-			virtual void special(opt::Special action);
+			void special(opt::Special action);
+			void reset_special(opt::Special action);
 
 			/* Redraw scene */
-			virtual void reposition_view();
+			void reposition_view();
 
 		/* Protected member functions */
 		protected:
-			virtual void __center();
-			virtual void __eyef();
-			virtual void __eyes();
+			void __center();
+			void __eyef();
+			void __eyes();
 
 		/* Private member variables */
 		private:
@@ -94,6 +98,12 @@ namespace eRG
 
 			/* Speeds */
 			float msp_, lsp_;
+
+			/* Recharge indicators */
+			bool blink_, jump_, time_;
+
+			/* World height */
+			float world_;
 	}; /* class eRG::View */
 	/* @} */
 

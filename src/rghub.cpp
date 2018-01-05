@@ -35,6 +35,9 @@ namespace eRG
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LEQUAL);
 
+		/* Hide cursor */
+		glutSetCursor(GLUT_CURSOR_NONE);
+
 		/* Set key repeat */
 		glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
 	}
@@ -50,7 +53,9 @@ namespace eRG
 		width_ = w;
 		height_ = h;
 
-		glutWarpPointer(w/2, h/2);
+		d_x_ = w/2;
+		d_y_ = h/2;
+		glutWarpPointer(d_x_, d_y_);
 
 		View::matrix_mode(opt::Transform::PROJECTION);
 		View::identity_matrix();
@@ -80,7 +85,8 @@ namespace eRG
 			glLineWidth(5);
 				DEBUG::coordinate_system();
 			glLineWidth(1);
-			DEBUG::first_octant(5);
+			DEBUG::first_octant(10);
+			DEBUG::floor(20);
 		glPopMatrix();
 
 		glutSwapBuffers();
@@ -99,6 +105,10 @@ namespace eRG
 
 		switch(key)
 		{
+			/* Exit the game */
+			case 27:
+				std::exit(0);
+			/* Manual camera movement controls */
 			case 'w':
 				mview.center_move(opt::View::UP);
 				break;
@@ -110,6 +120,15 @@ namespace eRG
 				break;
 			case 'd':
 				mview.center_move(opt::View::RIGHT);
+				break;
+			/* Ability controls */
+			case 'b':
+				mview.special(opt::Special::BLINK);
+				glutTimerFunc(TIMER_BLINK_INTERVAL, timer, TIMER_BLINK);
+				break;
+			case ' ':
+				mview.special(opt::Special::JUMP);
+				glutTimerFunc(TIMER_JUMP_INTERVAL, timer, TIMER_JUMP);
 				break;
 		}
 	}
@@ -124,8 +143,6 @@ namespace eRG
 
 		switch(key)
 		{
-			case 27:
-				std::exit(0);
 			case 'w':
 			case 's':
 				mview.center_move(opt::View::STOP_VERTICAL);
@@ -213,6 +230,14 @@ namespace eRG
 	{
 		y = height_ - y;
 
+		if (std::sqrt(std::pow(x - width_/2, 2) + std::pow(y - height_/2, 2)) > width_/4) {
+			d_x_ = width_/2;
+			d_y_ = height_/2;
+			glutWarpPointer(d_x_, d_y_);
+
+			return;
+		}
+
 		mview.d_theta_ = mview.get_lspeed() * (d_x_ - x);
 		mview.d_phi_ = mview.get_lspeed() * (d_y_ - y);
 
@@ -235,9 +260,16 @@ namespace eRG
 	{
 		switch(timer_id)
 		{
-			case TIMER0:
+			case TIMER_REDISPLAY:
 				glutPostRedisplay();
-				glutTimerFunc(TIMER0_INTERVAL, timer, TIMER0);
+				glutTimerFunc(TIMER_REDISPLAY_INTERVAL, timer, TIMER_REDISPLAY);
+				break;
+			case TIMER_BLINK:
+				mview.eye_move(opt::Position::STOP_FORWARD);
+				mview.reset_special(opt::Special::BLINK);
+				break;
+			case TIMER_JUMP:
+				mview.reset_special(opt::Special::JUMP);
 				break;
 		}
 	}

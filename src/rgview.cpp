@@ -20,7 +20,8 @@ namespace eRG
 		:	eye_{std::move(eye)}, center_{std::move(center)}, normal_{std::move(normal)},
 			theta_{util::pi/4}, phi_{util::pi/2},
 			d_theta_{0.0f}, d_phi_{0.0f},
-			msp_{0.1f}, lsp_{util::pi/180.0f}
+			msp_{0.1f}, lsp_{util::pi/180.0f},
+			world_{1.0f}
 	{
 		std::clog << "eRG::View: Default contructor" << std::endl;
 	}
@@ -201,6 +202,12 @@ namespace eRG
 	}
 	/* @} */
 
+	/* Set world height */
+	void View::set_world_height(float wh)
+	{
+		world_ = wh;
+	}
+
 	/* Move center point: */
 	/* @{ */
 	/*
@@ -272,7 +279,45 @@ namespace eRG
 	*/
 	void View::special(opt::Special action)
 	{
-		static_cast<void>(action);
+		using namespace opt;
+
+		switch(action)
+		{
+			case Special::JUMP:
+				if(!jump_) {
+					jump_ = true;
+				}
+				break;
+			case Special::BLINK:
+				if(!blink_) {
+					d_front_ = 3.0f;
+					blink_ = true;
+				}
+				break;
+			case Special::TIME:
+				break;
+		}
+	}
+
+	/*
+	* @brief Reset ability state.
+	*/
+	void View::reset_special(opt::Special action)
+	{
+		using namespace opt;
+
+		switch(action)
+		{
+			case Special::JUMP:
+				jump_ = false;
+				break;
+			case Special::BLINK:
+				blink_ = false;
+				break;
+			case Special::TIME:
+				time_ = false;
+				break;
+		}
 	}
 	/* @} */
 
@@ -293,6 +338,12 @@ namespace eRG
 
 		if(d_side_) {
 			__eyes();
+		}
+
+		if(!jump_ && eye_.y > world_ + 3*msp_) {
+			eye_.y -= 3*msp_;
+		} else if(jump_) {
+			eye_.y += 3*msp_;
 		}
 	}
 	/* @} */
@@ -333,6 +384,10 @@ namespace eRG
 	{
 		eye_.x += d_front_ * std::sin(theta_);
 		eye_.z += d_front_ * std::cos(theta_);
+
+		if(blink_) {
+			eye_.y += d_front_ * std::cos(phi_);
+		}
 	}
 
 	/*
