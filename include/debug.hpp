@@ -45,5 +45,19 @@ namespace eRG::DEBUG
 		glPopMatrix();
 	}
 
+	/*
+	* @brief Draw a floor.
+	*/
+	void floor(float size)
+	{
+		glBegin(GL_POLYGON);
+			glColor3f(0.4, 0.4, 0.4);
+			glVertex3f(size, 0, size);
+			glVertex3f(size, 0, -size);
+			glVertex3f(-size, 0, -size);
+			glVertex3f(-size, 0, size);
+		glEnd();
+	
+	}
 
 }; /* namespace eRG::DEBUG */
