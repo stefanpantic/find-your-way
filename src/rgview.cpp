@@ -1,7 +1,8 @@
 #include <iostream>
+#include <cmath>
+#include <GL/glut.h>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
-#include <GL/glut.h>
 #include "rgdefines.hpp"
 #include "rgview.hpp"
 #include "option.hpp"
@@ -32,7 +33,8 @@ namespace eRG
 	*/
 	View::View(const View &other)
 		:	eye_{other.eye_}, center_{other.center_}, normal_{other.normal_},
-			msp_{other.msp_}, lsp_{other.lsp_}
+			msp_{other.msp_}, lsp_{other.lsp_},
+			y_base_{other.y_base_}
 	{
 		std::clog << "eRG::View: Copy contructor" << std::endl;
 	}

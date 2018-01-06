@@ -2,14 +2,21 @@
 
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
-#include <cmath>
-#include "option.hpp"
 
 namespace eRG
 {
 
 	/* Forward declaration of eRG::Hub */
 	class Hub;
+
+	/* Forward declarations of eRG::opt enum classes */
+	namespace opt
+	{
+		enum class Transform;
+		enum class View;
+		enum class Position;
+		enum class Special;
+	}; /* namespace eRG::opt */
 
 	/* View declaration: */
 	/* @{ */
