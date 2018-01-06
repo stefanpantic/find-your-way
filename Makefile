@@ -2,7 +2,7 @@ CXX 		= g++
 STANDARD	= -std=c++17
 DEBUG 		= -g
 INCLUDE 	= -I./include
-CXXFLAGS 	= -Wall -Wextra -O3 $(STANDARD) $(INCLUDE) $(DEBUG)
+CXXFLAGS 	= -Wall -Wextra -O2 $(STANDARD) $(INCLUDE) $(DEBUG)
 LDFLAGS 	= -lGL -lGLU -lglut -lm
 BIN			= build
 MAIN		= main.cpp
