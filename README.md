@@ -23,10 +23,14 @@ Ubuntu:
     * g++ 7.2.0+,
     * clang++ 5.0.0+.
 
+## Preview:
+**Date:** 06-01-2018  
+
+![preview](https://github.com/MATF-RG17/RG061-find-your-way/blob/master/sample/06-01-2018.png) 
+
 ## Progress reports and change log:
 **TODO:** 
 * Update wiki and move progress report there,
-* Add screen recording.
 
 
 ### Version 0.1:
@@ -55,3 +59,14 @@ Ubuntu:
  * Improved viewpoint control via mouse (cursor can't accidentally leave the screen),
  * Added another temporary helper function in debug.hpp,
  * Minor refactoring.
+ 
+ ### Version 0.4:
+ **Date:** 06-01-2018  
+ **Progress made:**  
+ * Rewrote JUMP ability,
+ * Implemented gravity for player,
+ * Replaced several #includes in favour of forward declarations,
+ * Cleaned up #includes,
+ * Minor bug fixes,
+ * Updated Makefile,
+ * Added screen capture and screenshot.
