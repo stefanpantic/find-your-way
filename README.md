@@ -19,12 +19,15 @@ Arch Linux:
 Ubuntu:
 <pre>sudo apt-get install freeglut3-dev binutils-gold glm</pre>
 
-* **Tested C++ compilers (others may work as well)**:   
-    * g++ 7.2.0,
-    * clang++ 5.0.0.
+* **Tested C++ compiler (others may work as well)**:   
+    * g++ 7.2.0+,
+    * clang++ 5.0.0+.
 
 ## Progress reports and change log:
-**TODO:** Update wiki and move progress report there.  
+**TODO:** 
+* Update wiki and move progress report there,
+* Add screen recording.
+
 
 ### Version 0.1:
 **Date:** 30-12-2017  
@@ -43,3 +46,12 @@ Ubuntu:
  * Added debugging helper functions,
  * Minor refactoring and reformating,
  * Improved Makefile.
+ 
+ ### Version 0.3:
+ **Date:** 05-01-2018  
+ **Progress made:**
+ * Implemented JUMP ability,
+ * Implemented BLINK ability,
+ * Improved viewpoint control via mouse (cursor can't accidentally leave the screen),
+ * Added another temporary helper function in debug.hpp,
+ * Minor refactoring.
