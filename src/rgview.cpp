@@ -22,7 +22,7 @@ namespace eRG
 			d_theta_{0.0f}, d_phi_{0.0f},
 			d_front_{0.0f}, d_side_{0.0f}, d_vert_{0.0f},
 			msp_{0.1f}, lsp_{util::pi/180.0f},
-			y_base_{1.0f}
+			y_base_{1.0f}, jump_base_{1.0f}
 	{
 		std::clog << "eRG::View: Default contructor" << std::endl;
 	}
@@ -330,6 +330,8 @@ namespace eRG
 	/* @{ */
 	/*
 	* @brief If necessary, reposition camera.
+	*
+	* TODO: Detailed explanation of eye_.y operations.
 	*/
 	void View::reposition_view()
 	{
@@ -348,7 +350,11 @@ namespace eRG
 		if(d_vert_) {
 			__eyev();
 		} else if(eye_.y > y_base_) {
-			eye_.y -= 1.1*msp_;
+			eye_.y -= 3*msp_;
+			if(eye_.y < y_base_) {
+				eye_.y = y_base_;
+				jump_base_ = y_base_;
+			}
 		}
 	}
 	/* @} */
@@ -406,12 +412,22 @@ namespace eRG
 
 	/*
 	* @brief Translate eye up/down.
+	*
+	* TODO: A detailed explanation.
 	*/
 	void View::__eyev()
 	{
 		static float v{0};
 
-		eye_.y = 3*std::sin(v) + y_base_;
+		if(jump_base_ != y_base_ && eye_.y <= y_base_ + 0.1) {
+			jump_base_ = y_base_;
+			d_vert_ = 0;
+			v = 0;
+		} else if(jump_base_ != y_base_ && eye_.y == y_base_) {
+			jump_base_ = y_base_;
+		}
+
+		eye_.y = 3*std::sin(v) + jump_base_;
 		v += d_vert_;
 
 		if(v >= util::pi) {

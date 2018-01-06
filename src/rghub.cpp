@@ -77,16 +77,41 @@ namespace eRG
 
 		View::identity_matrix();
 
+		auto pos{std::round(mview.get_eye().x) + 1};
+		mview.set_ybase((pos >= 1) ? pos : 1);
+
 		mview.reposition_view();
 		mview.look_at();
 
 		/* Temporary */
 		glPushMatrix();
-			glLineWidth(5);
-				DEBUG::coordinate_system();
-			glLineWidth(1);
-			DEBUG::first_octant(10);
-			DEBUG::floor(20);
+
+		/* Temporary lighting */
+		float light[]{-1, -1, -1, 0};
+
+		glEnable(GL_COLOR_MATERIAL);
+		glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHT0);
+		glEnable(GL_NORMALIZE);
+		glLightfv(GL_LIGHT0, GL_POSITION, light);
+
+		for(float i = 1.5; i < 10; ++i) {
+			glPushMatrix();
+				glColor3f(0.4,0.4,0.4);
+				glTranslatef(i, i - 1, 5);
+				glScalef(1, 1, 10);
+				glutSolidCube(0.99);
+			glPopMatrix();
+		}
+
+		glDisable(GL_LIGHTING);
+
+		glLineWidth(5);
+			DEBUG::coordinate_system();
+		glLineWidth(1);
+		DEBUG::first_octant(10);
+		DEBUG::floor(20);
+
 		glPopMatrix();
 
 		glutSwapBuffers();

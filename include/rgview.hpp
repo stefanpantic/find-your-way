@@ -97,17 +97,14 @@ namespace eRG
 			/* Delta front, side, vertical */
 			float d_front_, d_side_, d_vert_;
 
-			/* Move, look, jump speed */
+			/* Move, look speed */
 			float msp_, lsp_;
 
 			/* Blink indicator */
 			bool blink_;
 
-			/* Jump height */
-			float jheight_;
-
 			/* Y base - world height indicator */
-			float y_base_;
+			float y_base_, jump_base_;
 	}; /* class eRG::View */
 	/* @} */
 
