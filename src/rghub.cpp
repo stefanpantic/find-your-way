@@ -1,5 +1,7 @@
 #include <iostream>
+#include <cmath>
 #include <GL/glut.h>
+#include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include "rghub.hpp"
 #include "rgview.hpp"
@@ -77,42 +79,63 @@ namespace eRG
 
 		View::identity_matrix();
 
-		auto pos{std::round(mview.get_eye().x) + 1};
-		mview.set_ybase((pos >= 1) ? pos : 1);
+		/* Set stairs - temporary colision test: */
+		/* @{ */
+		auto eye{mview.get_eye()};
+		if(eye.x <= 10 && eye.x >= 0 && eye.z >= 0 && eye.z <= 10) {
+			mview.set_ybase(std::round(eye.x) + 1);
+		} else {
+			mview.set_ybase(1);
+		}
+		/* @} */
 
 		mview.reposition_view();
 		mview.look_at();
 
-		/* Temporary */
+		/* Draw stairs - temporary: */
+		/* @{ */
 		glPushMatrix();
+			glEnable(GL_COLOR_MATERIAL);
+			glEnable(GL_NORMALIZE);
 
-		/* Temporary lighting */
-		float light[]{-1, -1, -1, 0};
+			float light[]{-1, -1, -1, 0};
+			glEnable(GL_LIGHTING);
+			glEnable(GL_LIGHT0);
+			glLightfv(GL_LIGHT0, GL_POSITION, light);
 
-		glEnable(GL_COLOR_MATERIAL);
-		glEnable(GL_LIGHTING);
-		glEnable(GL_LIGHT0);
-		glEnable(GL_NORMALIZE);
-		glLightfv(GL_LIGHT0, GL_POSITION, light);
+			for(float i = 1.5; i < 10; ++i)
+			{
+				glPushMatrix();
+					glColor3f(0.3,0.3,0.3);
+					glTranslatef(i, i - 1, 0);
+						for(float i = 0.5; i < 10; ++i)
+						{
+							glPushMatrix();
+								glTranslatef(0, 0, i);
+								glutSolidCube(0.95);
+							glPopMatrix();
+						}
+				glPopMatrix();
+			}
 
-		for(float i = 1.5; i < 10; ++i) {
+			glDisable(GL_LIGHTING);
+
+			/* Coordinate system */
 			glPushMatrix();
-				glColor3f(0.4,0.4,0.4);
-				glTranslatef(i, i - 1, 5);
-				glScalef(1, 1, 10);
-				glutSolidCube(0.99);
+				glScalef(10, 10, 10);
+				glLineWidth(5);
+				DEBUG::coordinate_system();
+				glLineWidth(1);
 			glPopMatrix();
-		}
 
-		glDisable(GL_LIGHTING);
+			DEBUG::first_octant(10);
 
-		glLineWidth(5);
-			DEBUG::coordinate_system();
-		glLineWidth(1);
-		DEBUG::first_octant(10);
-		DEBUG::floor(20);
-
+			glPushMatrix();
+				glTranslatef(5, 0, 5);
+				DEBUG::floor(5);
+			glPopMatrix();
 		glPopMatrix();
+		/* @} */
 
 		glutSwapBuffers();
 	}
