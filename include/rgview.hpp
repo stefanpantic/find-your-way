@@ -55,7 +55,7 @@ namespace eRG
 			void set_lspeed(float lsp);
 
 			/* Set world height */
-			void set_world_height(float wh);
+			void set_ybase(float wh);
 
 			/* Move center point */
 			void center_move(opt::View direction);
@@ -70,11 +70,12 @@ namespace eRG
 			/* Redraw scene */
 			void reposition_view();
 
-		/* Protected member functions */
-		protected:
+		/* Private member functions */
+		private:
 			void __center();
 			void __eyef();
 			void __eyes();
+			void __eyev();
 
 		/* Private member variables */
 		private:
@@ -93,17 +94,20 @@ namespace eRG
 			/* Delta theta, phi */
 			float d_theta_, d_phi_;
 
-			/* Delta front, side */
-			float d_front_, d_side_;
+			/* Delta front, side, vertical */
+			float d_front_, d_side_, d_vert_;
 
-			/* Speeds */
+			/* Move, look, jump speed */
 			float msp_, lsp_;
 
-			/* Recharge indicators */
-			bool blink_, jump_, time_;
+			/* Blink indicator */
+			bool blink_;
 
-			/* World height */
-			float world_;
+			/* Jump height */
+			float jheight_;
+
+			/* Y base - world height indicator */
+			float y_base_;
 	}; /* class eRG::View */
 	/* @} */
 

@@ -20,8 +20,9 @@ namespace eRG
 		:	eye_{std::move(eye)}, center_{std::move(center)}, normal_{std::move(normal)},
 			theta_{util::pi/4}, phi_{util::pi/2},
 			d_theta_{0.0f}, d_phi_{0.0f},
+			d_front_{0.0f}, d_side_{0.0f}, d_vert_{0.0f},
 			msp_{0.1f}, lsp_{util::pi/180.0f},
-			world_{1.0f}
+			y_base_{1.0f}
 	{
 		std::clog << "eRG::View: Default contructor" << std::endl;
 	}
@@ -141,7 +142,7 @@ namespace eRG
 	/* Get stored vectors */
 	/* @{ */
 	/*
-	* @brief Return stored @eye_ point.
+	* @brief Return stored eye point.
 	*/
 	const glm::vec3& View::get_eye()
 	{
@@ -149,7 +150,7 @@ namespace eRG
 	}
 
 	/*
-	* @brief Return stored @center_ point.
+	* @brief Return stored center point.
 	*/
 	const glm::vec3& View::get_center()
 	{
@@ -157,7 +158,7 @@ namespace eRG
 	}
 
 	/*
-	* @brief Return stored @normal_ vector.
+	* @brief Return stored normal vector.
 	*/
 	const glm::vec3& View::get_normal()
 	{
@@ -168,7 +169,7 @@ namespace eRG
 	/* Get speeds: */
 	/* @{ */
 	/*
-	* @brief Set @eye_ point movement speed.
+	* @brief Get eye point movement speed.
 	*/
 	const float& View::get_mspeed()
 	{
@@ -176,17 +177,18 @@ namespace eRG
 	}
 
 	/*
-	* @brief Get @center_ point movement speed.
+	* @brief Get center point movement speed.
 	*/
 	const float& View::get_lspeed()
 	{
 		return lsp_;
 	}
+	/* @} */
 
 	/* Set speeds: */
 	/* @{ */
 	/*
-	* @brief Set @eye_ point movement speed.
+	* @brief Set eye point movement speed.
 	*/
 	void View::set_mspeed(float msp)
 	{
@@ -194,7 +196,7 @@ namespace eRG
 	}
 
 	/*
-	* @brief Set @center_ point movement speed.
+	* @brief Set center point movement speed.
 	*/
 	void View::set_lspeed(float lsp)
 	{
@@ -202,16 +204,21 @@ namespace eRG
 	}
 	/* @} */
 
-	/* Set world height */
-	void View::set_world_height(float wh)
+	/* Set world height: */
+	/* @{ */
+	/*
+	* @brief Set y base height.
+	*/
+	void View::set_ybase(float wh)
 	{
-		world_ = wh;
+		y_base_ = std::move(wh);
 	}
+	/* @} */
 
 	/* Move center point: */
 	/* @{ */
 	/*
-	* @brief Handle @center_ point movement options.
+	* @brief Handle center point movement options.
 	*/
 	void View::center_move(opt::View direction)
 	{
@@ -242,7 +249,7 @@ namespace eRG
 	/* Move eye point */
 	/* @{ */
 	/*
-	* @brief Handle @eye_ point movement options.
+	* @brief Handle eye point movement options.
 	*/
 	void View::eye_move(opt::Position direction)
 	{
@@ -284,13 +291,11 @@ namespace eRG
 		switch(action)
 		{
 			case Special::JUMP:
-				if(!jump_) {
-					jump_ = true;
-				}
+				d_vert_ = msp_;
 				break;
 			case Special::BLINK:
 				if(!blink_) {
-					d_front_ = 3.0f;
+					d_front_ = 30*msp_;
 					blink_ = true;
 				}
 				break;
@@ -309,13 +314,13 @@ namespace eRG
 		switch(action)
 		{
 			case Special::JUMP:
-				jump_ = false;
+				// TODO
 				break;
 			case Special::BLINK:
 				blink_ = false;
 				break;
 			case Special::TIME:
-				time_ = false;
+				// TODO
 				break;
 		}
 	}
@@ -340,10 +345,10 @@ namespace eRG
 			__eyes();
 		}
 
-		if(!jump_ && eye_.y > world_ + 3*msp_) {
-			eye_.y -= 3*msp_;
-		} else if(jump_) {
-			eye_.y += 3*msp_;
+		if(d_vert_) {
+			__eyev();
+		} else if(eye_.y > y_base_) {
+			eye_.y -= 1.1*msp_;
 		}
 	}
 	/* @} */
@@ -351,7 +356,7 @@ namespace eRG
 	/* Center and eye point movement: */
 	/* @{ */
 	/*
-	* @brief Move center point on imaginary sphere with @eye_ as ceneter of sphere.
+	* @brief Move center point on imaginary sphere with eye as ceneter of sphere.
 	*/
 	void View::__center()
 	{
@@ -378,7 +383,7 @@ namespace eRG
 	}
 
 	/*
-	* @brief Translate @eye_ front/back.
+	* @brief Translate eye front/back.
 	*/
 	void View::__eyef()
 	{
@@ -391,12 +396,28 @@ namespace eRG
 	}
 
 	/*
-	* @brief Translate @eye_ left/right.
+	* @brief Translate eye left/right.
 	*/
 	void View::__eyes()
 	{
 		eye_.x += d_side_ * std::cos(theta_);
 		eye_.z += d_side_ * -std::sin(theta_);
+	}
+
+	/*
+	* @brief Translate eye up/down.
+	*/
+	void View::__eyev()
+	{
+		static float v{0};
+
+		eye_.y = 3*std::sin(v) + y_base_;
+		v += d_vert_;
+
+		if(v >= util::pi) {
+			v = 0;
+			d_vert_ = 0;
+		}
 	}
 	/* @} */
 	/* @@} */

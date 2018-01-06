@@ -128,7 +128,6 @@ namespace eRG
 				break;
 			case ' ':
 				mview.special(opt::Special::JUMP);
-				glutTimerFunc(TIMER_JUMP_INTERVAL, timer, TIMER_JUMP);
 				break;
 		}
 	}
@@ -267,9 +266,6 @@ namespace eRG
 			case TIMER_BLINK:
 				mview.eye_move(opt::Position::STOP_FORWARD);
 				mview.reset_special(opt::Special::BLINK);
-				break;
-			case TIMER_JUMP:
-				mview.reset_special(opt::Special::JUMP);
 				break;
 		}
 	}
