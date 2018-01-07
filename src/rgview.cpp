@@ -5,7 +5,7 @@
 #include <glm/vec3.hpp>
 #include "rgdefines.hpp"
 #include "rgview.hpp"
-#include "option.hpp"
+#include "rgoption.hpp"
 
 namespace eRG
 {
@@ -217,6 +217,33 @@ namespace eRG
 	}
 	/* @} */
 
+	/* Set deltas: */
+	/* @{ */
+	/*
+	* @brief Set individual movement deltas. Allows for finer camera control.
+	*/
+	void View::set_delta(opt::Delta delta, float val)
+	{
+		using namespace opt;
+
+		switch(delta)
+		{
+			case Delta::CENTERX:
+				d_theta_ = std::move(val);
+				break;
+			case Delta::CENTERY:
+				d_phi_ = std::move(val);
+				break;
+			case Delta::EYEF:
+				d_front_ = std::move(val);
+				break;
+			case Delta::EYES:
+				d_side_ = std::move(val);
+				break;
+		}
+	}
+	/* @} */
+
 	/* Move center point: */
 	/* @{ */
 	/*
@@ -357,6 +384,9 @@ namespace eRG
 				eye_.y = y_base_;
 				jump_base_ = y_base_;
 			}
+		} else if(y_base_ - eye_.y <= 0.5 && y_base_ - eye_.y > 0) {
+			eye_.y = y_base_;
+			jump_base_ = y_base_;
 		}
 	}
 	/* @} */

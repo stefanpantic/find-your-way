@@ -16,6 +16,7 @@ namespace eRG
 		enum class View;
 		enum class Position;
 		enum class Special;
+		enum class Delta;
 	}; /* namespace eRG::opt */
 
 	/* View declaration: */
@@ -60,6 +61,9 @@ namespace eRG
 			/* Set speeds */
 			void set_mspeed(float msp);
 			void set_lspeed(float lsp);
+
+			/* Set deltas */
+			void set_delta(opt::Delta delta, float val);
 
 			/* Set world height */
 			void set_ybase(float wh);
