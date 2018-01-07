@@ -6,6 +6,9 @@ namespace eRG
 	/* Forward declaration of eRG::View */
 	class View;
 
+	/* Forward declaration of eRG::Scene */
+	class Scene;
+
 	/* Hub declaration: */
 	/* @{ */
 	/*
@@ -57,6 +60,9 @@ namespace eRG
 
 			/* Camera */
 			static View mview;
+
+			/* Scene */
+			static Scene mscene;
 	}; /* class Hub */
 	/* @} */
 

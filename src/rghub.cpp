@@ -5,8 +5,10 @@
 #include <glm/vec3.hpp>
 #include "rghub.hpp"
 #include "rgview.hpp"
+#include "rgscene.hpp"
+#include "rgmodel.hpp"
 #include "rgdefines.hpp"
-#include "option.hpp"
+#include "rgoption.hpp"
 #include "debug.hpp"
 
 namespace eRG
@@ -21,6 +23,7 @@ namespace eRG
 	View Hub::mview{glm::vec3{0, 1, 0},
 					glm::vec3{1, 1, 1},
 					glm::vec3{0, 1, 0}};
+	Scene Hub::mscene{"placeholder"};
 	/* @} */
 
 	/* Initializer: */
@@ -42,6 +45,31 @@ namespace eRG
 
 		/* Set key repeat */
 		glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
+
+		/* Temporary light setup: */
+		/* @{ */
+		/* Light parameters */
+		float position[]{1, 1, 1, 0};
+		float ambient[]{0.1, 0.1, 0.1, 1};
+		float specular[]{0.5, 0.5, 0.5, 1};
+		float diffuse[]{0.3, 0.3, 0.3, 1};
+
+		/* Material parameters */
+		float material_ambient[]{0.4, 0.4, 0.4, 1};
+		float material_specular[]{0.9, 0.9, 0.9, 1};
+		float material_diffuse[]{0.4, 0.4, 0.4, 1};
+		float shininess{3};
+
+		glLightfv(GL_LIGHT0, GL_POSITION, position);
+		glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
+		glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+
+		glMaterialfv(GL_FRONT, GL_AMBIENT, material_ambient);
+		glMaterialfv(GL_FRONT, GL_SPECULAR, material_specular);
+		glMaterialfv(GL_FRONT, GL_DIFFUSE, material_diffuse);
+		glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+		/* @} */
 	}
 	/* @} */
 
@@ -79,61 +107,42 @@ namespace eRG
 
 		View::identity_matrix();
 
-		/* Set stairs - temporary colision test: */
+		/* Colision test: */
 		/* @{ */
 		auto eye{mview.get_eye()};
-		if(eye.x <= 10 && eye.x >= 0 && eye.z >= 0 && eye.z <= 10) {
-			mview.set_ybase(std::round(eye.x) + 1);
+
+		if(eye.x >= 0 && eye.z >= 0 && eye.x < 25 && eye.z < 25) {
+			auto model{mscene.model_at(std::floor(eye.x), std::floor(eye.z))->position().y};
+			if(model + 1 <= eye.y) {
+				mview.set_ybase(model + 1.5);
+			}
 		} else {
-			mview.set_ybase(1);
+			mview.set_ybase(-100);
 		}
 		/* @} */
 
 		mview.reposition_view();
 		mview.look_at();
 
-		/* Draw stairs - temporary: */
+		/* World test - temporary: */
+		/* @{ */
+		glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHT0);
+		glEnable(GL_NORMALIZE);
+
+		glColor3f(0.3, 0.3, 0.3);
+		mscene.render_scene();
+
+		glDisable(GL_LIGHTING);
+		/* @} */
+
+		/* Coordinate system: */
 		/* @{ */
 		glPushMatrix();
-			glEnable(GL_COLOR_MATERIAL);
-			glEnable(GL_NORMALIZE);
-
-			float light[]{-1, -1, -1, 0};
-			glEnable(GL_LIGHTING);
-			glEnable(GL_LIGHT0);
-			glLightfv(GL_LIGHT0, GL_POSITION, light);
-
-			for(float i = 1.5; i < 10; ++i)
-			{
-				glPushMatrix();
-					glColor3f(0.3,0.3,0.3);
-					glTranslatef(i, i - 1, 0);
-						for(float i = 0.5; i < 10; ++i)
-						{
-							glPushMatrix();
-								glTranslatef(0, 0, i);
-								glutSolidCube(0.95);
-							glPopMatrix();
-						}
-				glPopMatrix();
-			}
-
-			glDisable(GL_LIGHTING);
-
-			/* Coordinate system */
-			glPushMatrix();
-				glScalef(10, 10, 10);
-				glLineWidth(5);
-				DEBUG::coordinate_system();
-				glLineWidth(1);
-			glPopMatrix();
-
-			DEBUG::first_octant(10);
-
-			glPushMatrix();
-				glTranslatef(5, 0, 5);
-				DEBUG::floor(5);
-			glPopMatrix();
+			glScalef(10, 10, 10);
+			glLineWidth(5);
+			DEBUG::coordinate_system();
+			glLineWidth(1);
 		glPopMatrix();
 		/* @} */
 
@@ -285,16 +294,16 @@ namespace eRG
 			return;
 		}
 
-		mview.d_theta_ = mview.get_lspeed() * (d_x_ - x);
-		mview.d_phi_ = mview.get_lspeed() * (d_y_ - y);
-
-		d_x_ = x;
-		d_y_ = y;
+		mview.set_delta(opt::Delta::CENTERX, mview.get_lspeed() * (d_x_ - x));
+		mview.set_delta(opt::Delta::CENTERY, mview.get_lspeed() * (d_y_ - y));
 
 		mview.reposition_view();
 
 		mview.center_move(opt::View::STOP_VERTICAL);
 		mview.center_move(opt::View::STOP_HORIZONTAL);
+
+		d_x_ = x;
+		d_y_ = y;
 	}
 	/* @} */
 
