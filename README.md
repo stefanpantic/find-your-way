@@ -9,7 +9,7 @@ classes. Done in C++.
 <br>
 **Description:** *Find Your Way* is a platformer styled first person game. The goal is to find a way to the end of each level using several abilities at your disposal that include slowing down time, blinking and super jump. At one point I'm hoping to add mobs that will try to hinder your progess, as well as abilities to fend them off. The project is being written in C++ using older OpenGL/GLUT and some GLM classes for convenience. If time allows it, a port to modern OpenGL is not out of the question. This is my first larger C++ project. Any criticism and/or suggestions are more than welcome. :)  
 
-# Installation:
+## Installation:
 Just run <code>make</code> from the project directory.
 ## Requirements:
  * **OpenGL/GLUT and GLM:**  
@@ -24,9 +24,9 @@ Ubuntu:
     * clang++ 5.0.0+.
 
 ## Preview:
-**Date:** 06-01-2018  
+**Date:** 07-01-2018  
 
-![preview](https://github.com/MATF-RG17/RG061-find-your-way/blob/master/sample/06-01-2018.png) 
+![preview](https://github.com/MATF-RG17/RG061-find-your-way/blob/master/sample/07-01-2018.png) 
 
 ## Progress reports and change log:
 **TODO:** 
@@ -69,4 +69,13 @@ Ubuntu:
  * Cleaned up #includes,
  * Minor bug fixes,
  * Updated Makefile,
+ * Added screen capture and screenshot.
+ 
+ ### Version 0.5:
+ **Date:** 07-01-2018  
+ **Progress made:**
+ * Started work on eRG::Scene class. This class will handle all models and render the virtual world,
+ * Extended eRG::View class functionality with finer camera controls,
+ * Removed unused file,
+ * Minor refactoring and code cleanup,
  * Added screen capture and screenshot.
