@@ -1,9 +1,7 @@
 #pragma once
 
-#include <iostream>
 #include <vector>
 #include <memory>
-#include <glm/vec4.hpp>
 
 namespace eRG
 {
@@ -18,23 +16,20 @@ namespace eRG
 	*/
 	class Scene
 	{
-		/* Convenience */
-		using wmap = std::vector<std::vector<std::shared_ptr<Model>>>;
-
 		/* Public member functions */
 		public:
 			/* Construction */
 			explicit Scene(const std::string &source);
 
 			/* Get model */
-			std::shared_ptr<Model>& model_at(int x, int y);
+			const std::shared_ptr<Model>& model_at(float x, float z);
 
 			/* Render scene */
 			void render_scene();
 		/* Private member variables */
 		private:
-			/* Main scene */
-			wmap scene_;
+			/* Model storage */
+			std::vector<std::shared_ptr<Model>> models_;
 	}; /* class eRG::Scene */
 	/* @} */
 

@@ -15,21 +15,15 @@ namespace eRG
 	* TODO: Implement scene constructor.
 	*/
 	Scene::Scene(const std::string &source)
-		:	scene_{Scene::wmap{}}
+		:	models_{std::vector<std::shared_ptr<Model>>{}}
 	{
 		static_cast<void>(source);
 
 		/* Scene test: */
 		/* @{ */
-		scene_.resize(25);
-		for(auto &e: scene_) {
-			e.resize(25);
-		}
-
-		for(float i = 0; i < 25; ++i) {
-			for(float j = 0; j < 25; ++j) {
-				scene_[i][j] = std::shared_ptr<Model>{new PModel{glm::vec3{i + 0.5, std::sin(i*j/5), j + 0.5}}};
-			}
+		models_.resize(100);
+		for(int i = 0; i < 100; ++i) {
+			models_[i] = std::shared_ptr<Model>{new PModel{glm::vec3{i, 0.5, i}, glm::vec3{i, 0.5, i}}};
 		}
 		/* @} */
 	}
@@ -38,11 +32,15 @@ namespace eRG
 	/* Get model: */
 	/* @{ */
 	/*
-	* @brief Get model with (x,y) coordinates.
+	* TODO: Implement model position check.
 	*/
-	std::shared_ptr<Model>& Scene::model_at(int x, int y)
+	const std::shared_ptr<Model>& Scene::model_at(float x, float z)
 	{
-		return scene_[x][y];
+		static_cast<void>(x);
+		static_cast<void>(z);
+
+		/* Just to supress a warning */
+		return models_[x];
 	}
 	/* @} */
 
@@ -53,10 +51,10 @@ namespace eRG
 	*/
 	void Scene::render_scene()
 	{
-		for(auto &row : scene_) {
-			for(auto &e : row) {
+		for(auto &e : models_) {
+			glPushMatrix();
 				e->draw();
-			}
+			glPopMatrix();
 		}
 	}
 	/* @} */
