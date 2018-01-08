@@ -109,16 +109,7 @@ namespace eRG
 
 		/* Colision test: */
 		/* @{ */
-		auto eye{mview.get_eye()};
 
-		if(eye.x >= 0 && eye.z >= 0 && eye.x < 25 && eye.z < 25) {
-			auto model{mscene.model_at(std::floor(eye.x), std::floor(eye.z))->position().y};
-			if(model + 1 <= eye.y) {
-				mview.set_ybase(model + 1.5);
-			}
-		} else {
-			mview.set_ybase(-100);
-		}
 		/* @} */
 
 		mview.reposition_view();
