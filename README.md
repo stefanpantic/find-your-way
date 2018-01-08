@@ -75,16 +75,17 @@ Ubuntu:
  **Date:** 07-01-2018  
  **Progress made:**
  * Started work on eRG::Scene class. This class will handle all models and render the virtual world,
- * Implemented eRG::Model abstract class to represent models,
+ * Implemented eRG::Model class to act as a base for all future models,
  * Extended eRG::View class functionality with finer camera controls,
  * Removed unused file,
  * Minor refactoring and code cleanup,
  * Added screen capture and screenshot.
 
  ### Version 0.5.1:
- **Date:** 08-01-2018   
+ **Date:** 08-01-2018  
  **Progress made:**
  * Redesigned and reimplemented eRG::Model,
- * Reworked classes that depended on eRG::Model,
- * Minor changes to eRG::Hub.
+ * Reworked classes dependent on eRG::Model,
+ * Minor tweaks.
+
 
