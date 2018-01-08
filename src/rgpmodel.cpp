@@ -13,10 +13,9 @@ namespace eRG
 	/*
 	* @brief Builds instance of %eRG::PModel.
 	*/
-	PModel::PModel(	glm::vec3 translate,
-					glm::vec3 scale,
-					glm::vec4 rotate)
-		:	Model{translate, scale, rotate}
+	PModel::PModel(	glm::vec3 lower_left_near,
+					glm::vec3 upper_right_far)
+		:	Model{lower_left_near, upper_right_far}
 	{
 		std::clog << "eRG::PModel: Default constructor" << std::endl;
 	}
@@ -45,23 +44,22 @@ namespace eRG
 	/*
 	* @brief Get model position as (x,y,z) coordinates.
 	*/
-	const glm::vec3& PModel::position()
+	std::pair<Model::v3cr, Model::v3cr> PModel::position()
 	{
-		return Model::translate_;
+		return std::make_pair(Model::lln_, Model::urf_);
 	}
 	/* @} */
 
 	/* Draw: */
 	/* @{ */
 	/*
-	* @brief Draw the model.
+	* TODO: Implement draw function.
 	*/
 	void PModel::draw()
 	{
-		glPushMatrix();
-			glTranslatef(Model::translate_.x, Model::translate_.y, Model::translate_.z);
-			glutSolidCube(0.95);
-		glPopMatrix();
+		auto translate{(Model::urf_ + Model::lln_)/2.0f};
+		glTranslatef(translate.x, translate.y, translate.z);
+		glutSolidCube(0.95);
 	}
 	/* @} */
 
