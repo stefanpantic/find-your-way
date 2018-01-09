@@ -23,7 +23,7 @@ namespace eRG
 	View Hub::mview{glm::vec3{0, 1, 0},
 					glm::vec3{1, 1, 1},
 					glm::vec3{0, 1, 0}};
-	Scene Hub::mscene{"placeholder"};
+	Scene Hub::mscene{"placeholder name"};
 	/* @} */
 
 	/* Initializer: */
@@ -48,6 +48,10 @@ namespace eRG
 
 		/* Temporary light setup: */
 		/* @{ */
+		glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHT0);
+		glEnable(GL_NORMALIZE);
+
 		/* Light parameters */
 		float position[]{1, 1, 1, 0};
 		float ambient[]{0.1, 0.1, 0.1, 1};
@@ -93,7 +97,7 @@ namespace eRG
 		View::viewport(	glm::vec2{0, 0},
 						glm::vec2{w, h});
 
-		View::perspective(60.0f, static_cast<float>(w)/h, 0.1f, 100.0f);
+		View::perspective(80.0f, static_cast<float>(w)/h, 0.1f, 100.0f);
 		View::matrix_mode(opt::Transform::MODELVIEW);
 	}
 
@@ -109,6 +113,14 @@ namespace eRG
 
 		/* Colision test: */
 		/* @{ */
+		auto eye{mview.get_eye()};
+		auto model{mscene.model_at(eye.x, eye.z)};
+
+		/* Vertical */
+		mview.set_ybase(model->position().second.y + 1);
+
+		/* Horizontal */
+		// TODO
 
 		/* @} */
 
@@ -118,8 +130,6 @@ namespace eRG
 		/* World test - temporary: */
 		/* @{ */
 		glEnable(GL_LIGHTING);
-		glEnable(GL_LIGHT0);
-		glEnable(GL_NORMALIZE);
 
 		glColor3f(0.3, 0.3, 0.3);
 		mscene.render_scene();
