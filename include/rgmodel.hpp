@@ -13,10 +13,6 @@ namespace eRG
 	*/
 	class Model
 	{
-		/* Convenience */
-		protected:
-			using v3cr = const glm::vec3&;
-
 		/* Public member functions */
 		public:
 			/* Construction */
@@ -26,7 +22,7 @@ namespace eRG
 			explicit Model(Model &&other);
 
 			/* Position */
-			virtual std::pair<v3cr, v3cr> position() = 0;
+			virtual std::pair<glm::vec3, glm::vec3> position() = 0;
 
 			/* Draw */
 			virtual void draw() = 0;
