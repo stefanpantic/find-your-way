@@ -15,7 +15,9 @@ namespace eRG
 	*/
 	PModel::PModel(	glm::vec3 lower_left_near,
 					glm::vec3 upper_right_far)
-		:	Model{lower_left_near, upper_right_far}
+		:	Model{lower_left_near, upper_right_far},
+			translate_{(lower_left_near + upper_right_far)/2.0f},
+			scale_{upper_right_far - lower_left_near}
 	{
 		std::clog << "eRG::PModel: Default constructor" << std::endl;
 	}
@@ -42,11 +44,11 @@ namespace eRG
 	/* Position: */
 	/* @{ */
 	/*
-	* @brief Get model position as (x,y,z) coordinates.
+	* @brief Get model position as lower left near corner and upper far right corner coordinates.
 	*/
-	std::pair<Model::v3cr, Model::v3cr> PModel::position()
+	std::pair<glm::vec3, glm::vec3> PModel::position()
 	{
-		return std::make_pair(Model::lln_, Model::urf_);
+		return {glm::vec3{Model::lln_}, glm::vec3{Model::urf_}};
 	}
 	/* @} */
 
@@ -57,9 +59,11 @@ namespace eRG
 	*/
 	void PModel::draw()
 	{
-		auto translate{(Model::urf_ + Model::lln_)/2.0f};
-		glTranslatef(translate.x, translate.y, translate.z);
-		glutSolidCube(0.95);
+		glPushMatrix();
+			glTranslatef(translate_.x, translate_.y, translate_.z);
+			glScalef(scale_.x, scale_.y, scale_.z);
+			glutSolidCube(0.95);
+		glPopMatrix();
 	}
 	/* @} */
 
