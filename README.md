@@ -88,4 +88,11 @@ Ubuntu:
  * Reworked classes dependent on eRG::Model,
  * Minor tweaks.
 
+ ### Version 0.5.2:
+ **Date:** 09-01-2018  
+ **Progress made:**
+ * Implemented most of eRG::PModel, the class used to represent stationary models,
+ * Made minor tweaks to eRG::Model,
+ * Tweaked JUMP ability and gravity for eRG::View.
+
 
