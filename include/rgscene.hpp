@@ -22,7 +22,7 @@ namespace eRG
 			explicit Scene(const std::string &source);
 
 			/* Get model */
-			const std::shared_ptr<Model>& model_at(float x, float z);
+			std::shared_ptr<Model>& model_at(float x, float z);
 
 			/* Render scene */
 			void render_scene();

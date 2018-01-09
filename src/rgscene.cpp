@@ -21,9 +21,10 @@ namespace eRG
 
 		/* Scene test: */
 		/* @{ */
-		models_.resize(100);
-		for(int i = 0; i < 100; ++i) {
-			models_[i] = std::shared_ptr<Model>{new PModel{glm::vec3{i, 0.5, i}, glm::vec3{i, 0.5, i}}};
+		for(float i = 0; i < 10; ++i) {
+			for(float j = 0; j < 10; ++j) {
+				models_.push_back(std::shared_ptr<Model>{new PModel{glm::vec3{i, std::sin(i) - 1, j}, glm::vec3{i + 1, std::sin(i), j + 1}}});
+			}
 		}
 		/* @} */
 	}
@@ -34,13 +35,18 @@ namespace eRG
 	/*
 	* TODO: Implement model position check.
 	*/
-	const std::shared_ptr<Model>& Scene::model_at(float x, float z)
+	std::shared_ptr<Model>& Scene::model_at(float x, float z)
 	{
-		static_cast<void>(x);
-		static_cast<void>(z);
+		static std::shared_ptr<Model> abyss{new PModel{glm::vec3{0, 0, 0}, glm::vec3{0, -100, 0}}};
 
-		/* Just to supress a warning */
-		return models_[x];
+		for(auto &e : models_) {
+			auto pos{e->position()};
+			if(x >= pos.first.x && x <= pos.second.x && z >= pos.first.z && z <= pos.second.z) {
+				return e;
+			}
+		}
+
+		return abyss;
 	}
 	/* @} */
 
@@ -52,9 +58,7 @@ namespace eRG
 	void Scene::render_scene()
 	{
 		for(auto &e : models_) {
-			glPushMatrix();
-				e->draw();
-			glPopMatrix();
+			e->draw();
 		}
 	}
 	/* @} */
