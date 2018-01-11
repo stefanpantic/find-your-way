@@ -34,7 +34,7 @@ namespace eRG
 	void Hub::initialize()
 	{
 		/* Set clear color */
-		glClearColor(0, 0, 0, 1);
+		glClearColor(33/256.0f, 0, 33/256.0f, 1);
 
 		/* Enable depth test */
 		glEnable(GL_DEPTH_TEST);
@@ -56,12 +56,12 @@ namespace eRG
 		float position[]{1, 1, 1, 0};
 		float ambient[]{0.1, 0.1, 0.1, 1};
 		float specular[]{0.5, 0.5, 0.5, 1};
-		float diffuse[]{0.3, 0.3, 0.3, 1};
+		float diffuse[]{0.3, 100/256.0f, 100/256.0f, 1};
 
 		/* Material parameters */
 		float material_ambient[]{0.4, 0.4, 0.4, 1};
-		float material_specular[]{0.9, 0.9, 0.9, 1};
-		float material_diffuse[]{0.4, 0.4, 0.4, 1};
+		float material_specular[]{0.1, 0.1, 0.1, 1};
+		float material_diffuse[]{0.3, 100/256.0f, 100/256.0f, 1};
 		float shininess{3};
 
 		glLightfv(GL_LIGHT0, GL_POSITION, position);
@@ -114,14 +114,15 @@ namespace eRG
 		/* Colision test: */
 		/* @{ */
 		auto eye{mview.get_eye()};
-		auto model{mscene.model_at(eye.x, eye.z)};
+		auto model{mscene.model_at(eye)};
 
-		/* Vertical */
-		mview.set_ybase(model->position().second.y + 1);
-
+		if(model) {
+			mview.set_ybase(model->position().second.y + 1);
+		} else {
+			mview.set_ybase(-100);
+		}
 		/* Horizontal */
-		// TODO
-
+		// TODO: Implement basic colision.
 		/* @} */
 
 		mview.reposition_view();
@@ -131,7 +132,6 @@ namespace eRG
 		/* @{ */
 		glEnable(GL_LIGHTING);
 
-		glColor3f(0.3, 0.3, 0.3);
 		mscene.render_scene();
 
 		glDisable(GL_LIGHTING);
