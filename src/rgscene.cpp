@@ -1,8 +1,9 @@
 #include <sstream>
 #include <cmath>
 #include <GL/glut.h>
-#include "rgpmodel.hpp"
 #include "rgscene.hpp"
+#include "rgpmodel.hpp"
+#include "rgamodel.hpp"
 
 namespace eRG
 {
@@ -21,11 +22,14 @@ namespace eRG
 
 		/* Scene test: */
 		/* @{ */
-		for(float i = 0; i < 10; ++i) {
-			for(float j = 0; j < 10; ++j) {
-				models_.push_back(std::shared_ptr<Model>{new PModel{glm::vec3{i, std::sin(i) - 1, j}, glm::vec3{i + 1, std::sin(i), j + 1}}});
-			}
-		}
+		models_.push_back(std::shared_ptr<Model>{new AModel{glm::vec3{0, -1, 0},
+															glm::vec3{1, 0, 1},
+															std::vector<glm::vec3>{	glm::vec3{0.5, -0.5, 0.5},
+																					glm::vec3{5.5, -0.5, 5.5},
+																					glm::vec3{5.5, -0.5, 0.0}}
+															}});
+		models_.push_back(std::shared_ptr<Model>{new PModel{glm::vec3{-1, -1, -1},
+															glm::vec3{0, 0, 0}}});
 		/* @} */
 	}
 	/* @} */
@@ -37,7 +41,7 @@ namespace eRG
 	*/
 	std::shared_ptr<Model>& Scene::model_at(float x, float z)
 	{
-		static std::shared_ptr<Model> abyss{new PModel{glm::vec3{0, 0, 0}, glm::vec3{0, -100, 0}}};
+		static std::shared_ptr<Model> abyss{new AModel{glm::vec3{0, 0, 0}, glm::vec3{0, -100, 0}}};
 
 		for(auto &e : models_) {
 			auto pos{e->position()};
