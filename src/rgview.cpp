@@ -21,7 +21,7 @@ namespace eRG
 		:	eye_{std::move(eye)}, center_{std::move(center)}, normal_{std::move(normal)},
 			theta_{util::pi/4}, phi_{util::pi/2},
 			d_theta_{0.0f}, d_phi_{0.0f},
-			d_front_{0.0f}, d_side_{0.0f}, d_vert_{0.0f},
+			d_front_{0.0f}, d_side_{0.0f}, d_up_{0.0f},
 			msp_{0.1f}, lsp_{util::pi/180.0f},
 			y_base_{1.0f}, jump_base_{1.0f}
 	{
@@ -55,11 +55,8 @@ namespace eRG
 	*/
 	void View::look_at()
 	{
-		// TODO: find an elegant workaround.
-		auto tmp{eye_ + center_};
-
 		gluLookAt(	eye_.x, eye_.y, eye_.z,
-					tmp.x, tmp.y, tmp.z,
+					eye_.x + center_.x, eye_.y + center_.y, eye_.z + center_.z,
 					normal_.x, normal_.y, normal_.z);
 	}
 
@@ -228,17 +225,42 @@ namespace eRG
 
 		switch(delta)
 		{
+			/* Center point deltas */
 			case Delta::CENTERX:
 				d_theta_ = std::move(val);
 				break;
 			case Delta::CENTERY:
 				d_phi_ = std::move(val);
 				break;
+			/* Eye point front deltas */
 			case Delta::EYEF:
-				d_front_ = std::move(val);
+				d_front_ = glm::vec3(std::move(val));
 				break;
+			case Delta::EYEFX:
+				d_front_.x = std::move(val);
+				break;
+			case Delta::EYEFY:
+				d_front_.y = std::move(val);
+				break;
+			case Delta::EYEFZ:
+				d_front_.z = std::move(val);
+				break;
+			/* Eye point side deltas */
 			case Delta::EYES:
-				d_side_ = std::move(val);
+				d_side_ = glm::vec3(std::move(val));
+				break;
+			case Delta::EYESX:
+				d_side_.x = std::move(val);
+				break;
+			case Delta::EYESY:
+				d_side_.y = std::move(val);
+				break;
+			case Delta::EYESZ:
+				d_side_.z = std::move(val);
+				break;
+			/* Eye point up deltas */
+			case Delta::EYEV:
+				d_up_ = std::move(val);
 				break;
 		}
 	}
@@ -287,22 +309,22 @@ namespace eRG
 		switch(direction)
 		{
 			case Position::UP:
-				d_front_ = msp_;
+				d_front_ = glm::vec3(msp_);
 				break;
 			case Position::DOWN:
-				d_front_ = -msp_;
+				d_front_ = glm::vec3(-msp_);
 				break;
 			case Position::LEFT:
-				d_side_ = msp_;
+				d_side_ = glm::vec3(msp_);
 				break;
 			case Position::RIGHT:
-				d_side_ = -msp_;
+				d_side_ = glm::vec3(-msp_);
 				break;
 			case Position::STOP_FORWARD:
-				d_front_ = 0;
+				d_front_ = glm::vec3(0);
 				break;
 			case Position::STOP_SIDEWAYS:
-				d_side_ = 0;
+				d_side_ = glm::vec3(0);
 				break;
 		}
 	}
@@ -320,11 +342,11 @@ namespace eRG
 		switch(action)
 		{
 			case Special::JUMP:
-				d_vert_ = msp_;
+				d_up_ = msp_;
 				break;
 			case Special::BLINK:
 				if(!blink_) {
-					d_front_ = 30*msp_;
+					d_front_ = glm::vec3(30*msp_);
 					blink_ = true;
 				}
 				break;
@@ -368,18 +390,21 @@ namespace eRG
 			__center();
 		}
 
-		if(d_front_) {
+		if(d_front_.x || d_front_.y || d_front_.z) {
 			__eyef();
 		}
 
-		if(d_side_) {
+		if(d_side_.x || d_side_.y || d_side_.z) {
 			__eyes();
 		}
 
-		if(d_vert_) {
+		if(d_up_) {
 			__eyev();
 		} else if(eye_.y > y_base_) {
+			/* Aproximate sin(x) = x for gravity */
 			eye_.y -= 3*msp_;
+
+			/* Make sure we don't fall through the floor */
 			if(eye_.y < y_base_) {
 				eye_.y = y_base_;
 				jump_base_ = y_base_;
@@ -425,12 +450,9 @@ namespace eRG
 	*/
 	void View::__eyef()
 	{
-		eye_.x += d_front_ * std::sin(theta_);
-		eye_.z += d_front_ * std::cos(theta_);
-
-		if(blink_) {
-			eye_.y += d_front_ * std::cos(phi_);
-		}
+		eye_.x += d_front_.x * std::sin(theta_);
+		eye_.y += d_front_.z * std::cos(phi_);
+		eye_.z += d_front_.y * std::cos(theta_);
 	}
 
 	/*
@@ -438,8 +460,8 @@ namespace eRG
 	*/
 	void View::__eyes()
 	{
-		eye_.x += d_side_ * std::cos(theta_);
-		eye_.z += d_side_ * -std::sin(theta_);
+		eye_.x += d_side_.x * std::cos(theta_);
+		eye_.z += d_side_.z * -std::sin(theta_);
 	}
 
 	/*
@@ -453,18 +475,18 @@ namespace eRG
 
 		if(jump_base_ != y_base_ && eye_.y <= y_base_ + 0.1) {
 			jump_base_ = y_base_;
-			d_vert_ = 0;
+			d_up_ = 0;
 			v = 0;
 		} else if(jump_base_ != y_base_ && eye_.y == y_base_) {
 			jump_base_ = y_base_;
 		}
 
 		eye_.y = 3*std::sin(v) + jump_base_;
-		v += d_vert_;
+		v += d_up_;
 
 		if(v >= util::pi) {
 			v = 0;
-			d_vert_ = 0;
+			d_up_ = 0;
 		}
 	}
 	/* @} */

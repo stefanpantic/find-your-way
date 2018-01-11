@@ -105,8 +105,11 @@ namespace eRG
 			/* Delta theta, phi */
 			float d_theta_, d_phi_;
 
-			/* Delta front, side, vertical */
-			float d_front_, d_side_, d_vert_;
+			/* Delta front, side vectors */
+			glm::vec3 d_front_, d_side_;
+
+			/* Delta up */
+			float d_up_;
 
 			/* Move, look speed */
 			float msp_, lsp_;
