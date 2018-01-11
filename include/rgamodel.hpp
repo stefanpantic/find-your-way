@@ -32,6 +32,9 @@ namespace eRG
 		private:
 			/* Points of movement */
 			std::vector<glm::vec3> points_;
+
+			/* Direction of movement */
+			glm::vec3 delta_;
 	}; /* class eRG::AModel */
 	/* @} */
 

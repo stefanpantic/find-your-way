@@ -18,7 +18,8 @@ namespace eRG
 					glm::vec3 upper_right_far,
 					std::vector<glm::vec3> &&points)
 		:	Model{lower_left_near, upper_right_far},
-			points_{std::move(points)}
+			points_{std::move(points)},
+			delta_{glm::normalize(points_[1] - points_[0])/30.0f}
 	{
 		std::clog << "eRG::AModel: Default constructor" << std::endl;
 	}
@@ -28,7 +29,8 @@ namespace eRG
 	*/
 	AModel::AModel(const AModel &other)
 		:	Model{other},
-			points_{other.points_}
+			points_{other.points_},
+			delta_{other.delta_}
 	{
 		std::clog << "eRG::AModel: Copy constructor" << std::endl;
 	}
@@ -38,7 +40,8 @@ namespace eRG
 	*/
 	AModel::AModel(AModel &&other)
 		:	Model{std::move(other)},
-			points_{std::move(other.points_)}
+			points_{std::move(other.points_)},
+			delta_{std::move(other.delta_)}
 
 	{
 		std::clog << "eRG::AModel: Move constructor" << std::endl;
@@ -56,28 +59,23 @@ namespace eRG
 	{
 		static double d_old{0}, d_new{glm::distance(points_[1], points_[0])};
 		static size_t index{1};
-		static glm::vec3 delta{glm::normalize(points_[1] - points_[0])/10.0f};
-		static glm::vec3 translate{(Model::urf_ + Model::lln_)/2.0f}, scale{Model::urf_ - Model::lln_};
 
 		d_old = d_new;
-		d_new = glm::distance(translate, points_[index % points_.size()]);
+		d_new = glm::distance(translate_, points_[index]);
 
 		if(d_new > d_old) {
-			index++;
-			delta = glm::normalize(points_[index % points_.size()] - translate)/10.0f;
-			d_new = glm::distance(points_[index % points_.size()], translate);
+			index = (index + 1) % points_.size();
+			delta_ = glm::normalize(points_[index] - translate_)/30.0f;
+			d_new = glm::distance(points_[index], translate_);
 		}
 
-		Model::lln_ += delta;
-		Model::urf_ += delta;
-
-		translate = (Model::urf_ + Model::lln_)/2.0f;
-		scale = Model::urf_ - Model::lln_;
+		Model::lln_ += delta_;
+		Model::urf_ += delta_;
+		translate_ += delta_;
 
 		glPushMatrix();
-			glTranslatef(translate.x, translate.y, translate.z);
-			glScalef(scale.x, scale.y, scale.z);
-			glutSolidCube(0.95);
+			Model::apply_transformations();
+			glutSolidCube(1);
 		glPopMatrix();
 
 	}
