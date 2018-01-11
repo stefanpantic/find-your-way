@@ -92,7 +92,15 @@ Ubuntu:
  **Date:** 09-01-2018  
  **Progress made:**
  * Implemented most of eRG::PModel, the class used to represent stationary models,
- * Made minor tweaks to eRG::Model,
+ * Made minor changes to eRG::Model,
  * Tweaked JUMP ability and gravity for eRG::View.
+
+ ### Version 0.6:
+ **Date:** 11-01-2018  
+ **Progress made:**
+ * Implemented eRG::AModel, the class used to represent moving models,
+ * Added storing of translation and scale to eRG::PModel for efficiency,
+ * Made minor changes to eRG::Model,
+ * Some rafactoring.
 
 
