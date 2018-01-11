@@ -22,7 +22,7 @@ namespace eRG
 			explicit Model(Model &&other);
 
 			/* Position */
-			virtual std::pair<glm::vec3, glm::vec3> position() = 0;
+			virtual std::pair<glm::vec3, glm::vec3> position();
 
 			/* Draw */
 			virtual void draw() = 0;

@@ -37,6 +37,16 @@ namespace eRG
 	{
 		std::clog << "eRG::Model: Move constructor" << std::endl;
 	}
+
+	/* Position: */
+	/* @{ */
+	/*
+	* @brief Get model position as lower left near corner and upper far right corner coordinates.
+	*/
+	std::pair<glm::vec3, glm::vec3> Model::position()
+	{
+		return {glm::vec3{Model::lln_}, glm::vec3{Model::urf_}};
+	}
 	/* @} */
 	/* @@} */
 
