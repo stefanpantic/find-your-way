@@ -26,11 +26,6 @@ namespace eRG
 
 			/* Draw */
 			void draw() override;
-
-		private:
-			/* Stored transformations */
-			glm::vec3 translate_;
-			glm::vec3 scale_;
 	}; /* class eRG::PModel */
 	/* @} */
 

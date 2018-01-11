@@ -22,15 +22,25 @@ namespace eRG
 			explicit Model(Model &&other);
 
 			/* Position */
-			virtual std::pair<glm::vec3, glm::vec3> position();
+			virtual std::pair<glm::vec3, glm::vec3> position() const;
 
 			/* Draw */
 			virtual void draw() = 0;
+
+		/* Protected member functions */
+		protected:
+			/* Apply stored transformations */
+			void apply_transformations();
+
 		/* Protected member variables */
 		protected:
 			/* Stored corners */
 			glm::vec3 lln_;
 			glm::vec3 urf_;
+
+			/* Stored transformations */
+			glm::vec3 translate_;
+			glm::vec3 scale_;
 	}; /* class eRG::Model */
 	/* @} */
 
