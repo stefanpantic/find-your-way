@@ -99,8 +99,9 @@ Ubuntu:
  **Date:** 11-01-2018  
  **Progress made:**
  * Implemented eRG::AModel, the class used to represent moving models,
- * Added storing of translation and scale to eRG::PModel for efficiency,
- * Made minor changes to eRG::Model,
- * Some rafactoring.
+ * Added storing of translation and scale to eRG::Model,
+ * Swithced storage of models in eRG::Scene from std::shared_ptr to std::unique_ptr, 
+ * Reimplemented eRG::Scene::model_at method,
+ * Added per axis camera movement controls.
 
-
+&#955;
