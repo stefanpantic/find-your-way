@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <glm/vec3.hpp>
 #include <memory>
 
 namespace eRG
@@ -22,14 +23,14 @@ namespace eRG
 			explicit Scene(const std::string &source);
 
 			/* Get model */
-			std::shared_ptr<Model>& model_at(float x, float z);
+			const Model* model_at(glm::vec3 player);
 
 			/* Render scene */
 			void render_scene();
 		/* Private member variables */
 		private:
 			/* Model storage */
-			std::vector<std::shared_ptr<Model>> models_;
+			std::vector<std::unique_ptr<Model>> models_;
 	}; /* class eRG::Scene */
 	/* @} */
 

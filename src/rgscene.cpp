@@ -1,5 +1,4 @@
 #include <sstream>
-#include <cmath>
 #include <GL/glut.h>
 #include "rgscene.hpp"
 #include "rgpmodel.hpp"
@@ -16,20 +15,20 @@ namespace eRG
 	* TODO: Implement scene constructor.
 	*/
 	Scene::Scene(const std::string &source)
-		:	models_{std::vector<std::shared_ptr<Model>>{}}
+		:	models_{std::vector<std::unique_ptr<Model>>{}}
 	{
 		static_cast<void>(source);
 
 		/* Scene test: */
 		/* @{ */
-		models_.push_back(std::shared_ptr<Model>{new AModel{glm::vec3{0, -1, 0},
-															glm::vec3{1, 0, 1},
+		models_.push_back(std::unique_ptr<Model>{new AModel{glm::vec3{0, -1, 0},
+															glm::vec3{2, 0, 2},
 															std::vector<glm::vec3>{	glm::vec3{0.5, -0.5, 0.5},
-																					glm::vec3{5.5, -0.5, 5.5},
-																					glm::vec3{5.5, -0.5, 0.0}}
-															}});
-		models_.push_back(std::shared_ptr<Model>{new PModel{glm::vec3{-1, -1, -1},
+																					glm::vec3{8.5, -0.5, 8.5}}}});
+		models_.push_back(std::unique_ptr<Model>{new PModel{glm::vec3{-5, -1, -5},
 															glm::vec3{0, 0, 0}}});
+		models_.push_back(std::unique_ptr<Model>{new PModel{glm::vec3{9, -1, 9},
+															glm::vec3{10, 0, 10}}});
 		/* @} */
 	}
 	/* @} */
@@ -39,18 +38,17 @@ namespace eRG
 	/*
 	* TODO: Implement model position check.
 	*/
-	std::shared_ptr<Model>& Scene::model_at(float x, float z)
+	const Model* Scene::model_at(glm::vec3 player)
 	{
-		static std::shared_ptr<Model> abyss{new AModel{glm::vec3{0, 0, 0}, glm::vec3{0, -100, 0}}};
-
 		for(auto &e : models_) {
 			auto pos{e->position()};
-			if(x >= pos.first.x && x <= pos.second.x && z >= pos.first.z && z <= pos.second.z) {
-				return e;
+			if(	player.x >= pos.first.x && player.x <= pos.second.x &&
+				player.z >= pos.first.z && player.z <= pos.second.z) {
+				return e.get();
 			}
 		}
 
-		return abyss;
+		return nullptr;
 	}
 	/* @} */
 
