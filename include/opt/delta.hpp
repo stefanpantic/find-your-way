@@ -12,7 +12,14 @@ namespace eRG::opt
 		CENTERX,
 		CENTERY,
 		EYEF,
+		EYEFX,
+		EYEFY,
+		EYEFZ,
 		EYES,
+		EYESX,
+		EYESY,
+		EYESZ,
+		EYEV,
 	}; /* enum class eRG::opt::Delta */
 
 }; /* namespace eRG::opt */
