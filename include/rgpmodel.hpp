@@ -24,14 +24,11 @@ namespace eRG
 			explicit PModel(const PModel &other);
 			explicit PModel(PModel &&other);
 
-			/* Position */
-			std::pair<glm::vec3, glm::vec3> position() override;
-
 			/* Draw */
 			void draw() override;
 
-		/* Private member variables */
 		private:
+			/* Stored transformations */
 			glm::vec3 translate_;
 			glm::vec3 scale_;
 	}; /* class eRG::PModel */

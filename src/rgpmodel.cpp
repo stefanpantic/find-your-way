@@ -26,7 +26,10 @@ namespace eRG
 	* @brief Copy constructor.
 	*/
 	PModel::PModel(const PModel &other)
-		:	Model{other}
+		:	Model{other},
+			translate_{other.translate_},
+			scale_{other.scale_}
+
 	{
 		std::clog << "eRG::PModel: Copy constructor" << std::endl;
 	}
@@ -35,27 +38,18 @@ namespace eRG
 	* @brief Move constructor.
 	*/
 	PModel::PModel(PModel &&other)
-		:	Model{std::move(other)}
+		:	Model{std::move(other)},
+			translate_{std::move(other.translate_)},
+			scale_{std::move(other.scale_)}
 	{
 		std::clog << "eRG::PModel: Move constructor" << std::endl;
-	}
-	/* @} */
-
-	/* Position: */
-	/* @{ */
-	/*
-	* @brief Get model position as lower left near corner and upper far right corner coordinates.
-	*/
-	std::pair<glm::vec3, glm::vec3> PModel::position()
-	{
-		return {glm::vec3{Model::lln_}, glm::vec3{Model::urf_}};
 	}
 	/* @} */
 
 	/* Draw: */
 	/* @{ */
 	/*
-	* TODO: Implement draw function.
+	* @brief Draw the stored stationary model.
 	*/
 	void PModel::draw()
 	{
