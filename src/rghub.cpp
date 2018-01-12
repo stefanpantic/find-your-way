@@ -119,13 +119,13 @@ namespace eRG
 
 		/* Colision test: */
 		/* @{ */
-		auto eye{mview.get_eye()};
+		auto eye{mview.get(opt::Point::EYE)};
 		auto model{mscene.model_at(eye)};
 
 		if(model) {
-			mview.set_ybase(model->position().second.y + 2);
+			mview.set_floor(model->position().second.y + 2);
 		} else {
-			mview.set_ybase(-100);
+			mview.set_floor(-100);
 		}
 		/* Horizontal */
 		// TODO: Implement basic colision.
@@ -301,8 +301,8 @@ namespace eRG
 			return;
 		}
 
-		mview.set_delta(opt::Delta::CENTERX, mview.get_lspeed() * (d_x_ - x));
-		mview.set_delta(opt::Delta::CENTERY, mview.get_lspeed() * (d_y_ - y));
+		mview.set(opt::Delta::CENTERX, mview.get(opt::LMS::LOOK) * (d_x_ - x));
+		mview.set(opt::Delta::CENTERY, mview.get(opt::LMS::LOOK) * (d_y_ - y));
 
 		mview.reposition_view();
 
