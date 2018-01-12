@@ -17,6 +17,8 @@ namespace eRG
 		enum class Position;
 		enum class Special;
 		enum class Delta;
+		enum class Point;
+		enum class LMS;
 	}; /* namespace eRG::opt */
 
 	/* View declaration: */
@@ -45,28 +47,18 @@ namespace eRG
 			static void matrix_mode(opt::Transform mode);
 
 			/* Get stored vectors */
-			const glm::vec3 &get_eye();
-			const glm::vec3 &get_center();
-			const glm::vec3 &get_normal();
+			const glm::vec3& get(opt::Point p);
 
-			/* Get speeds */
-			const float &get_mspeed();
-			const float &get_lspeed();
-
-			/* Set speeds */
-			void set_mspeed(float msp);
-			void set_lspeed(float lsp);
-
-			/* Set deltas */
-			void set_delta(opt::Delta delta, float val);
+			/* Get/set look/move speed */
+			const float& get(opt::LMS s);
+			void set(opt::LMS s, float val);
+			void set(opt::Delta delta, float val);
 
 			/* Set world height */
-			void set_ybase(float wh);
+			void set_floor(float wh);
 
-			/* Move center point */
+			/* Main point transformmations */
 			void center_move(opt::View direction);
-
-			/* Move eye point */
 			void eye_move(opt::Position direction);
 
 			/* Special motion */

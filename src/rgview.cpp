@@ -69,94 +69,96 @@ namespace eRG
 	*/
 	void View::matrix_mode(opt::Transform mode)
 	{
-		using namespace opt;
-
 		switch(mode)
 		{
-			case Transform::MODELVIEW:
+			case opt::Transform::MODELVIEW:
 				glMatrixMode(GL_MODELVIEW);
 				break;
-			case Transform::PROJECTION:
+			case opt::Transform::PROJECTION:
 				glMatrixMode(GL_PROJECTION);
 				break;
-			case Transform::TEXTURE:
+			case opt::Transform::TEXTURE:
 				glMatrixMode(GL_TEXTURE);
 				break;
 		}
 	}
 	/* @} */
 
+/*
+* @brief Supressing warning about control reaching end of non-void function.
+*
+* The functiions below return values based off the value of an enum class parameter.
+* All of the enum class options have been covered, so the end of the function cannot be reached
+* before a condition is met.
+*/
+/* @{ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wreturn-type"
+
 	/* Get stored vectors */
 	/* @{ */
 	/*
-	* @brief Return stored eye point.
+	* @brief Return stored camera position vectors.
 	*/
-	const glm::vec3& View::get_eye()
+	const glm::vec3& View::get(opt::Point p)
 	{
-		return eye_;
-	}
-
-	/*
-	* @brief Return stored center point.
-	*/
-	const glm::vec3& View::get_center()
-	{
-		return center_;
-	}
-
-	/*
-	* @brief Return stored normal vector.
-	*/
-	const glm::vec3& View::get_normal()
-	{
-		return normal_;
+		switch(p)
+		{
+			case opt::Point::CENTER:
+				return center_;
+			case opt::Point::EYE:
+				return eye_;
+			case opt::Point::NORMAL:
+				return normal_;
+		}
 	}
 	/* @} */
 
-	/* Get speeds: */
+	/* Get move/look speeds: */
 	/* @{ */
 	/*
-	* @brief Get eye point movement speed.
+	* @brief Get stored movement speed and look sensitivity.
 	*/
-	const float& View::get_mspeed()
+	const float& View::get(opt::LMS s)
 	{
-		return msp_;
-	}
-
-	/*
-	* @brief Get center point movement speed.
-	*/
-	const float& View::get_lspeed()
-	{
-		return lsp_;
+		switch(s)
+		{
+			case opt::LMS::MOVE:
+				return msp_;
+			case opt::LMS::LOOK:
+				return lsp_;
+		}
 	}
 	/* @} */
 
-	/* Set speeds: */
+#pragma GCC diagnostic pop
+/* @} */
+
+	/* Set move/look speeds: */
 	/* @{ */
 	/*
-	* @brief Set eye point movement speed.
+	* @brief Set stored movement speed and look sensitivity.
 	*/
-	void View::set_mspeed(float msp)
+	void View::set(opt::LMS s, float val)
 	{
-		msp_ = std::move(msp);
-	}
-
-	/*
-	* @brief Set center point movement speed.
-	*/
-	void View::set_lspeed(float lsp)
-	{
-		lsp_ = std::move(lsp);
+		switch(s)
+		{
+			case opt::LMS::MOVE:
+				msp_ = std::move(val);
+				break;
+			case opt::LMS::LOOK:
+				lsp_ = std::move(val);
+				break;
+		}
 	}
 	/* @} */
 
 	/* Set world height: */
 	/* @{ */
 	/*
-	* @brief Set y base height.
+	* @brief Set y axis base height.
 	*/
-	void View::set_ybase(float wh)
+	void View::set_floor(float wh)
 	{
 		y_base_ = std::move(wh);
 	}
@@ -167,7 +169,7 @@ namespace eRG
 	/*
 	* @brief Set individual movement deltas. Allows for finer camera control.
 	*/
-	void View::set_delta(opt::Delta delta, float val)
+	void View::set(opt::Delta delta, float val)
 	{
 		using namespace opt;
 
@@ -252,26 +254,24 @@ namespace eRG
 	*/
 	void View::eye_move(opt::Position direction)
 	{
-		using namespace opt;
-
 		switch(direction)
 		{
-			case Position::UP:
+			case opt::Position::UP:
 				d_front_ = glm::vec3(msp_);
 				break;
-			case Position::DOWN:
+			case opt::Position::DOWN:
 				d_front_ = glm::vec3(-msp_);
 				break;
-			case Position::LEFT:
+			case opt::Position::LEFT:
 				d_side_ = glm::vec3(msp_);
 				break;
-			case Position::RIGHT:
+			case opt::Position::RIGHT:
 				d_side_ = glm::vec3(-msp_);
 				break;
-			case Position::STOP_FORWARD:
+			case opt::Position::STOP_FORWARD:
 				d_front_ = glm::vec3(0);
 				break;
-			case Position::STOP_SIDEWAYS:
+			case opt::Position::STOP_SIDEWAYS:
 				d_side_ = glm::vec3(0);
 				break;
 		}
@@ -285,20 +285,18 @@ namespace eRG
 	*/
 	void View::special(opt::Special action)
 	{
-		using namespace opt;
-
 		switch(action)
 		{
-			case Special::JUMP:
+			case opt::Special::JUMP:
 				d_up_ = msp_;
 				break;
-			case Special::BLINK:
+			case opt::Special::BLINK:
 				if(!blink_) {
 					d_front_ = glm::vec3(30*msp_);
 					blink_ = true;
 				}
 				break;
-			case Special::TIME:
+			case opt::Special::TIME:
 				// TODO: Implement time control.
 				break;
 		}
@@ -309,17 +307,15 @@ namespace eRG
 	*/
 	void View::reset_special(opt::Special action)
 	{
-		using namespace opt;
-
 		switch(action)
 		{
-			case Special::JUMP:
+			case opt::Special::JUMP:
 				// TODO: Jump reseter.
 				break;
-			case Special::BLINK:
+			case opt::Special::BLINK:
 				blink_ = false;
 				break;
-			case Special::TIME:
+			case opt::Special::TIME:
 				// TODO: Time reseter.
 				break;
 		}
