@@ -84,20 +84,24 @@ namespace eRG
 	*/
 	void Hub::reshape(int w, int h)
 	{
+		/* Capture the width and height of the window */
 		width_ = w;
 		height_ = h;
 
+		/* Center the pointer */
 		d_x_ = w/2;
 		d_y_ = h/2;
 		glutWarpPointer(d_x_, d_y_);
 
+		/* Enter projection mode */
 		View::matrix_mode(opt::Transform::PROJECTION);
-		View::identity_matrix();
 
-		View::viewport(	glm::vec2{0, 0},
-						glm::vec2{w, h});
+		/* Reset matrices, set viewport to entire window and set perspective */
+		glLoadIdentity();
+		glViewport(0, 0, w, h);
+		gluPerspective(70.0f, static_cast<float>(w)/h, 0.1f, 100.0f);
 
-		View::perspective(80.0f, static_cast<float>(w)/h, 0.1f, 100.0f);
+		/* Enter modelview */
 		View::matrix_mode(opt::Transform::MODELVIEW);
 	}
 
@@ -106,10 +110,12 @@ namespace eRG
 	*/
 	void Hub::display()
 	{
+		/* Clear the depth and color buffers */
 		glClear(GL_COLOR_BUFFER_BIT |
 				GL_DEPTH_BUFFER_BIT);
 
-		View::identity_matrix();
+		/* Reset all matrix transformations */
+		glLoadIdentity();
 
 		/* Colision test: */
 		/* @{ */
@@ -117,7 +123,7 @@ namespace eRG
 		auto model{mscene.model_at(eye)};
 
 		if(model) {
-			mview.set_ybase(model->position().second.y + 1);
+			mview.set_ybase(model->position().second.y + 2);
 		} else {
 			mview.set_ybase(-100);
 		}
