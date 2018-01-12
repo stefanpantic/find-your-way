@@ -1,4 +1,4 @@
-# Find Your Way (RG061)
+# Find Your Way (RG061) &#955;
 
 ## About:
 **Author:** Stefan Pantic.  
@@ -104,4 +104,11 @@ Ubuntu:
  * Reimplemented eRG::Scene::model_at method,
  * Added per axis camera movement controls.
 
-&#955;
+ ### Version 0.6.1:
+ **Date:** 12-01-2018  
+ **Progress made:**
+ * Changed get and set methods in eRG::View,
+ * Added options for eRG::View get and set methods in opt/ enum classes,
+
+
+
