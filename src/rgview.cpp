@@ -23,7 +23,7 @@ namespace eRG
 			d_theta_{0.0f}, d_phi_{0.0f},
 			d_front_{0.0f}, d_side_{0.0f}, d_up_{0.0f},
 			msp_{0.1f}, lsp_{util::pi/180.0f},
-			y_base_{1.0f}, jump_base_{1.0f}
+			y_base_{2.0f}, jump_base_{2.0f}
 	{
 		std::clog << "eRG::View: Default contructor" << std::endl;
 	}
@@ -42,14 +42,6 @@ namespace eRG
 
 	/* Set matrix transformations: */
 	/* @{ */
-	/*
-	* @brief Load the identity matrix.
-	*/
-	void View::identity_matrix()
-	{
-		glLoadIdentity();
-	}
-
 	/*
 	* @brief Set gluLookAt with stored parameters.
 	*/
@@ -91,50 +83,6 @@ namespace eRG
 				glMatrixMode(GL_TEXTURE);
 				break;
 		}
-	}
-
-	/*
-	* @brief Set the viewport.
-	*
-	* First parameter is the new lower left corner of the window, second parameter is the new
-	* upper right corner of the window.
-	*/
-	void View::viewport(glm::vec2 lower_left, glm::vec2 upper_right)
-	{
-		glViewport(lower_left.x, lower_left.y, upper_right.x, upper_right.y);
-	}
-
-	/*
-	* @brief Set the perspective view frustrum.
-	*
-	* First parameter is the field of view, second is the aspect ratio of the display
-	* and the final two parameters are the near and far clipping planes.
-	*/
-	void View::perspective(double fov, double aspect_ratio, double z_near, double z_far)
-	{
-		gluPerspective(fov, aspect_ratio, z_near, z_far);
-	}
-
-	/*
-	* @brief Sets the paralel projection square.
-	*
-	* Parameters are as follows: left clipping plane, right clipping plane,
-	* bottom clipping plane, top clipping plane.
-	*/
-	void View::ortho2D(double left, double right, double bottom, double top)
-	{
-		gluOrtho2D(left, right, bottom, top);
-	}
-
-	/*
-	* @brief Sets the paralel projection volume.
-	*
-	* Parameters are as follows: left clipping plane, right clipping plane,
-	* bottom clipping plane, top clipping plane, z near plane, z far plane.
-	*/
-	void View::ortho(double left, double right, double bottom, double top, double z_near, double z_far)
-	{
-		glOrtho(left, right, bottom, top, z_near, z_far);
 	}
 	/* @} */
 
@@ -351,6 +299,7 @@ namespace eRG
 				}
 				break;
 			case Special::TIME:
+				// TODO: Implement time control.
 				break;
 		}
 	}
@@ -365,13 +314,13 @@ namespace eRG
 		switch(action)
 		{
 			case Special::JUMP:
-				// TODO
+				// TODO: Jump reseter.
 				break;
 			case Special::BLINK:
 				blink_ = false;
 				break;
 			case Special::TIME:
-				// TODO
+				// TODO: Time reseter.
 				break;
 		}
 	}
@@ -402,7 +351,7 @@ namespace eRG
 			__eyev();
 		} else if(eye_.y > y_base_) {
 			/* Aproximate sin(x) = x for gravity */
-			eye_.y -= 3*msp_;
+			eye_.y -= 4*msp_;
 
 			/* Make sure we don't fall through the floor */
 			if(eye_.y < y_base_) {
@@ -419,7 +368,7 @@ namespace eRG
 	/* Center and eye point movement: */
 	/* @{ */
 	/*
-	* @brief Move center point on imaginary sphere with eye as ceneter of sphere.
+	* @brief Move center point on imaginary sphere with eye as center of sphere.
 	*/
 	void View::__center()
 	{
@@ -451,8 +400,8 @@ namespace eRG
 	void View::__eyef()
 	{
 		eye_.x += d_front_.x * std::sin(theta_);
-		eye_.y += d_front_.z * std::cos(phi_);
-		eye_.z += d_front_.y * std::cos(theta_);
+		eye_.y += (blink_) ? d_front_.y * std::cos(phi_) : 0;
+		eye_.z += d_front_.z * std::cos(theta_);
 	}
 
 	/*
@@ -481,7 +430,7 @@ namespace eRG
 			jump_base_ = y_base_;
 		}
 
-		eye_.y = 3*std::sin(v) + jump_base_;
+		eye_.y = 4*std::sin(v) + jump_base_;
 		v += d_up_;
 
 		if(v >= util::pi) {

@@ -42,12 +42,7 @@ namespace eRG
 			void look_at(glm::vec3 eye, glm::vec3 center, glm::vec3 normal);
 
 			/* Matrix mode */
-			static void identity_matrix();
 			static void matrix_mode(opt::Transform mode);
-			static void viewport(glm::vec2 lower_left, glm::vec2 upper_right);
-			static void perspective(double fov, double aspect_ratio, double z_near, double z_far);
-			static void ortho2D(double left, double right, double bottom, double top);
-			static void ortho(double left, double right, double bottom, double top, double z_near, double z_far);
 
 			/* Get stored vectors */
 			const glm::vec3 &get_eye();
