@@ -1,4 +1,4 @@
-# Find Your Way (RG061) &#955;
+# &#955;: Find Your Way (RG061)
 
 ## About:
 **Author:** Stefan Pantic.  
@@ -110,5 +110,12 @@ Ubuntu:
  * Changed get and set methods in eRG::View,
  * Added options for eRG::View get and set methods in opt/ enum classes,
 
+ ### Version 0.6.2:
+ **Date:** 12-01-2018  
+ **Progress made:**
+ * Redesigned and reimplemented eRG::View,
+ * Changed options in eRG::opt,
+ * Started work on AABB colision detection in eRG::Scene,
+ * Renamed some variables in eRG::Hub.
 
 
