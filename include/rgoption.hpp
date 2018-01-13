@@ -1,12 +1,9 @@
 #pragma once
 
+#include "opt/move.hpp"
+#include "opt/look.hpp"
 #include "opt/view.hpp"
-#include "opt/position.hpp"
 #include "opt/transform.hpp"
-#include "opt/special.hpp"
-#include "opt/delta.hpp"
-#include "opt/lms.hpp"
-#include "opt/point.hpp"
 
 
 
