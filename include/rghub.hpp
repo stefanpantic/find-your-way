@@ -56,7 +56,7 @@ namespace eRG
 			static int width_, height_;
 
 			/* Delta x, y */
-			static int d_x_, d_y_;
+			static int dx_, dy_;
 
 			/* Camera */
 			static View mview;

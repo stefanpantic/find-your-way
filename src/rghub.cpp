@@ -19,11 +19,11 @@ namespace eRG
 	/* Static member initialization: */
 	/* @{ */
 	int Hub::width_{0}, Hub::height_{0};
-	int Hub::d_x_{0}, Hub::d_y_{0};
+	int Hub::dx_{0}, Hub::dy_{0};
 	View Hub::mview{glm::vec3{0, 1, 0},
 					glm::vec3{1, 1, 1},
 					glm::vec3{0, 1, 0}};
-	Scene Hub::mscene{"placeholder name"};
+	Scene Hub::mscene{"placeholder"};
 	/* @} */
 
 	/* Initializer: */
@@ -88,10 +88,10 @@ namespace eRG
 		width_ = w;
 		height_ = h;
 
-		/* Center the pointer */
-		d_x_ = w/2;
-		d_y_ = h/2;
-		glutWarpPointer(d_x_, d_y_);
+		/* Center the cursor */
+		dx_ = w/2;
+		dy_ = h/2;
+		glutWarpPointer(dx_, dy_);
 
 		/* Enter projection mode */
 		View::matrix_mode(opt::Transform::PROJECTION);
@@ -119,26 +119,27 @@ namespace eRG
 
 		/* Colision test: */
 		/* @{ */
-		auto eye{mview.get(opt::Point::EYE)};
+		auto eye{mview.get_point(opt::View::EYE)};
 		auto model{mscene.model_at(eye)};
 
 		if(model) {
 			mview.set_floor(model->position().second.y + 2);
 		} else {
-			mview.set_floor(-100);
+			mview.set_floor(1);
 		}
+
 		/* Horizontal */
-		// TODO: Implement basic colision.
+		// TODO: Implement colision checking.
 		/* @} */
 
-		mview.reposition_view();
+		mview.reposition();
 		mview.look_at();
 
 		/* World test - temporary: */
 		/* @{ */
 		glEnable(GL_LIGHTING);
 
-		mscene.render_scene();
+		mscene.render();
 
 		glDisable(GL_LIGHTING);
 		/* @} */
@@ -169,29 +170,26 @@ namespace eRG
 
 		switch(key)
 		{
-			/* Exit the game */
 			case 27:
 				std::exit(0);
-			/* Manual camera movement controls */
 			case 'w':
-				mview.center_move(opt::View::UP);
+				mview.set_look_parameter(opt::Look::VERTICAL, -1);
 				break;
 			case 's':
-				mview.center_move(opt::View::DOWN);
+				mview.set_look_parameter(opt::Look::VERTICAL, 1);
 				break;
 			case 'a':
-				mview.center_move(opt::View::LEFT);
+				mview.set_look_parameter(opt::Look::HORIZONTAL, -1);
 				break;
 			case 'd':
-				mview.center_move(opt::View::RIGHT);
+				mview.set_look_parameter(opt::Look::HORIZONTAL, 1);
 				break;
-			/* Ability controls */
 			case 'b':
-				mview.special(opt::Special::BLINK);
+				mview.set_move_parameter(opt::Move::FORWARD, 30);
 				glutTimerFunc(TIMER_BLINK_INTERVAL, timer, TIMER_BLINK);
 				break;
 			case ' ':
-				mview.special(opt::Special::JUMP);
+				mview.set_move_parameter(opt::Move::UP, util::pi/40.0f);
 				break;
 		}
 	}
@@ -208,11 +206,11 @@ namespace eRG
 		{
 			case 'w':
 			case 's':
-				mview.center_move(opt::View::STOP_VERTICAL);
+				mview.set_look_parameter(opt::Look::VERTICAL, 0);
 				break;
 			case 'a':
 			case 'd':
-				mview.center_move(opt::View::STOP_HORIZONTAL);
+				mview.set_look_parameter(opt::Look::HORIZONTAL, 0);
 				break;
 		}
 	}
@@ -225,19 +223,21 @@ namespace eRG
 		static_cast<void>(x);
 		static_cast<void>(y);
 
+		mview.set_move_parameter(opt::Move::FORWARDY, 0);
+
 		switch(key)
 		{
 			case GLUT_KEY_UP:
-				mview.eye_move(opt::Position::UP);
+				mview.set_move_parameter(opt::Move::FORWARD, 1);
 				break;
 			case GLUT_KEY_DOWN:
-				mview.eye_move(opt::Position::DOWN);
+				mview.set_move_parameter(opt::Move::FORWARD, -1);
 				break;
 			case GLUT_KEY_LEFT:
-				mview.eye_move(opt::Position::LEFT);
+				mview.set_move_parameter(opt::Move::STRAFE, 1);
 				break;
 			case GLUT_KEY_RIGHT:
-				mview.eye_move(opt::Position::RIGHT);
+				mview.set_move_parameter(opt::Move::STRAFE, -1);
 				break;
 		}
 	}
@@ -254,11 +254,11 @@ namespace eRG
 		{
 			case GLUT_KEY_UP:
 			case GLUT_KEY_DOWN:
-				mview.eye_move(opt::Position::STOP_FORWARD);
+				mview.set_move_parameter(opt::Move::FORWARD, 0);
 				break;
 			case GLUT_KEY_LEFT:
 			case GLUT_KEY_RIGHT:
-				mview.eye_move(opt::Position::STOP_SIDEWAYS);
+				mview.set_move_parameter(opt::Move::STRAFE, 0);
 				break;
 		}
 	}
@@ -294,23 +294,23 @@ namespace eRG
 		y = height_ - y;
 
 		if (std::sqrt(std::pow(x - width_/2, 2) + std::pow(y - height_/2, 2)) > width_/4) {
-			d_x_ = width_/2;
-			d_y_ = height_/2;
-			glutWarpPointer(d_x_, d_y_);
+			dx_ = width_/2;
+			dy_ = height_/2;
+			glutWarpPointer(dx_, dy_);
 
 			return;
 		}
 
-		mview.set(opt::Delta::CENTERX, mview.get(opt::LMS::LOOK) * (d_x_ - x));
-		mview.set(opt::Delta::CENTERY, mview.get(opt::LMS::LOOK) * (d_y_ - y));
+		mview.set_look_parameter(opt::Look::HORIZONTAL, (dx_ - x)/2.0f);
+		mview.set_look_parameter(opt::Look::VERTICAL, (dy_ - y)/2.0f);
 
-		mview.reposition_view();
+		mview.reposition();
 
-		mview.center_move(opt::View::STOP_VERTICAL);
-		mview.center_move(opt::View::STOP_HORIZONTAL);
+		mview.set_look_parameter(opt::Look::HORIZONTAL, 0);
+		mview.set_look_parameter(opt::Look::VERTICAL, 0);
 
-		d_x_ = x;
-		d_y_ = y;
+		dx_ = x;
+		dy_ = y;
 	}
 	/* @} */
 
@@ -325,11 +325,10 @@ namespace eRG
 		{
 			case TIMER_REDISPLAY:
 				glutPostRedisplay();
-				glutTimerFunc(TIMER_REDISPLAY_INTERVAL, timer, TIMER_REDISPLAY);
+				glutTimerFunc(TIMER_REDISPLAY_INTERVAL, Hub::timer, TIMER_REDISPLAY);
 				break;
 			case TIMER_BLINK:
-				mview.eye_move(opt::Position::STOP_FORWARD);
-				mview.reset_special(opt::Special::BLINK);
+				mview.set_move_parameter(opt::Move::FORWARD, 0);
 				break;
 		}
 	}
@@ -338,7 +337,9 @@ namespace eRG
 	* TODO: Implement idle function.
 	*/
 	void Hub::idle()
-	{}
+	{
+		glutPostRedisplay();
+	}
 	/* @} */
 	/* @@} */
 
