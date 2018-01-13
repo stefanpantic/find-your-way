@@ -12,13 +12,10 @@ namespace eRG
 	/* Forward declarations of eRG::opt enum classes */
 	namespace opt
 	{
-		enum class Transform;
+		enum class Look;
+		enum class Move;
 		enum class View;
-		enum class Position;
-		enum class Special;
-		enum class Delta;
-		enum class Point;
-		enum class LMS;
+		enum class Transform;
 	}; /* namespace eRG::opt */
 
 	/* View declaration: */
@@ -37,36 +34,29 @@ namespace eRG
 			explicit View(	glm::vec3 eye 	 = {0, 0, -1},	/* Eye point */
 							glm::vec3 center = {0, 0, 0},	/* To point */
 							glm::vec3 normal = {0, 1, 0});	/* Normal vector */
-			explicit View(const View &other);
-
-			/* Set matrix transformations */
-			void look_at();
-			void look_at(glm::vec3 eye, glm::vec3 center, glm::vec3 normal);
+			//explicit View(const View &other);
 
 			/* Matrix mode */
 			static void matrix_mode(opt::Transform mode);
 
-			/* Get stored vectors */
-			const glm::vec3& get(opt::Point p);
+			/* Set look at */
+			void look_at();
+			void look_at(glm::vec3 eye, glm::vec3 center, glm::vec3 normal);
 
-			/* Get/set look/move speed */
-			const float& get(opt::LMS s);
-			void set(opt::LMS s, float val);
-			void set(opt::Delta delta, float val);
+			/* Get look and movement parameters */
+			const glm::vec3& get_point(opt::View opt) const;
+			const float& get_look_sensitivity() const;
+			const float& get_move_speed() const;
+
+			/* Set look and movement parameters */
+			void set_look_parameter(opt::Look opt, float val);
+			void set_move_parameter(opt::Move opt, float val);
 
 			/* Set world height */
-			void set_floor(float wh);
-
-			/* Main point transformmations */
-			void center_move(opt::View direction);
-			void eye_move(opt::Position direction);
-
-			/* Special motion */
-			void special(opt::Special action);
-			void reset_special(opt::Special action);
+			void set_floor(float base);
 
 			/* Redraw scene */
-			void reposition_view();
+			void reposition();
 
 		/* Private member functions */
 		private:
@@ -90,19 +80,16 @@ namespace eRG
 			float theta_, phi_;
 
 			/* Delta theta, phi */
-			float d_theta_, d_phi_;
+			float dtheta_, dphi_;
 
-			/* Delta front, side vectors */
-			glm::vec3 d_front_, d_side_;
+			/* Delta forward and strafe vectors */
+			glm::vec3 dforward_, dstrafe_;
 
 			/* Delta up */
-			float d_up_;
+			float dup_;
 
-			/* Move, look speed */
-			float msp_, lsp_;
-
-			/* Blink indicator */
-			bool blink_;
+			/* Move speed and look sensitivity */
+			float mspd_, lsen_;
 
 			/* Y base - world height indicator */
 			float y_base_, jump_base_;

@@ -4,19 +4,13 @@ namespace eRG::opt
 {
 
 	/*
-	* @brief Enum containing viewpoint movemement options.
+	* @brief Enum containing view positional parameters.
 	*/
 	enum class View
 	{
-		/* Direction options */
-		UP,
-		DOWN,
-		LEFT,
-		RIGHT,
-
-		/* Stop movement */
-		STOP_VERTICAL,
-		STOP_HORIZONTAL,
+		CENTER,
+		EYE,
+		NORMAL,
 	}; /* enum class eRG::opt::View */
 
 }; /* namespace eRG::opt */
