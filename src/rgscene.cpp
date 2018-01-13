@@ -1,5 +1,7 @@
 #include <sstream>
 #include <GL/glut.h>
+#include <glm/vec3.hpp>
+#include <glm/geometric.hpp>
 #include "rgscene.hpp"
 #include "rgpmodel.hpp"
 #include "rgamodel.hpp"
@@ -23,8 +25,8 @@ namespace eRG
 		/* @{ */
 		models_.push_back(std::unique_ptr<Model>{new AModel{glm::vec3{0, -1, 0},
 															glm::vec3{2, 0, 2},
-															std::vector<glm::vec3>{	glm::vec3{0.5, -0.5, 0.5},
-																					glm::vec3{8.5, -0.5, 8.5}}}});
+															std::vector<glm::vec3>{	glm::vec3{1, 0.5, 1},
+																					glm::vec3{1, 10.5, 1}}}});
 		models_.push_back(std::unique_ptr<Model>{new PModel{glm::vec3{-5, -1, -5},
 															glm::vec3{0, 0, 0}}});
 		models_.push_back(std::unique_ptr<Model>{new PModel{glm::vec3{9, -1, 9},
@@ -38,15 +40,25 @@ namespace eRG
 	/*
 	* TODO: Implement model position check.
 	*/
-	const Model* Scene::model_at(glm::vec3 player)
+	const Model* Scene::model_at(glm::vec3 pbox) const
 	{
-		for(auto &e : models_) {
+		for(decltype(auto) e : models_) {
 			auto pos{e->position()};
-			if(	player.x >= pos.first.x && player.x <= pos.second.x &&
-				player.z >= pos.first.z && player.z <= pos.second.z) {
+			if(	pbox.x >= pos.first.x && pbox.x <= pos.second.x &&
+				pbox.z >= pos.first.z && pbox.z <= pos.second.z) {
 				return e.get();
 			}
 		}
+
+		return nullptr;
+	}
+
+	/*
+	* TODO: Implement AABB colision checking.
+	*/
+	const Model* Scene::aabb(glm::vec3 pbox) const
+	{
+		static_cast<void>(pbox);
 
 		return nullptr;
 	}
@@ -57,7 +69,7 @@ namespace eRG
 	/*
 	* TODO: Implement scene rendering.
 	*/
-	void Scene::render_scene()
+	void Scene::render() const
 	{
 		for(auto &e : models_) {
 			e->draw();

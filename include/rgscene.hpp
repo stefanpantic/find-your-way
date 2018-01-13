@@ -23,10 +23,11 @@ namespace eRG
 			explicit Scene(const std::string &source);
 
 			/* Get model */
-			const Model* model_at(glm::vec3 player);
+			const Model* model_at(glm::vec3 pbox) const;
+			const Model* aabb(glm::vec3 pbox) const;
 
 			/* Render scene */
-			void render_scene();
+			void render() const;
 		/* Private member variables */
 		private:
 			/* Model storage */
