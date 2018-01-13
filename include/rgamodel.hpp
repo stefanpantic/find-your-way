@@ -35,6 +35,12 @@ namespace eRG
 
 			/* Direction of movement */
 			glm::vec3 delta_;
+
+			/* Current point */
+			size_t index_;
+
+			/* Distances from next point */
+			float dold_, dnew_;
 	}; /* class eRG::AModel */
 	/* @} */
 

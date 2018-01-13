@@ -19,7 +19,9 @@ namespace eRG
 					std::vector<glm::vec3> &&points)
 		:	Model{lower_left_near, upper_right_far},
 			points_{std::move(points)},
-			delta_{glm::normalize(points_[1] - points_[0])/30.0f}
+			delta_{glm::normalize(points_[0] - Model::translate_)/30.0f},
+			index_{0},
+			dold_{0}, dnew_{0}
 	{
 		std::clog << "eRG::AModel: Default constructor" << std::endl;
 	}
@@ -30,7 +32,9 @@ namespace eRG
 	AModel::AModel(const AModel &other)
 		:	Model{other},
 			points_{other.points_},
-			delta_{other.delta_}
+			delta_{other.delta_},
+			index_{other.index_},
+			dold_{other.dold_}, dnew_{other.dnew_}
 	{
 		std::clog << "eRG::AModel: Copy constructor" << std::endl;
 	}
@@ -41,8 +45,9 @@ namespace eRG
 	AModel::AModel(AModel &&other)
 		:	Model{std::move(other)},
 			points_{std::move(other.points_)},
-			delta_{std::move(other.delta_)}
-
+			delta_{std::move(other.delta_)},
+			index_{std::move(other.index_)},
+			dold_{std::move(other.dold_)}, dnew_{std::move(other.dnew_)}
 	{
 		std::clog << "eRG::AModel: Move constructor" << std::endl;
 	}
@@ -57,16 +62,13 @@ namespace eRG
 	*/
 	void AModel::draw()
 	{
-		static double d_old{0}, d_new{glm::distance(points_[1], points_[0])};
-		static size_t index{1};
+		dold_ = dnew_;
+		dnew_ = glm::distance(translate_, points_[index_]);
 
-		d_old = d_new;
-		d_new = glm::distance(translate_, points_[index]);
-
-		if(d_new > d_old) {
-			index = (index + 1) % points_.size();
-			delta_ = glm::normalize(points_[index] - translate_)/30.0f;
-			d_new = glm::distance(points_[index], translate_);
+		if(dnew_ > dold_) {
+			index_ = (index_ + 1) % points_.size();
+			delta_ = glm::normalize(points_[index_] - translate_)/30.0f;
+			dnew_ = glm::distance(points_[index_], translate_);
 		}
 
 		Model::lln_ += delta_;
@@ -77,7 +79,6 @@ namespace eRG
 			Model::apply_transformations();
 			glutSolidCube(1);
 		glPopMatrix();
-
 	}
 	/* @} */
 
