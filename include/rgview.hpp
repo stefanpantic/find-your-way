@@ -51,6 +51,8 @@ namespace eRG
 			/* Set look and movement parameters */
 			void set_look_parameter(opt::Look opt, float val);
 			void set_move_parameter(opt::Move opt, float val);
+			void set_look_sensitivity(float val);
+			void set_move_speed(float val);
 
 			/* Set world height */
 			void set_floor(float base);
@@ -64,6 +66,7 @@ namespace eRG
 			void __eyef();
 			void __eyes();
 			void __eyev();
+			void __gravity();
 
 		/* Private member variables */
 		private:

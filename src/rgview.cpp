@@ -22,8 +22,8 @@ namespace eRG
 			theta_{util::pi/4}, phi_{util::pi/2},
 			dtheta_{0.0f}, dphi_{0.0f},
 			dforward_{0.0f}, dstrafe_{0.0f}, dup_{0.0f},
-			mspd_{0.1f}, lsen_{util::pi/180.0f},
-			y_base_{2.0f}, jump_base_{2.0f}
+			mspd_{0.0f}, lsen_{0.0f},
+			y_base_{0.0f}, jump_base_{0.0f}
 	{
 		std::clog << "eRG::View: Default contructor" << std::endl;
 	}
@@ -140,9 +140,6 @@ namespace eRG
 			case opt::Look::VERTICAL:
 				dphi_ = val;
 				break;
-			case opt::Look::SENSITIVITY:
-				lsen_ = val;
-				break;
 		}
 	}
 
@@ -180,10 +177,23 @@ namespace eRG
 			case opt::Move::UP:
 				dup_ = val;
 				break;
-			case opt::Move::SPEED:
-				mspd_ = val;
-				break;
 		}
+	}
+
+	/*
+	* @brief Set center point movement sensitivity/
+	*/
+	void View::set_look_sensitivity(float val)
+	{
+		lsen_ = val;
+	}
+
+	/*
+	* @brief Eye point movement speed.
+	*/
+	void View::set_move_speed(float val)
+	{
+		mspd_ = val;
 	}
 	/* @} */
 
@@ -221,19 +231,8 @@ namespace eRG
 
 		if(dup_) {
 			__eyev();
-		} else if(eye_.y > y_base_) {
-			/* Aproximate sin(x) = x for gravity */
-			eye_.y -= 4*mspd_;
-
-			/* Make sure we don't fall through the floor */
-			if(eye_.y < y_base_) {
-				eye_.y = y_base_;
-				jump_base_ = y_base_;
-			}
-
-		} else if(eye_.y >= y_base_ - 0.4 && eye_.y - y_base_ < 0) {
-			eye_.y = y_base_;
-			jump_base_ = y_base_;
+		} else {
+			__gravity();
 		}
 	}
 	/* @} */
@@ -305,6 +304,28 @@ namespace eRG
 
 		if(v >= util::pi) {
 			v = dup_ = 0;
+		}
+	}
+
+	/*
+	* @brief Apply gravity to view.
+	*/
+	void View::__gravity()
+	{
+		if(eye_.y > y_base_) {
+			/* Aproximate sin(x) = x for gravity */
+			eye_.y -= 4*mspd_;
+
+			/* Make sure we don't fall through the floor */
+			if(eye_.y < y_base_) {
+				eye_.y = y_base_;
+				jump_base_ = y_base_;
+			}
+
+		}
+		else if(eye_.y >= y_base_ - 0.4 && eye_.y - y_base_ < 0) {
+			eye_.y = y_base_;
+			jump_base_ = y_base_;
 		}
 	}
 	/* @} */
