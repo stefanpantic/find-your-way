@@ -111,11 +111,17 @@ Ubuntu:
  * Added options for eRG::View get and set methods in opt/ enum classes,
 
  ### Version 0.6.2:
- **Date:** 12-01-2018  
+ **Date:** 13-01-2018  
  **Progress made:**
  * Redesigned and reimplemented eRG::View,
  * Changed options in eRG::opt,
  * Started work on AABB colision detection in eRG::Scene,
  * Renamed some variables in eRG::Hub.
 
+ ### Version 0.7:
+ **Date:** 14-01-2018  
+ **Progress made:**
+ * Implemented AABB colision detection in eRG::Scene,
+ * Moved gravity to seperate function in eRG::View,
+ * Minor refactoring.
 
