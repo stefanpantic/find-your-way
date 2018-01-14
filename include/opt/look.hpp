@@ -10,7 +10,6 @@ namespace eRG::opt
 	{
 		VERTICAL,
 		HORIZONTAL,
-		SENSITIVITY,
 	}; /* enum class eRG::opt::Look */
 
 }; /* namespace eRG::opt */

@@ -17,7 +17,6 @@ namespace eRG::opt
 		STRAFEY,
 		STRAFEZ,
 		UP,
-		SPEED,
 	}; /* enum class eRG::opt::Move */
 
 }; /* namespace eRG::opt */
