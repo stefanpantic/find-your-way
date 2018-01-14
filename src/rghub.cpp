@@ -23,7 +23,7 @@ namespace eRG
 	View Hub::mview{glm::vec3{0, 1, 0},
 					glm::vec3{1, 1, 1},
 					glm::vec3{0, 1, 0}};
-	Scene Hub::mscene{"placeholder"};
+	Scene Hub::mscene{};
 	/* @} */
 
 	/* Initializer: */
@@ -33,6 +33,8 @@ namespace eRG
 	*/
 	void Hub::initialize()
 	{
+		/* Basic OpenGL initializers: */
+		/* @{ */
 		/* Set clear color */
 		glClearColor(33/256.0f, 0, 33/256.0f, 1);
 
@@ -45,6 +47,14 @@ namespace eRG
 
 		/* Set key repeat */
 		glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
+		/* @} */
+
+		/* Initialize the View: */
+		/* @{ */
+		mview.set_move_speed(0.1f);
+		mview.set_look_sensitivity(util::pi/180.0f);
+		mview.set_floor(0.0f);
+		/* @} */
 
 		/* Temporary light setup: */
 		/* @{ */
@@ -125,11 +135,15 @@ namespace eRG
 		if(model) {
 			mview.set_floor(model->position().second.y + 2);
 		} else {
-			mview.set_floor(1);
+			mview.set_floor(0);
 		}
 
 		/* Horizontal */
-		// TODO: Implement colision checking.
+		auto aabb{mscene.aabb(eye)};
+		static int C{0};
+		if(aabb) {
+			std::cerr << "colision: " << C++ << std::endl;
+		}
 		/* @} */
 
 		mview.reposition();
@@ -154,6 +168,7 @@ namespace eRG
 		glPopMatrix();
 		/* @} */
 
+		/* Swap buffers */
 		glutSwapBuffers();
 	}
 	/* @} */
