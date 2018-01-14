@@ -1,3 +1,4 @@
+#include <fstream>
 #include <sstream>
 #include <GL/glut.h>
 #include <glm/vec3.hpp>
@@ -16,11 +17,9 @@ namespace eRG
 	/*
 	* TODO: Implement scene constructor.
 	*/
-	Scene::Scene(const std::string &source)
+	Scene::Scene()
 		:	models_{std::vector<std::unique_ptr<Model>>{}}
 	{
-		static_cast<void>(source);
-
 		/* Scene test: */
 		/* @{ */
 		models_.push_back(std::unique_ptr<Model>{new AModel{glm::vec3{0, -1, 0},
@@ -38,36 +37,82 @@ namespace eRG
 	/* Get model: */
 	/* @{ */
 	/*
-	* TODO: Implement model position check.
+	* @brief Returns model underneath the player.
 	*/
 	const Model* Scene::model_at(glm::vec3 pbox) const
 	{
-		for(decltype(auto) e : models_) {
-			auto pos{e->position()};
-			if(	pbox.x >= pos.first.x && pbox.x <= pos.second.x &&
-				pbox.z >= pos.first.z && pbox.z <= pos.second.z) {
+		for(decltype(auto) e : models_)
+		{
+			/* Get the model box */
+			auto model{e->position()};
+
+			/* Get intersections */
+			bool 	xintersect{pbox.x >= model.first.x && pbox.x <= model.second.x},
+					zintersect{pbox.z >= model.first.z && pbox.z <= model.second.z},
+					yintersect{pbox.y < model.second.y};
+
+			/* If all conditions are met return the model */
+			if(	xintersect && zintersect && !yintersect) {
 				return e.get();
 			}
 		}
 
+		/* There isn't a model underneath the player */
 		return nullptr;
 	}
 
 	/*
-	* TODO: Implement AABB colision checking.
+	* @brief Colision detection using AABB.
 	*/
 	const Model* Scene::aabb(glm::vec3 pbox) const
 	{
-		static_cast<void>(pbox);
+		/* Get the player box */
+		glm::vec3 pbox_lln{pbox - glm::vec3{1, 2, 1}};
+		glm::vec3 pbox_urf{pbox + glm::vec3{1, 0, 1}};
 
+		for(decltype(auto) e : models_)
+		{
+			/* Get the model box */
+			auto model{e->position()};
+
+			/* The boxes intersect on the X plane */
+			bool xintersect{(pbox_lln.x <= model.first.x && model.first.x <= pbox_urf.x) ||
+							(model.first.x <= pbox_lln.x && pbox_lln.x <= model.second.x)};
+
+			/* The boxes intersect on the Y plane */
+			bool yintersect{(pbox_lln.y <= model.first.y && model.first.y <= pbox_urf.y) ||
+							(model.first.y <= pbox_lln.y && pbox_lln.y <= model.second.y)};
+
+			/* The boxes intersect on the Z plane */
+			bool zintersect{(pbox_lln.z <= model.first.z && model.first.z <= pbox_urf.z) ||
+							(model.first.z <= pbox_lln.z && pbox_lln.z <= model.second.z)};
+
+			/* If the boxes intersect on all axis, a colision has occured */
+			if(xintersect && yintersect && zintersect) {
+				return e.get();
+			}
+		}
+
+		/* A colision hasn't occured */
 		return nullptr;
+	}
+	/* @} */
+
+	/* Read map: */
+	/* @{ */
+	/*
+	* @brief Read map from passed file.
+	*/
+	void Scene::read_map(std::string path)
+	{
+		static_cast<void>(path);
 	}
 	/* @} */
 
 	/* Render scene */
 	/* @{ */
 	/*
-	* TODO: Implement scene rendering.
+	* @brief Draws all stored models.
 	*/
 	void Scene::render() const
 	{

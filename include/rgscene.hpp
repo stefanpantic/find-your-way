@@ -20,11 +20,14 @@ namespace eRG
 		/* Public member functions */
 		public:
 			/* Construction */
-			explicit Scene(const std::string &source);
+			explicit Scene();
 
 			/* Get model */
 			const Model* model_at(glm::vec3 pbox) const;
 			const Model* aabb(glm::vec3 pbox) const;
+
+			/* Read map from file */
+			void read_map(std::string path);
 
 			/* Render scene */
 			void render() const;
