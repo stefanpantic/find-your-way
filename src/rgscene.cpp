@@ -39,20 +39,26 @@ namespace eRG
 	/*
 	* @brief Returns model underneath the player.
 	*/
-	const Model* Scene::model_at(glm::vec3 pbox) const
+	const Model* Scene::below(glm::vec3 pbox_lln, glm::vec3 pbox_urf) const
 	{
-		for(decltype(auto) e : models_)
+		auto bpoint{((pbox_urf + pbox_lln)/2.0f)};
+
+		for(auto &&e : models_)
 		{
 			/* Get the model box */
 			auto model{e->position()};
 
-			/* Get intersections */
-			bool 	xintersect{pbox.x >= model.first.x && pbox.x <= model.second.x},
-					zintersect{pbox.z >= model.first.z && pbox.z <= model.second.z},
-					yintersect{pbox.y < model.second.y};
+			/* The boxes intersect on the X plane */
+			bool xintersect{bpoint.x >= model.first.x && bpoint.x <= model.second.x};
+
+			/* The boxes intersect on the Y plane */
+			bool yintersect{bpoint.y >= model.second.y};
+
+			/* The boxes intersect on the Z plane */
+			bool zintersect{bpoint.z >= model.first.z && bpoint.z <= model.second.z};
 
 			/* If all conditions are met return the model */
-			if(	xintersect && zintersect && !yintersect) {
+			if(	xintersect && zintersect && yintersect) {
 				return e.get();
 			}
 		}
@@ -64,13 +70,9 @@ namespace eRG
 	/*
 	* @brief Colision detection using AABB.
 	*/
-	const Model* Scene::aabb(glm::vec3 pbox) const
+	const Model* Scene::aabb(glm::vec3 pbox_lln, glm::vec3 pbox_urf) const
 	{
-		/* Get the player box */
-		glm::vec3 pbox_lln{pbox - glm::vec3{1, 2, 1}};
-		glm::vec3 pbox_urf{pbox + glm::vec3{1, 0, 1}};
-
-		for(decltype(auto) e : models_)
+		for(auto &&e : models_)
 		{
 			/* Get the model box */
 			auto model{e->position()};

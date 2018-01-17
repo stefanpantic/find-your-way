@@ -23,8 +23,8 @@ namespace eRG
 			explicit Scene();
 
 			/* Get model */
-			const Model* model_at(glm::vec3 pbox) const;
-			const Model* aabb(glm::vec3 pbox) const;
+			const Model* below(glm::vec3 pbox_lln, glm::vec3 pbox_urf) const;
+			const Model* aabb(glm::vec3 pbox_lln, glm::vec3 pbox_urf) const;
 
 			/* Read map from file */
 			void read_map(std::string path);
