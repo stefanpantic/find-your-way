@@ -21,9 +21,7 @@ namespace eRG
 	/* @{ */
 	int Hub::width_{0}, Hub::height_{0};
 	int Hub::dx_{0}, Hub::dy_{0};
-	View Hub::mview{glm::vec3{-1, 1, -1},
-					glm::vec3{1, 1, 1},
-					glm::vec3{0, 1, 0}};
+	View Hub::mview{glm::vec3{2, 2, 2}};
 	Scene Hub::mscene{};
 	/* @} */
 
@@ -37,7 +35,7 @@ namespace eRG
 		/* Basic OpenGL initializers: */
 		/* @{ */
 		/* Set clear color */
-		glClearColor(33/256.0f, 0, 33/256.0f, 1);
+		glClearColor(33/256.0f, 0, 66/256.0f, 1);
 
 		/* Enable depth test */
 		glEnable(GL_DEPTH_TEST);
@@ -57,6 +55,11 @@ namespace eRG
 		mview.set_floor(2.0f);
 		/* @} */
 
+		/* Initialize the Scene: */
+		/* @{ */
+		//mscene.read_map(path);
+		/* @} */
+
 		/* Temporary light setup: */
 		/* @{ */
 		glEnable(GL_LIGHTING);
@@ -67,13 +70,13 @@ namespace eRG
 		float position[]{1, 1, 1, 0};
 		float ambient[]{0.1, 0.1, 0.1, 1};
 		float specular[]{0.5, 0.5, 0.5, 1};
-		float diffuse[]{0.3, 100/256.0f, 100/256.0f, 1};
+		float diffuse[]{0, 110/256.0f, 100/256.0f, 1};
 
 		/* Material parameters */
 		float material_ambient[]{0.4, 0.4, 0.4, 1};
 		float material_specular[]{0.1, 0.1, 0.1, 1};
-		float material_diffuse[]{0.3, 100/256.0f, 100/256.0f, 1};
-		float shininess{3};
+		float material_diffuse[]{0, 110/256.0f, 100/256.0f, 1};
+		float shininess{20};
 
 		glLightfv(GL_LIGHT0, GL_POSITION, position);
 		glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
@@ -104,16 +107,20 @@ namespace eRG
 		dy_ = h/2;
 		glutWarpPointer(dx_, dy_);
 
-		/* Enter projection mode */
-		View::matrix_mode(opt::Transform::PROJECTION);
-
-		/* Reset matrices, set viewport to entire window and set perspective */
-		glLoadIdentity();
+		/* Set viewport to entire window */
 		glViewport(0, 0, w, h);
-		gluPerspective(70.0f, static_cast<float>(w)/h, 0.1f, 100.0f);
+
+		/* Enter projection mode */
+		glMatrixMode(GL_PROJECTION);
+
+		/* Reset projection matrix*/
+		glLoadIdentity();
+
+		/* Set perspective */
+		gluPerspective(70.0f, (float)w/h, 0.1f, 100.0f);
 
 		/* Enter modelview */
-		View::matrix_mode(opt::Transform::MODELVIEW);
+		glMatrixMode(GL_MODELVIEW);
 	}
 
 	/*
@@ -130,7 +137,6 @@ namespace eRG
 
 		/* Colision handling: */
 		/* @{ */
-
 		/* Get player box */
 		auto pbox{util::pbox(mview.get_point(opt::View::EYE), 2)};
 
@@ -139,7 +145,7 @@ namespace eRG
 		if(model) {
 			mview.set_floor(model->position().second.y + 2);
 		} else {
-			mview.set_floor(0);
+			mview.set_floor(-20);
 		}
 
 		/* Horizontal */
@@ -157,7 +163,7 @@ namespace eRG
 		}
 		/* @} */
 
-		/* Reposition camera and set look at : */
+		/* Reposition camera and set look at: */
 		/* @{ */
 		mview.reposition();
 		mview.look_at();
@@ -364,9 +370,7 @@ namespace eRG
 	* TODO: Implement idle function.
 	*/
 	void Hub::idle()
-	{
-		glutPostRedisplay();
-	}
+	{}
 	/* @} */
 	/* @@} */
 

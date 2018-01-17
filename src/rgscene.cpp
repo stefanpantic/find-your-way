@@ -20,16 +20,22 @@ namespace eRG
 	Scene::Scene()
 		:	models_{std::vector<std::unique_ptr<Model>>{}}
 	{
-		/* Scene test: */
+		/* Test: */
 		/* @{ */
-		models_.push_back(std::unique_ptr<Model>{new AModel{glm::vec3{0, -1, 0},
-															glm::vec3{2, 0, 2},
-															std::vector<glm::vec3>{	glm::vec3{1, 0.5, 1},
-																					glm::vec3{1, 10.5, 1}}}});
-		models_.push_back(std::unique_ptr<Model>{new PModel{glm::vec3{-5, -1, -5},
-															glm::vec3{0, 0, 0}}});
-		models_.push_back(std::unique_ptr<Model>{new PModel{glm::vec3{9, -1, 9},
-															glm::vec3{10, 0, 10}}});
+		models_.push_back(std::unique_ptr<Model>{new PModel{{0, -1, 0}, {15, 0, 5}}});
+		models_.push_back(std::unique_ptr<Model>{new PModel{{10, -1, 20}, {15, 0, 25}}});
+
+		models_.push_back(std::unique_ptr<Model>{new AModel{{1, -1, 7}, {3, 0, 9},
+															{{1.5, 0, 8}, {1.5, -7, 8}}}});
+
+		models_.push_back(std::unique_ptr<Model>{new AModel{{5, -7, 9}, {7, -6, 11},
+															{{6, -7, 10}, {6, 0, 10}}}});
+
+		models_.push_back(std::unique_ptr<Model>{new AModel{{9, -1, 13}, {11, 0, 15},
+															{{10, 0, 14}, {10, -7, 14}}}});
+
+		models_.push_back(std::unique_ptr<Model>{new AModel{{13, -7, 17}, {15, -6, 19},
+															{{14, -7, 18}, {14, 0, 18}}}});
 		/* @} */
 	}
 	/* @} */
