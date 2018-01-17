@@ -323,7 +323,7 @@ namespace eRG
 			}
 
 		}
-		else if(eye_.y >= y_base_ - 0.4 && eye_.y - y_base_ < 0) {
+		else {
 			eye_.y = y_base_;
 			jump_base_ = y_base_;
 		}
