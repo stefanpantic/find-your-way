@@ -28,26 +28,6 @@ namespace eRG
 		std::clog << "eRG::View: Default contructor" << std::endl;
 	}
 
-	/*
-	* @brief Set the current matrix mode.
-	*/
-	void View::matrix_mode(opt::Transform mode)
-	{
-		switch(mode)
-		{
-			case opt::Transform::MODELVIEW:
-				glMatrixMode(GL_MODELVIEW);
-				break;
-			case opt::Transform::PROJECTION:
-				glMatrixMode(GL_PROJECTION);
-				break;
-			case opt::Transform::TEXTURE:
-				glMatrixMode(GL_TEXTURE);
-				break;
-		}
-	}
-	/* @} */
-
 	/* Set look at: */
 	/* @{ */
 	/*
@@ -296,7 +276,7 @@ namespace eRG
 
 		if(jump_base_ != y_base_ && eye_.y <= y_base_ + 0.1) {
 			jump_base_ = y_base_;
-			dup_ = v = 0;
+			//dup_ = v = 0;
 		}
 
 		eye_.y = 4*std::sin(v) + jump_base_;

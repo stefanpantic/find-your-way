@@ -15,7 +15,6 @@ namespace eRG
 		enum class Look;
 		enum class Move;
 		enum class View;
-		enum class Transform;
 	}; /* namespace eRG::opt */
 
 	/* View declaration: */
@@ -34,10 +33,6 @@ namespace eRG
 			explicit View(	glm::vec3 eye 	 = {0, 0, -1},	/* Eye point */
 							glm::vec3 center = {0, 0, 0},	/* To point */
 							glm::vec3 normal = {0, 1, 0});	/* Normal vector */
-			//explicit View(const View &other);
-
-			/* Matrix mode */
-			static void matrix_mode(opt::Transform mode);
 
 			/* Set look at */
 			void look_at();
