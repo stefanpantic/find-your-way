@@ -8,6 +8,7 @@
 #include "rgscene.hpp"
 #include "rgmodel.hpp"
 #include "rgdefines.hpp"
+#include "rgcolision.hpp"
 #include "rgoption.hpp"
 #include "debug.hpp"
 
@@ -20,7 +21,7 @@ namespace eRG
 	/* @{ */
 	int Hub::width_{0}, Hub::height_{0};
 	int Hub::dx_{0}, Hub::dy_{0};
-	View Hub::mview{glm::vec3{0, 1, 0},
+	View Hub::mview{glm::vec3{-1, 1, -1},
 					glm::vec3{1, 1, 1},
 					glm::vec3{0, 1, 0}};
 	Scene Hub::mscene{};
@@ -53,7 +54,7 @@ namespace eRG
 		/* @{ */
 		mview.set_move_speed(0.1f);
 		mview.set_look_sensitivity(util::pi/180.0f);
-		mview.set_floor(0.0f);
+		mview.set_floor(2.0f);
 		/* @} */
 
 		/* Temporary light setup: */
@@ -127,11 +128,14 @@ namespace eRG
 		/* Reset all matrix transformations */
 		glLoadIdentity();
 
-		/* Colision test: */
+		/* Colision handling: */
 		/* @{ */
-		auto eye{mview.get_point(opt::View::EYE)};
-		auto model{mscene.model_at(eye)};
 
+		/* Get player box */
+		auto pbox{util::pbox(mview.get_point(opt::View::EYE), 2)};
+
+		/* Vertical */
+		auto model{mscene.below(pbox.first, pbox.second)};
 		if(model) {
 			mview.set_floor(model->position().second.y + 2);
 		} else {
@@ -139,22 +143,30 @@ namespace eRG
 		}
 
 		/* Horizontal */
-		auto aabb{mscene.aabb(eye)};
-		static int C{0};
-		if(aabb) {
-			std::cerr << "colision: " << C++ << std::endl;
+		auto aabb{mscene.aabb(pbox.first, pbox.second)};
+		if(aabb && aabb != model) {
+
+			auto mbox{aabb->position()};
+			auto package{util::handle_colision(pbox, mbox)};
+
+			if(opt::Move::UP != package.first) {
+				mview.set_move_parameter(package.first, package.second);
+				mview.reposition();
+				mview.set_move_parameter(package.first, 0);
+			}
 		}
 		/* @} */
 
+		/* Reposition camera and set look at : */
+		/* @{ */
 		mview.reposition();
 		mview.look_at();
+		/* @} */
 
-		/* World test - temporary: */
+		/* World rendering: */
 		/* @{ */
 		glEnable(GL_LIGHTING);
-
 		mscene.render();
-
 		glDisable(GL_LIGHTING);
 		/* @} */
 
