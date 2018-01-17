@@ -125,3 +125,9 @@ Ubuntu:
  * Moved gravity to seperate function in eRG::View,
  * Minor refactoring.
 
+ ### Version 0.7.5:
+ **Date:** 17-01-2018  
+ **Progress made:**
+ * Implemented full colision handling using AABB.
+
+
