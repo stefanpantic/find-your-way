@@ -1,3 +1,4 @@
+TITLE 		= find-your-way
 CXX 		= g++
 STANDARD	= -std=c++17
 DEBUG 		= -g
@@ -11,7 +12,7 @@ SRC 		= $(wildcard src/*.cpp)
 HEAD 		= $(patsubst src/%.cpp, include/%.hpp, $(SRC))
 HEADONLY 	= $(wildcard include/*.hpp include/opt/*.hpp)
 OBJ 		= $(patsubst src/%.cpp, $(BIN)/%.o, $(SRC))
-TARGET 		= $(BIN)/find-your-way
+TARGET 		= $(BIN)/$(TITLE)
 
 .PHONY: clean zip
 
@@ -34,4 +35,4 @@ clean:
 	rm -f ~*
 
 zip:
-	zip -r $(TARGET).zip ./
+	zip -r $(TITLE).zip ./
