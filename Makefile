@@ -22,7 +22,7 @@ $(TARGET): $(OBJ) $(MAINOBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 $(MAINOBJ): $(MAIN) $(HEADONLY)
-	$(CXX) $(CXXFLAGS) -o $@ -c $< $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 $(BIN)/%.o: src/%.cpp include/%.hpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
