@@ -23,20 +23,20 @@ namespace eRG::util
 			/* Left/Right */
 			if(	pbox.second.z >= mbox.first.z ||
 				pbox.first.z <= mbox.second.z) {
-				return std::make_pair(opt::Move::FORWARDZ, -0.1);
+				return std::make_pair(opt::Move::forwardz, -0.5);
 			}
 
-		} else if(pbox.first.z >= mbox.first.x && pbox.second.z <= mbox.second.z) {
+		} else if(pbox.first.z >= mbox.first.z && pbox.second.z <= mbox.second.z) {
 
 			/* Bottom/Top */
-			if(	pbox.second.x >= mbox.first.z ||
+			if(	pbox.second.x >= mbox.first.x ||
 				pbox.first.x <= mbox.second.x) {
-				return std::make_pair(opt::Move::FORWARDX, -0.1);
+				return std::make_pair(opt::Move::forwardx, -0.5);
 			}
 		}
 
 		/* Placeholder for no action */
-		return std::make_pair(opt::Move::UP, 0);
+		return std::make_pair(opt::Move::up, 0);
 	}
 	/* @} */
 
