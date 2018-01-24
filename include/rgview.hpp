@@ -38,8 +38,12 @@ namespace eRG
 			void look_at();
 			void look_at(glm::vec3 eye, glm::vec3 center, glm::vec3 normal);
 
+			/* Get camera position parameters */
+			const glm::vec3& get_eye() const;
+			const glm::vec3& get_center() const;
+			const glm::vec3& get_normal() const;
+
 			/* Get look and movement parameters */
-			const glm::vec3& get_point(opt::View opt) const;
 			const float& get_look_sensitivity() const;
 			const float& get_move_speed() const;
 
@@ -90,7 +94,7 @@ namespace eRG
 			float mspd_, lsen_;
 
 			/* Y base - world height indicator */
-			float y_base_, jump_base_;
+			float y_base_, jump_base_, jump_;
 	}; /* class eRG::View */
 	/* @} */
 
