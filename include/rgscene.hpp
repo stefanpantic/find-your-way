@@ -1,8 +1,9 @@
 #pragma once
 
 #include <vector>
-#include <glm/vec3.hpp>
 #include <memory>
+#include <boost/property_tree/ptree.hpp>
+#include <glm/vec3.hpp>
 
 namespace eRG
 {
@@ -17,20 +18,28 @@ namespace eRG
 	*/
 	class Scene
 	{
+		/* Convenience */
+		using Box = std::pair<glm::vec3, glm::vec3>;
+
 		/* Public member functions */
 		public:
 			/* Construction */
 			explicit Scene();
 
 			/* Get model */
-			const Model* below(glm::vec3 pbox_lln, glm::vec3 pbox_urf) const;
-			const Model* aabb(glm::vec3 pbox_lln, glm::vec3 pbox_urf) const;
+			const Model* below(Box pbox) const;
+			const Model* aabb(Box pbox) const;
 
 			/* Read map from file */
 			void read_map(std::string path);
 
 			/* Render scene */
 			void render() const;
+		/* Private member functions */
+		private:
+			/* Traverse property tree */
+			void traverse_ptree(const boost::property_tree::ptree &root);
+
 		/* Private member variables */
 		private:
 			/* Model storage */
