@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <GL/glut.h>
 
 namespace eRG
@@ -39,6 +40,11 @@ namespace eRG
 							size_t width, size_t height,
 							size_t x, size_t y)
 	{
+		/* Check command line arguments */
+		if(argc < 2) {
+			throw std::runtime_error{"Invalid command line arguments..."};
+		}
+
 		/* Initialize GLUT */
 		glutInit(&argc, argv);
 		glutInitDisplayMode(display_mode);
@@ -47,7 +53,7 @@ namespace eRG
 		glutCreateWindow(argv[0] + 2);
 
 		/* Initialize %RGHub */
-		RGHub::initialize();
+		RGHub::initialize(argv[1]);
 
 		/* Display callbacks */
 		glutDisplayFunc(RGHub::display);
@@ -59,12 +65,12 @@ namespace eRG
 		glutSpecialFunc(RGHub::special);
 		glutSpecialUpFunc(RGHub::special_up);
 
-		///* Mouse callbacks */
+		/* Mouse callbacks */
 		glutMouseFunc(RGHub::mouse);
 		glutMotionFunc(RGHub::motion);
 		glutPassiveMotionFunc(RGHub::passive_motion);
 
-		///* Timer registration */
+		/* Timer registration */
 		glutTimerFunc(RGHub::TIMER_REDISPLAY_INTERVAL, RGHub::timer, RGHub::TIMER_REDISPLAY);
 		glutIdleFunc(RGHub::idle);
 	}
