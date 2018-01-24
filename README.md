@@ -130,4 +130,13 @@ Ubuntu:
  **Progress made:**
  * Implemented full colision handling using AABB.
 
+ ### Version 0.8:
+ **Date:** 25-01-2018  
+ **Progress made:**
+ * Implemented reading game levels from JSON files,
+ * Changed some functions related to colision to have consistent argument types,
+ * Removed unused function in eRG::View,
+ * Fixed a bug that caused moving models to dissapear,
+ * Made modifications to gravity in eRG::View.
+
 
