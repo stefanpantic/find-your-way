@@ -19,9 +19,9 @@ namespace eRG
 					std::vector<glm::vec3> &&points)
 		:	Model{lower_left_near, upper_right_far},
 			points_{std::move(points)},
-			delta_{glm::normalize(points_[0] - Model::translate_)/30.0f},
+			delta_{(Model::translate_ != points_[0]) ? glm::normalize(points_[0] - Model::translate_)/30.0f : glm::normalize(points_[1] - points_[0])/30.0f},
 			index_{0},
-			dold_{0}, dnew_{0}
+			dold_{0.0f}, dnew_{0.0f}
 	{
 		std::clog << "eRG::AModel: Default constructor" << std::endl;
 	}
