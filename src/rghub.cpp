@@ -30,7 +30,7 @@ namespace eRG
 	/*
 	* TODO: @brief decription
 	*/
-	void Hub::initialize()
+	void Hub::initialize(std::string path)
 	{
 		/* Basic OpenGL initializers: */
 		/* @{ */
@@ -57,7 +57,7 @@ namespace eRG
 
 		/* Initialize the Scene: */
 		/* @{ */
-		//mscene.read_map(path);
+		mscene.read_map(path);
 		/* @} */
 
 		/* Temporary light setup: */
@@ -67,15 +67,15 @@ namespace eRG
 		glEnable(GL_NORMALIZE);
 
 		/* Light parameters */
-		float position[]{1, 1, 1, 0};
+		float position[]{5, 5, 5, 1};
 		float ambient[]{0.1, 0.1, 0.1, 1};
 		float specular[]{0.5, 0.5, 0.5, 1};
-		float diffuse[]{0, 110/256.0f, 100/256.0f, 1};
+		float diffuse[]{110/256.0f, 110/256.0f, 110/256.0f, 1};
 
 		/* Material parameters */
 		float material_ambient[]{0.4, 0.4, 0.4, 1};
-		float material_specular[]{0.1, 0.1, 0.1, 1};
-		float material_diffuse[]{0, 110/256.0f, 100/256.0f, 1};
+		float material_specular[]{0.6, 0.6, 0.6, 1};
+		float material_diffuse[]{110/256.0f, 110/256.0f, 110/256.0f, 1};
 		float shininess{20};
 
 		glLightfv(GL_LIGHT0, GL_POSITION, position);
@@ -87,6 +87,7 @@ namespace eRG
 		glMaterialfv(GL_FRONT, GL_SPECULAR, material_specular);
 		glMaterialfv(GL_FRONT, GL_DIFFUSE, material_diffuse);
 		glMaterialf(GL_FRONT, GL_SHININESS, shininess);
+
 		/* @} */
 	}
 	/* @} */
@@ -138,24 +139,24 @@ namespace eRG
 		/* Colision handling: */
 		/* @{ */
 		/* Get player box */
-		auto pbox{util::pbox(mview.get_point(opt::View::EYE), 2)};
+		auto pbox{util::pbox(mview.get_eye(), 1.5)};
 
 		/* Vertical */
-		auto model{mscene.below(pbox.first, pbox.second)};
+		auto model{mscene.below(pbox)};
 		if(model) {
 			mview.set_floor(model->position().second.y + 2);
 		} else {
-			mview.set_floor(-20);
+			mview.set_floor(-10);
 		}
 
 		/* Horizontal */
-		auto aabb{mscene.aabb(pbox.first, pbox.second)};
+		auto aabb{mscene.aabb(pbox)};
 		if(aabb && aabb != model) {
 
 			auto mbox{aabb->position()};
 			auto package{util::handle_colision(pbox, mbox)};
 
-			if(opt::Move::UP != package.first) {
+			if(opt::Move::up != package.first) {
 				mview.set_move_parameter(package.first, package.second);
 				mview.reposition();
 				mview.set_move_parameter(package.first, 0);
@@ -206,23 +207,23 @@ namespace eRG
 			case 27:
 				std::exit(0);
 			case 'w':
-				mview.set_look_parameter(opt::Look::VERTICAL, -1);
+				mview.set_look_parameter(opt::Look::vertical, -1);
 				break;
 			case 's':
-				mview.set_look_parameter(opt::Look::VERTICAL, 1);
+				mview.set_look_parameter(opt::Look::vertical, 1);
 				break;
 			case 'a':
-				mview.set_look_parameter(opt::Look::HORIZONTAL, -1);
+				mview.set_look_parameter(opt::Look::horizontal, -1);
 				break;
 			case 'd':
-				mview.set_look_parameter(opt::Look::HORIZONTAL, 1);
+				mview.set_look_parameter(opt::Look::horizontal, 1);
 				break;
 			case 'b':
-				mview.set_move_parameter(opt::Move::FORWARD, 30);
+				mview.set_move_parameter(opt::Move::forward, 30);
 				glutTimerFunc(TIMER_BLINK_INTERVAL, timer, TIMER_BLINK);
 				break;
 			case ' ':
-				mview.set_move_parameter(opt::Move::UP, util::pi/40.0f);
+				mview.set_move_parameter(opt::Move::up, util::pi/40.0f);
 				break;
 		}
 	}
@@ -239,11 +240,11 @@ namespace eRG
 		{
 			case 'w':
 			case 's':
-				mview.set_look_parameter(opt::Look::VERTICAL, 0);
+				mview.set_look_parameter(opt::Look::vertical, 0);
 				break;
 			case 'a':
 			case 'd':
-				mview.set_look_parameter(opt::Look::HORIZONTAL, 0);
+				mview.set_look_parameter(opt::Look::horizontal, 0);
 				break;
 		}
 	}
@@ -256,21 +257,19 @@ namespace eRG
 		static_cast<void>(x);
 		static_cast<void>(y);
 
-		mview.set_move_parameter(opt::Move::FORWARDY, 0);
-
 		switch(key)
 		{
 			case GLUT_KEY_UP:
-				mview.set_move_parameter(opt::Move::FORWARD, 1);
+				mview.set_move_parameter(opt::Move::forward, 1);
 				break;
 			case GLUT_KEY_DOWN:
-				mview.set_move_parameter(opt::Move::FORWARD, -1);
+				mview.set_move_parameter(opt::Move::forward, -1);
 				break;
 			case GLUT_KEY_LEFT:
-				mview.set_move_parameter(opt::Move::STRAFE, 1);
+				mview.set_move_parameter(opt::Move::strafe, 1);
 				break;
 			case GLUT_KEY_RIGHT:
-				mview.set_move_parameter(opt::Move::STRAFE, -1);
+				mview.set_move_parameter(opt::Move::strafe, -1);
 				break;
 		}
 	}
@@ -287,11 +286,11 @@ namespace eRG
 		{
 			case GLUT_KEY_UP:
 			case GLUT_KEY_DOWN:
-				mview.set_move_parameter(opt::Move::FORWARD, 0);
+				mview.set_move_parameter(opt::Move::forward, 0);
 				break;
 			case GLUT_KEY_LEFT:
 			case GLUT_KEY_RIGHT:
-				mview.set_move_parameter(opt::Move::STRAFE, 0);
+				mview.set_move_parameter(opt::Move::strafe, 0);
 				break;
 		}
 	}
@@ -334,13 +333,13 @@ namespace eRG
 			return;
 		}
 
-		mview.set_look_parameter(opt::Look::HORIZONTAL, (dx_ - x)/2.0f);
-		mview.set_look_parameter(opt::Look::VERTICAL, (dy_ - y)/2.0f);
+		mview.set_look_parameter(opt::Look::horizontal, (dx_ - x)/2.0f);
+		mview.set_look_parameter(opt::Look::vertical, (dy_ - y)/2.0f);
 
 		mview.reposition();
 
-		mview.set_look_parameter(opt::Look::HORIZONTAL, 0);
-		mview.set_look_parameter(opt::Look::VERTICAL, 0);
+		mview.set_look_parameter(opt::Look::horizontal, 0);
+		mview.set_look_parameter(opt::Look::vertical, 0);
 
 		dx_ = x;
 		dy_ = y;
@@ -358,10 +357,10 @@ namespace eRG
 		{
 			case TIMER_REDISPLAY:
 				glutPostRedisplay();
-				glutTimerFunc(TIMER_REDISPLAY_INTERVAL, Hub::timer, TIMER_REDISPLAY);
+				glutTimerFunc(TIMER_REDISPLAY_INTERVAL, timer, TIMER_REDISPLAY);
 				break;
 			case TIMER_BLINK:
-				mview.set_move_parameter(opt::Move::FORWARD, 0);
+				mview.set_move_parameter(opt::Move::forward, 0);
 				break;
 		}
 	}

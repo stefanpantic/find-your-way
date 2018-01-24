@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 namespace eRG
 {
 
@@ -19,7 +21,7 @@ namespace eRG
 		/* Public member functions */
 		public:
 			/* Initializer */
-			static void initialize();
+			static void initialize(std::string path);
 
 			/* Display callbacks */
 			static void reshape(int w, int h);
