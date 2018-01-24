@@ -8,8 +8,8 @@ namespace eRG::opt
 	*/
 	enum class Look
 	{
-		VERTICAL,
-		HORIZONTAL,
+		vertical,
+		horizontal,
 	}; /* enum class eRG::opt::Look */
 
 }; /* namespace eRG::opt */

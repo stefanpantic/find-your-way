@@ -8,15 +8,15 @@ namespace eRG::opt
 	*/
 	enum class Move
 	{
-		FORWARD,
-		FORWARDX,
-		FORWARDY,
-		FORWARDZ,
-		STRAFE,
-		STRAFEX,
-		STRAFEY,
-		STRAFEZ,
-		UP,
+		forward,
+		forwardx,
+		forwardy,
+		forwardz,
+		strafe,
+		strafex,
+		strafey,
+		strafez,
+		up,
 	}; /* enum class eRG::opt::Move */
 
 }; /* namespace eRG::opt */
