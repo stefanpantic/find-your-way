@@ -24,9 +24,9 @@ Ubuntu:
     * clang++ 5.0.0+.
 
 ## Preview:
-**Date:** 07-01-2018  
+**Date:** 25-01-2018  
 
-![preview](https://github.com/MATF-RG17/RG061-find-your-way/blob/master/sample/07-01-2018.png) 
+![preview](https://github.com/MATF-RG17/RG061-find-your-way/blob/master/sample/25-01-2018.gif) 
 
 ## Progress reports and change log:
 **TODO:** 
@@ -137,6 +137,9 @@ Ubuntu:
  * Changed some functions related to colision to have consistent argument types,
  * Removed unused function in eRG::View,
  * Fixed a bug that caused moving models to dissapear,
- * Made modifications to gravity in eRG::View.
+ * Made modifications to gravity in eRG::View,
+ * Added first level,
+ * Added screen gif.
+ 
 
 
