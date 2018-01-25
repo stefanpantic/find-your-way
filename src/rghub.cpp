@@ -35,7 +35,7 @@ namespace eRG
 		/* Basic OpenGL initializers: */
 		/* @{ */
 		/* Set clear color */
-		glClearColor(33/256.0f, 0, 66/256.0f, 1);
+		glClearColor(0, 0, 0.1, 1);
 
 		/* Enable depth test */
 		glEnable(GL_DEPTH_TEST);
@@ -65,29 +65,29 @@ namespace eRG
 		glEnable(GL_LIGHTING);
 		glEnable(GL_LIGHT0);
 		glEnable(GL_NORMALIZE);
+		glEnable(GL_COLOR_MATERIAL);
 
 		/* Light parameters */
 		float position[]{5, 5, 5, 1};
 		float ambient[]{0.1, 0.1, 0.1, 1};
 		float specular[]{0.5, 0.5, 0.5, 1};
-		float diffuse[]{110/256.0f, 110/256.0f, 110/256.0f, 1};
+		float diffuse[]{110/256.0f, 110/256.0f, 150/256.0f, 1};
 
 		/* Material parameters */
-		float material_ambient[]{0.4, 0.4, 0.4, 1};
-		float material_specular[]{0.6, 0.6, 0.6, 1};
-		float material_diffuse[]{110/256.0f, 110/256.0f, 110/256.0f, 1};
-		float shininess{20};
+		//float material_ambient[]{0.1, 0.1, 0.1, 1};
+		//float material_specular[]{0.8, 0.8, 0.8, 1};
+		//float material_diffuse[]{20/256.0f, 20/256.0f, 30/256.0f, 1};
+		//float shininess{2};
 
 		glLightfv(GL_LIGHT0, GL_POSITION, position);
 		glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
 		glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
 
-		glMaterialfv(GL_FRONT, GL_AMBIENT, material_ambient);
-		glMaterialfv(GL_FRONT, GL_SPECULAR, material_specular);
-		glMaterialfv(GL_FRONT, GL_DIFFUSE, material_diffuse);
-		glMaterialf(GL_FRONT, GL_SHININESS, shininess);
-
+		//glMaterialfv(GL_FRONT, GL_AMBIENT, material_ambient);
+		//glMaterialfv(GL_FRONT, GL_SPECULAR, material_specular);
+		//glMaterialfv(GL_FRONT, GL_DIFFUSE, material_diffuse);
+		//glMaterialf(GL_FRONT, GL_SHININESS, shininess);
 		/* @} */
 	}
 	/* @} */
@@ -173,6 +173,7 @@ namespace eRG
 		/* World rendering: */
 		/* @{ */
 		glEnable(GL_LIGHTING);
+		glColor3f(0.3, 0.3, 0.3);
 		mscene.render();
 		glDisable(GL_LIGHTING);
 		/* @} */
@@ -223,7 +224,7 @@ namespace eRG
 				glutTimerFunc(TIMER_BLINK_INTERVAL, timer, TIMER_BLINK);
 				break;
 			case ' ':
-				mview.set_move_parameter(opt::Move::up, util::pi/40.0f);
+				mview.set_move_parameter(opt::Move::up, util::pi/60.0f);
 				break;
 		}
 	}
@@ -369,7 +370,9 @@ namespace eRG
 	* TODO: Implement idle function.
 	*/
 	void Hub::idle()
-	{}
+	{
+		glutPostRedisplay();
+	}
 	/* @} */
 	/* @@} */
 

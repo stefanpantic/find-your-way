@@ -267,8 +267,7 @@ namespace eRG
 	void View::__eyev()
 	{
 		if(jump_base_ != y_base_ && eye_.y < y_base_) {
-			jump_base_ = y_base_;
-			dup_ = jump_ = 0;
+			eye_.y = jump_base_ = y_base_;
 		}
 
 		eye_.y = 4*std::sin(jump_) + jump_base_;
