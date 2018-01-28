@@ -41,6 +41,10 @@ namespace eRG
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LEQUAL);
 
+		/* Enable textures */
+		glEnable(GL_TEXTURE_2D);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
 		/* Hide cursor */
 		glutSetCursor(GLUT_CURSOR_NONE);
 
@@ -60,6 +64,14 @@ namespace eRG
 		mscene.read_map(path);
 		/* @} */
 
+		/* Initialize fog */
+		/* @{ */
+		glEnable(GL_FOG);
+		glFogf(GL_FOG_START, 10);
+		glFogf(GL_FOG_END, 20);
+		glFogf(GL_FOG_DENSITY, 0.07);
+		/* @} */
+
 		/* Temporary light setup: */
 		/* @{ */
 		glEnable(GL_LIGHTING);
@@ -68,26 +80,15 @@ namespace eRG
 		glEnable(GL_COLOR_MATERIAL);
 
 		/* Light parameters */
-		float position[]{5, 5, 5, 1};
+		float position[]{2, 2, 2, 1};
 		float ambient[]{0.1, 0.1, 0.1, 1};
 		float specular[]{0.5, 0.5, 0.5, 1};
-		float diffuse[]{110/256.0f, 110/256.0f, 150/256.0f, 1};
-
-		/* Material parameters */
-		//float material_ambient[]{0.1, 0.1, 0.1, 1};
-		//float material_specular[]{0.8, 0.8, 0.8, 1};
-		//float material_diffuse[]{20/256.0f, 20/256.0f, 30/256.0f, 1};
-		//float shininess{2};
+		float diffuse[]{110/265.0f, 110/256.0f, 150/256.0f, 1};
 
 		glLightfv(GL_LIGHT0, GL_POSITION, position);
 		glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
 		glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
-
-		//glMaterialfv(GL_FRONT, GL_AMBIENT, material_ambient);
-		//glMaterialfv(GL_FRONT, GL_SPECULAR, material_specular);
-		//glMaterialfv(GL_FRONT, GL_DIFFUSE, material_diffuse);
-		//glMaterialf(GL_FRONT, GL_SHININESS, shininess);
 		/* @} */
 	}
 	/* @} */
@@ -95,7 +96,7 @@ namespace eRG
 	/* Display callbacks: */
 	/* @{ */
 	/*
-	* TODO: @brief decription
+	* @brief Called on window resize.
 	*/
 	void Hub::reshape(int w, int h)
 	{
@@ -138,30 +139,7 @@ namespace eRG
 
 		/* Colision handling: */
 		/* @{ */
-		/* Get player box */
-		auto pbox{util::pbox(mview.get_eye(), 1.5)};
-
-		/* Vertical */
-		auto model{mscene.below(pbox)};
-		if(model) {
-			mview.set_floor(model->position().second.y + 2);
-		} else {
-			mview.set_floor(-10);
-		}
-
-		/* Horizontal */
-		auto aabb{mscene.aabb(pbox)};
-		if(aabb && aabb != model) {
-
-			auto mbox{aabb->position()};
-			auto package{util::handle_colision(pbox, mbox)};
-
-			if(opt::Move::up != package.first) {
-				mview.set_move_parameter(package.first, package.second);
-				mview.reposition();
-				mview.set_move_parameter(package.first, 0);
-			}
-		}
+		Hub::__colision();
 		/* @} */
 
 		/* Reposition camera and set look at: */
@@ -170,10 +148,17 @@ namespace eRG
 		mview.look_at();
 		/* @} */
 
+		/* Update lantern: */
+		/* @{ */
+		auto eye{mview.get_eye()};
+		float position[]{eye.x, eye.y, eye.z, 1};
+		glLightfv(GL_LIGHT0, GL_POSITION, position);
+		/* @} */
+
 		/* World rendering: */
 		/* @{ */
 		glEnable(GL_LIGHTING);
-		glColor3f(0.3, 0.3, 0.3);
+		glColor3f(0.5, 0.5, 0.4);
 		mscene.render();
 		glDisable(GL_LIGHTING);
 		/* @} */
@@ -224,7 +209,7 @@ namespace eRG
 				glutTimerFunc(TIMER_BLINK_INTERVAL, timer, TIMER_BLINK);
 				break;
 			case ' ':
-				mview.set_move_parameter(opt::Move::up, util::pi/60.0f);
+				mview.set_move_parameter(opt::Move::up, util::pi/50);
 				break;
 		}
 	}
@@ -251,7 +236,7 @@ namespace eRG
 	}
 
 	/*
-	* TODO: @brief decription
+	* @brief Move player on key press.
 	*/
 	void Hub::special(int key, int x, int y)
 	{
@@ -276,7 +261,7 @@ namespace eRG
 	}
 
 	/*
-	* TODO: @brief decription
+	* @brief Stop player movement on key release.
 	*/
 	void Hub::special_up(int key, int x, int y)
 	{
@@ -320,7 +305,7 @@ namespace eRG
 	}
 
 	/*
-	* TODO: @brief decription.
+	* @brief Move center point with mouse.
 	*/
 	void Hub::passive_motion(int x, int y)
 	{
@@ -350,7 +335,7 @@ namespace eRG
 	/* Timer callbacks: */
 	/* @{ */
 	/*
-	* TODO: @brief decription
+	* @brief Handle timers.
 	*/
 	void Hub::timer(int timer_id)
 	{
@@ -358,7 +343,7 @@ namespace eRG
 		{
 			case TIMER_REDISPLAY:
 				glutPostRedisplay();
-				glutTimerFunc(TIMER_REDISPLAY_INTERVAL, timer, TIMER_REDISPLAY);
+				glutTimerFunc(TIMER_REDISPLAY_INTERVAL, Hub::timer, TIMER_REDISPLAY);
 				break;
 			case TIMER_BLINK:
 				mview.set_move_parameter(opt::Move::forward, 0);
@@ -367,11 +352,60 @@ namespace eRG
 	}
 
 	/*
-	* TODO: Implement idle function.
+	* @brief Whenever there's nothing to do call the display function to increase framerate.
 	*/
 	void Hub::idle()
 	{
 		glutPostRedisplay();
+	}
+	/* @} */
+
+	/* Handle colisions between mview and mscene */
+	/* @{ */
+	/*
+	* @brief Wrapper function for colision handing.
+	*/
+	void Hub::__colision()
+	{
+		/* Get player box */
+		auto pbox{util::pbox(mview.get_eye(), 1.5)};
+
+		/* Jumping */
+		auto model{mscene.below(pbox)};
+		if(model) {
+			mview.set_floor(model->position().second.y + 2);
+		} else {
+			mview.set_floor(-100);
+		}
+
+		/* Walls */
+		auto aabb{mscene.aabb(pbox)};
+		if(aabb && aabb != model) {
+
+			/* Get model box */
+			auto mbox{aabb->position()};
+
+			/* Get colision points */
+			auto package{util::handle_colision(pbox, mbox)};
+
+			if(opt::Move::up != package.first) {
+
+				/* TODO: workaround */
+				float 	front{(package.first == opt::Move::forwardx) ? -mview.dforward_.x : -mview.dforward_.z},
+						strafe{(package.first == opt::Move::strafex) ? -mview.dstrafe_.x : -mview.dstrafe_.z};
+
+				/* Set appropriate move parameters */
+				mview.set_move_parameter(package.first, front);
+				mview.set_move_parameter(package.second, strafe);
+
+				/* Reposition the view */
+				mview.reposition();
+
+				/* Stop motion */
+				mview.set_move_parameter(package.first, 0);
+				mview.set_move_parameter(package.second, 0);
+			}
+		}
 	}
 	/* @} */
 	/* @@} */

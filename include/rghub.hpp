@@ -42,6 +42,11 @@ namespace eRG
 			static void timer(int timer_id);
 			static void idle();
 
+		/* Private member functions */
+		private:
+			/* Handle colisions between mview and mscene */
+			static void __colision();
+
 		/* Public member variables */
 		public:
 			/* Redisplay timer */

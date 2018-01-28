@@ -12,6 +12,6 @@ namespace eRG::util
 
 	/* Helper functions for colision detection and handling */
 	Box pbox(glm::vec3 eye, float h);
-	std::pair<opt::Move, float> handle_colision(const Box &pbox, const Box &mbox);
+	std::pair<opt::Move, opt::Move> handle_colision(const Box &pbox, const Box &mbox);
 
 }; /* namespace eRG::util */
