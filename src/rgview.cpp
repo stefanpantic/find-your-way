@@ -23,7 +23,7 @@ namespace eRG
 			dtheta_{0.0f}, dphi_{0.0f},
 			dforward_{0.0f}, dstrafe_{0.0f}, dup_{0.0f},
 			mspd_{0.0f}, lsen_{0.0f},
-			y_base_{0.0f}, jump_base_{0.0f}, jump_{0.0f}
+			y_base_{0.0f}, jump_base_{0.0f}, jump_{0.0f}, gravity_{0.0f}
 	{
 		std::clog << "eRG::View: Default contructor" << std::endl;
 	}
@@ -149,7 +149,7 @@ namespace eRG
 				dstrafe_.z = std::move(val);
 				break;
 			case opt::Move::up:
-				dup_ = std::move(val);
+				dup_ = gravity_ = std::move(val);
 				break;
 		}
 	}
@@ -266,7 +266,7 @@ namespace eRG
 	*/
 	void View::__eyev()
 	{
-		if(jump_base_ != y_base_ && eye_.y < y_base_) {
+		if(jump_base_ != y_base_ && eye_.y <= y_base_) {
 			eye_.y = jump_base_ = y_base_;
 		}
 
@@ -285,18 +285,16 @@ namespace eRG
 	{
 		if(eye_.y > y_base_) {
 			/* Aproximate sin(x) = x for gravity */
-			eye_.y -= 4*mspd_;
+			eye_.y -= 4*gravity_;
 
 			/* Make sure we don't fall through the floor */
 			if(eye_.y < y_base_) {
-				eye_.y = y_base_;
-				jump_base_ = y_base_;
+				eye_.y = jump_base_ = y_base_;
 			}
 
 		}
 		else {
-			eye_.y = y_base_;
-			jump_base_ = y_base_;
+			eye_.y = jump_base_ = y_base_;
 		}
 	}
 	/* @} */

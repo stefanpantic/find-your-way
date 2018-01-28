@@ -144,7 +144,10 @@ namespace eRG
 
 					/* Create the model */
 					models_.push_back(std::unique_ptr<Model>{	new PModel{	glm::vec3{tmp[0], tmp[1], tmp[2]},
-																			glm::vec3{tmp[3], tmp[4], tmp[5]}}});
+																			glm::vec3{tmp[3], tmp[4], tmp[5]},
+																			{	"./resource/texture/wall.bmp",
+																				"./resource/texture/floor.bmp",
+																				"./resource/texture/ceil.bmp"}}});
 				}
 			} else if("amodel" == e.first) { /* AModel node */
 
@@ -173,7 +176,10 @@ namespace eRG
 					/* Create the model */
 					models_.push_back(std::unique_ptr<Model>{	new AModel{	glm::vec3{tmp[0], tmp[1], tmp[2]},
 																			glm::vec3{tmp[3], tmp[4], tmp[5]},
-																			std::move(tmp1)}});
+																			std::move(tmp1),
+																			{	"./resource/texture/wall.bmp",
+																				"./resource/texture/floor.bmp",
+																				"./resource/texture/ceil.bmp"}}});
 				}
 			} else { /* Go with the flow */
 				traverse_ptree(e.second);
