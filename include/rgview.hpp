@@ -94,7 +94,7 @@ namespace eRG
 			float mspd_, lsen_;
 
 			/* Y base - world height indicator */
-			float y_base_, jump_base_, jump_;
+			float y_base_, jump_base_, jump_, gravity_;
 	}; /* class eRG::View */
 	/* @} */
 
