@@ -1,5 +1,7 @@
 #include <iostream>
+#include <vector>
 #include <GL/glut.h>
+#include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include "rgpmodel.hpp"
 
@@ -13,11 +15,16 @@ namespace eRG
 	/*
 	* @brief Builds instance of %eRG::PModel.
 	*/
-	PModel::PModel(	glm::vec3 lower_left_near,
-					glm::vec3 upper_right_far)
-		:	Model{lower_left_near, upper_right_far}
+	PModel::PModel(	glm::vec3 lln,
+					glm::vec3 urf,
+					const std::vector<std::string> &paths)
+		:	Model{lln, urf, paths}
 	{
 		std::clog << "eRG::PModel: Default constructor" << std::endl;
+
+		glNewList(dlist_, GL_COMPILE);
+			Model::initialize_model();
+		glEndList();
 	}
 
 	/*
@@ -46,10 +53,7 @@ namespace eRG
 	*/
 	void PModel::draw()
 	{
-		glPushMatrix();
-			Model::apply_transformations();
-			glutSolidCube(1);
-		glPopMatrix();
+		glCallList(dlist_);
 	}
 	/* @} */
 

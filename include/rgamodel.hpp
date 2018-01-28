@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <GL/glut.h>
 #include <glm/vec3.hpp>
 #include "rgmodel.hpp"
 
@@ -20,9 +21,10 @@ namespace eRG
 		/* Public member functions */
 		public:
 			/* Construction */
-			explicit AModel(glm::vec3 lower_left_near = {0, 0, 0},
-							glm::vec3 upper_right_far = {1, 1, 1},
-							std::vector<glm::vec3> &&points = {});
+			explicit AModel(glm::vec3 lln = {0, 0, 0},
+							glm::vec3 urf = {1, 1, 1},
+							std::vector<glm::vec3> &&points = {},
+							const std::vector<std::string> &paths = {});
 			explicit AModel(const AModel &other);
 			explicit AModel(AModel &&other);
 
@@ -32,6 +34,9 @@ namespace eRG
 		private:
 			/* Points of movement */
 			std::vector<glm::vec3> points_;
+
+			/* Translation factor */
+			glm::vec3 translate_;
 
 			/* Direction of movement */
 			glm::vec3 delta_;
