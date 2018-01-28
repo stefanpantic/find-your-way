@@ -12,12 +12,12 @@ classes. Done in C++.
 ## Installation:
 Just run <code>make</code> from the project directory.
 ## Requirements:
- * **OpenGL/GLUT and GLM:**  
+ * **Boost, OpenGL/GLUT, GLM:**  
 
 Arch Linux:
-<pre>sudo pacman -S freeglut glm</pre>
+<pre>sudo pacman -S boost freeglut glm</pre>
 Ubuntu:
-<pre>sudo apt-get install freeglut3-dev binutils-gold glm</pre>
+<pre>sudo apt-get install boost freeglut3-dev binutils-gold glm</pre>
 
 * **Tested C++ compiler (others may work as well)**:   
     * g++ 7.2.0+,
@@ -26,7 +26,7 @@ Ubuntu:
 ## Preview:
 **Date:** 25-01-2018  
 
-![preview](https://github.com/MATF-RG17/RG061-find-your-way/blob/master/sample/25-01-2018.gif) 
+![preview](https://github.com/MATF-RG17/RG061-find-your-way/blob/master/sample/28-01-2018.gif) 
 
 ## Progress reports and change log:
 **TODO:** 
@@ -140,6 +140,14 @@ Ubuntu:
  * Made modifications to gravity in eRG::View,
  * Added first level,
  * Added screen gif.
+ 
+### Version 0.9:
+**Date:** 28-01-2018  
+**Prograss made:**
+* Added textures to models,
+* Improved colision detection,
+* Some refactoring,
+* Added screen gif.
  
 
 
