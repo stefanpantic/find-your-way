@@ -41,7 +41,7 @@ namespace eRG
 							size_t x, size_t y)
 	{
 		/* Check command line arguments */
-		if(argc < 2) {
+		if(argc < 5) {
 			throw std::runtime_error{"Invalid command line arguments..."};
 		}
 
@@ -53,7 +53,7 @@ namespace eRG
 		glutCreateWindow(argv[0] + 2);
 
 		/* Initialize %RGHub */
-		RGHub::initialize(argv[1]);
+		RGHub::initialize(argc, argv);
 
 		/* Display callbacks */
 		glutDisplayFunc(RGHub::display);

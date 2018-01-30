@@ -6,7 +6,7 @@
 #include "rghub.hpp"
 #include "rgview.hpp"
 #include "rgscene.hpp"
-#include "rgmodel.hpp"
+#include "rgcube.hpp"
 #include "rgdefines.hpp"
 #include "rgcolision.hpp"
 #include "rgoption.hpp"
@@ -30,7 +30,7 @@ namespace eRG
 	/*
 	* TODO: @brief decription
 	*/
-	void Hub::initialize(std::string path)
+	void Hub::initialize(const int &argc, char **argv)
 	{
 		/* Basic OpenGL initializers: */
 		/* @{ */
@@ -61,7 +61,13 @@ namespace eRG
 
 		/* Initialize the Scene: */
 		/* @{ */
-		mscene.read_map(path);
+		std::vector<std::string> tmp;
+		for(int i = 2; i < argc; ++i) {
+			tmp.push_back(argv[i]);
+		}
+
+		mscene.set_textures(tmp);
+		mscene.read_map(argv[1]);
 		/* @} */
 
 		/* Initialize fog */
@@ -206,6 +212,7 @@ namespace eRG
 				break;
 			case 'b':
 				mview.set_move_parameter(opt::Move::forward, 30);
+				mview.set_move_parameter(opt::Move::up, util::pi/50);
 				glutTimerFunc(TIMER_BLINK_INTERVAL, timer, TIMER_BLINK);
 				break;
 			case ' ':
@@ -247,9 +254,11 @@ namespace eRG
 		{
 			case GLUT_KEY_UP:
 				mview.set_move_parameter(opt::Move::forward, 1);
+				mview.set_move_parameter(opt::Move::forwardy, 0);
 				break;
 			case GLUT_KEY_DOWN:
 				mview.set_move_parameter(opt::Move::forward, -1);
+				mview.set_move_parameter(opt::Move::forwardy, 0);
 				break;
 			case GLUT_KEY_LEFT:
 				mview.set_move_parameter(opt::Move::strafe, 1);
@@ -392,7 +401,7 @@ namespace eRG
 
 				/* TODO: workaround */
 				float 	front{(package.first == opt::Move::forwardx) ? -mview.dforward_.x : -mview.dforward_.z},
-						strafe{(package.first == opt::Move::strafex) ? -mview.dstrafe_.x : -mview.dstrafe_.z};
+						strafe{(package.second == opt::Move::strafex) ? -mview.dstrafe_.x : -mview.dstrafe_.z};
 
 				/* Set appropriate move parameters */
 				mview.set_move_parameter(package.first, front);

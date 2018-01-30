@@ -21,7 +21,7 @@ namespace eRG
 		/* Public member functions */
 		public:
 			/* Initializer */
-			static void initialize(std::string path);
+			static void initialize(const int &argc, char **argv);
 
 			/* Display callbacks */
 			static void reshape(int w, int h);
