@@ -10,7 +10,8 @@ classes. Done in C++.
 **Description:** *Find Your Way* is a platformer styled first person game. The goal is to find a way to the end of each level using several abilities at your disposal that include slowing down time, blinking and super jump. At one point I'm hoping to add mobs that will try to hinder your progess, as well as abilities to fend them off. The project is being written in C++ using older OpenGL/GLUT and some GLM classes for convenience. If time allows it, a port to modern OpenGL is not out of the question. This is my first larger C++ project. Any criticism and/or suggestions are more than welcome. :)  
 
 ## Installation:
-Just run <code>make</code> from the project directory.
+Just run <code>./start.sh</code> from the project directory. This will compile the project if needed and then start it with the default map/textures.   
+Alternatively you can run <code>make -j</code> and run with your own map/textures.   
 ## Requirements:
  * **Boost, OpenGL/GLUT, GLM:**  
 
@@ -143,11 +144,18 @@ Ubuntu:
  
 ### Version 0.9:
 **Date:** 28-01-2018  
-**Prograss made:**
+**Progress made:**
 * Added textures to models,
 * Improved colision detection,
 * Some refactoring,
 * Added screen gif.
  
+### Version 0.9.1:
+**Date:** 30-01-2018  
+**Progress made:**
+* Improved model implementations,
+* Added passing textures via command line arguments,
+* Some refatoring of model classes,
+* Added convenience script for running program.
 
 
