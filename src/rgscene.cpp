@@ -6,8 +6,8 @@
 #include <GL/glut.h>
 #include <glm/vec3.hpp>
 #include "rgscene.hpp"
-#include "rgpmodel.hpp"
-#include "rgamodel.hpp"
+#include "rgcube.hpp"
+#include "rgacube.hpp"
 
 namespace eRG
 {
@@ -20,7 +20,7 @@ namespace eRG
 	* TODO: Implement scene constructor.
 	*/
 	Scene::Scene()
-		:	models_{std::vector<std::unique_ptr<Model>>{}}
+		:	models_{std::vector<std::unique_ptr<Cube>>{}}
 	{
 		std::clog << "eRG::Scene: Default constructor" << std::endl;
 	}
@@ -31,7 +31,7 @@ namespace eRG
 	/*
 	* @brief Returns model underneath the player.
 	*/
-	const Model* Scene::below(Box pbox) const
+	const Cube* Scene::below(Box pbox) const
 	{
 		auto bpoint{((pbox.second + pbox.first)/2.0f)};
 
@@ -62,7 +62,7 @@ namespace eRG
 	/*
 	* @brief Colision detection using AABB.
 	*/
-	const Model* Scene::aabb(Box pbox) const
+	const Cube* Scene::aabb(Box pbox) const
 	{
 		for(auto &&e : models_)
 		{
@@ -108,11 +108,25 @@ namespace eRG
 			traverse_ptree(root);
 		} catch (const std::exception &e) {
 			std::cerr << e.what() << std::endl;
+			std::exit(1);
 		}
 
 		/* Sort all models by y coordinate descending */
 		std::sort(	models_.begin(), models_.end(),
 					[] (auto &&lhs, auto &&rhs) { return lhs->position().second.y > rhs->position().second.y; });
+	}
+	/* @} */
+
+	/* Set textures */
+	/* @{ */
+	/*
+	* @brief Set texture paths.
+	*/
+	void Scene::set_textures(std::vector<std::string> paths)
+	{
+		if(3 == paths.size()) {
+			textures_ = std::move(paths);
+		}
 	}
 	/* @} */
 
@@ -131,7 +145,7 @@ namespace eRG
 		/* Iterate through the entire tree */
 		for(auto &&e : root)
 		{
-			if("pmodel" == e.first) { /* PModel node */
+			if("pmodel" == e.first) { /* Cube node */
 
 				/* Get all the boxes from the node */
 				for(auto &&e1 : e.second)
@@ -143,13 +157,11 @@ namespace eRG
 					}
 
 					/* Create the model */
-					models_.push_back(std::unique_ptr<Model>{	new PModel{	glm::vec3{tmp[0], tmp[1], tmp[2]},
+					models_.push_back(std::unique_ptr<Cube>{	new Cube{	glm::vec3{tmp[0], tmp[1], tmp[2]},
 																			glm::vec3{tmp[3], tmp[4], tmp[5]},
-																			{	"./resource/texture/wall.bmp",
-																				"./resource/texture/floor.bmp",
-																				"./resource/texture/ceil.bmp"}}});
+																			textures_}});
 				}
-			} else if("amodel" == e.first) { /* AModel node */
+			} else if("amodel" == e.first) { /* ACube node */
 
 				/* Get all the boxes and movement points from the node */
 				for(auto &&e1 : e.second)
@@ -174,12 +186,10 @@ namespace eRG
 					}
 
 					/* Create the model */
-					models_.push_back(std::unique_ptr<Model>{	new AModel{	glm::vec3{tmp[0], tmp[1], tmp[2]},
+					models_.push_back(std::unique_ptr<Cube>{	new ACube{	glm::vec3{tmp[0], tmp[1], tmp[2]},
 																			glm::vec3{tmp[3], tmp[4], tmp[5]},
 																			std::move(tmp1),
-																			{	"./resource/texture/wall.bmp",
-																				"./resource/texture/floor.bmp",
-																				"./resource/texture/ceil.bmp"}}});
+																			textures_}});
 				}
 			} else { /* Go with the flow */
 				traverse_ptree(e.second);

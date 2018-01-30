@@ -8,8 +8,8 @@
 namespace eRG
 {
 
-	/* Forward declaration of eRG::Model */
-	class Model;
+	/* Forward declaration of eRG::Cube */
+	class Cube;
 
 	/* Scene declaration: */
 	/* @{ */
@@ -27,14 +27,18 @@ namespace eRG
 			explicit Scene();
 
 			/* Get model */
-			const Model* below(Box pbox) const;
-			const Model* aabb(Box pbox) const;
+			const Cube* below(Box pbox) const;
+			const Cube* aabb(Box pbox) const;
 
 			/* Read map from file */
 			void read_map(std::string path);
 
+			/* Set textures */
+			void set_textures(std::vector<std::string> path);
+
 			/* Render scene */
 			void render() const;
+
 		/* Private member functions */
 		private:
 			/* Traverse property tree */
@@ -42,8 +46,11 @@ namespace eRG
 
 		/* Private member variables */
 		private:
-			/* Model storage */
-			std::vector<std::unique_ptr<Model>> models_;
+			/* Cube storage */
+			std::vector<std::unique_ptr<Cube>> models_;
+
+			/* Texture paths */
+			std::vector<std::string> textures_;
 	}; /* class eRG::Scene */
 	/* @} */
 
