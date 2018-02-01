@@ -145,7 +145,7 @@ namespace eRG
 		/* Iterate through the entire tree */
 		for(auto &&e : root)
 		{
-			if("pmodel" == e.first) { /* Cube node */
+			if("pcube" == e.first) { /* Cube node */
 
 				/* Get all the boxes from the node */
 				for(auto &&e1 : e.second)
@@ -161,7 +161,7 @@ namespace eRG
 																			glm::vec3{tmp[3], tmp[4], tmp[5]},
 																			textures_}});
 				}
-			} else if("amodel" == e.first) { /* ACube node */
+			} else if("acube" == e.first) { /* ACube node */
 
 				/* Get all the boxes and movement points from the node */
 				for(auto &&e1 : e.second)
