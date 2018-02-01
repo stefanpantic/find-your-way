@@ -1,4 +1,5 @@
 #include <iostream>
+#include <array>
 #include <cmath>
 #include <GL/glut.h>
 #include <glm/vec2.hpp>
@@ -86,15 +87,15 @@ namespace eRG
 		glEnable(GL_COLOR_MATERIAL);
 
 		/* Light parameters */
-		float position[]{2, 2, 2, 1};
-		float ambient[]{0.1, 0.1, 0.1, 1};
-		float specular[]{0.5, 0.5, 0.5, 1};
-		float diffuse[]{110/265.0f, 110/256.0f, 150/256.0f, 1};
+		std::array<float, 4> position{{2, 2, 2, 1}};
+		std::array<float, 4> ambient{{0.1, 0.1, 0.1, 1}};
+		std::array<float, 4> specular{{0.5, 0.5, 0.5, 1}};
+		std::array<float, 4> diffuse{{110/265.0f, 110/256.0f, 150/256.0f, 1}};
 
-		glLightfv(GL_LIGHT0, GL_POSITION, position);
-		glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
-		glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+		glLightfv(GL_LIGHT0, GL_POSITION, position.data());
+		glLightfv(GL_LIGHT0, GL_AMBIENT, ambient.data());
+		glLightfv(GL_LIGHT0, GL_SPECULAR, specular.data());
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse.data());
 		/* @} */
 	}
 	/* @} */
@@ -143,41 +144,19 @@ namespace eRG
 		/* Reset all matrix transformations */
 		glLoadIdentity();
 
-		/* Colision handling: */
-		/* @{ */
+		/* Colision handling */
 		Hub::__colision();
-		/* @} */
 
-		/* Reposition camera and set look at: */
-		/* @{ */
+		/* Update lantern */
+		auto eye{mview.get_eye()};
+		glLightfv(GL_LIGHT0, GL_POSITION, std::array<float, 4>{{eye.x, eye.y, eye.z, 1}}.data());
+
+		/* Reposition camera and set look at */
 		mview.reposition();
 		mview.look_at();
-		/* @} */
 
-		/* Update lantern: */
-		/* @{ */
-		auto eye{mview.get_eye()};
-		float position[]{eye.x, eye.y, eye.z, 1};
-		glLightfv(GL_LIGHT0, GL_POSITION, position);
-		/* @} */
-
-		/* World rendering: */
-		/* @{ */
-		glEnable(GL_LIGHTING);
-		glColor3f(0.5, 0.5, 0.4);
+		/* World rendering */
 		mscene.render();
-		glDisable(GL_LIGHTING);
-		/* @} */
-
-		/* Coordinate system: */
-		/* @{ */
-		glPushMatrix();
-			glScalef(10, 10, 10);
-			glLineWidth(5);
-			DEBUG::coordinate_system();
-			glLineWidth(1);
-		glPopMatrix();
-		/* @} */
 
 		/* Swap buffers */
 		glutSwapBuffers();
