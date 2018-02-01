@@ -44,14 +44,12 @@ namespace eRG
 			/* Vertices */
 			std::vector<glm::vec3> vertices_;
 
-			/* Texture handles */
+			/* Texture handles and coords */
 			std::vector<GLuint> handles_;
+			std::vector<std::vector<glm::vec2>> tex_;
 
 			/* Indices */
 			static const std::vector<std::vector<int>> indices_;
-
-			/* Texture indices */
-			static const std::vector<glm::vec2> tex_;
 	}; /* class eRG::Cube */
 	/* @} */
 

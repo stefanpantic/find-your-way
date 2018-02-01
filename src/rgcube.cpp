@@ -3,8 +3,9 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
-#include "rgimage.hpp"
 #include "rgcube.hpp"
+#include "rgimage.hpp"
+#include "rgdefines.hpp"
 
 namespace eRG
 {
@@ -12,18 +13,17 @@ namespace eRG
 	/* Cube implementation: */
 	/* @@{ */
 	/* Static member initialization */
-	const std::vector<std::vector<int>> Cube::indices_{{0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7},
+	const std::vector<std::vector<int>> Cube::indices_{	{0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7},
 														{0, 1, 2, 3},
 														{4, 5, 6, 7}};
-	const std::vector<glm::vec2> Cube::tex_{{0, 0}, {1, 0}, {1, 1}, {0, 1}};
 	/* Construction: */
 	/* @{ */
 	/*
 	* @brief Builds %eRG::Cube.
 	*/
 	Cube::Cube(	glm::vec3 lln,
-					glm::vec3 urf,
-					const std::vector<std::string> &paths)
+				glm::vec3 urf,
+				const std::vector<std::string> &paths)
 		:	lln_{lln}, urf_{urf},
 			vertices_{	{lln_.x, lln_.y, lln_.z},
 						{lln_.x, lln_.y, urf_.z},
@@ -33,7 +33,13 @@ namespace eRG
 						{lln_.x, urf_.y, urf_.z},
 						{urf_.x, urf_.y, urf_.z},
 						{urf_.x, urf_.y, lln_.z}},
-			handles_{eRG::util::generate_texture_array(paths)}
+			handles_{eRG::util::generate_texture_array(paths)},
+			tex_{	{{0, 0}, {vertices_[1].z - vertices_[0].z, 0},
+					{vertices_[1].z - vertices_[0].z, vertices_[4].y - vertices_[0].y}, {0, vertices_[4].y - vertices_[0].y}},
+					{{0, 0}, {vertices_[3].x - vertices_[0].x, 0},
+					{vertices_[3].x - vertices_[0].x, vertices_[4].y - vertices_[0].y}, {0, vertices_[4].y - vertices_[0].y}},
+					{{0, 0}, {vertices_[1].z - vertices_[0].z, 0},
+					{vertices_[1].z - vertices_[0].z, vertices_[3].x - vertices_[0].x}, {0, vertices_[3].x - vertices_[0].x}}}
 	{
 		std::clog << "eRG::Cube: Default constructor" << std::endl;
 	}
@@ -76,7 +82,7 @@ namespace eRG
 	*/
 	std::pair<glm::vec3, glm::vec3> Cube::position() const
 	{
-		return {glm::vec3{Cube::lln_}, glm::vec3{Cube::urf_}};
+		return {glm::vec3{lln_}, glm::vec3{urf_}};
 	}
 	/* @} */
 
@@ -100,7 +106,9 @@ namespace eRG
 					glNormal3f(	vertices_[indices_[k][i]].x - center_.x,
 								vertices_[indices_[k][i]].y - center_.y,
 								vertices_[indices_[k][i]].z - center_.z);
-					glTexCoord2f(10*tex_[i%4].s, 10*tex_[i%4].t);
+
+					glTexCoord2f(tex_[(i/4)%2 + 2*util::sgn(k)][i%4].s/3, tex_[(i/4)%2 + 2*util::sgn(k)][i%4].t/3);
+
 					glVertex3f(	vertices_[indices_[k][i]].x,
 								vertices_[indices_[k][i]].y,
 								vertices_[indices_[k][i]].z);
