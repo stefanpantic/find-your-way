@@ -25,9 +25,9 @@ Ubuntu:
     * clang++ 5.0.0+.
 
 ## Preview:
-**Date:** 25-01-2018  
+**Date:** 02-01-2018  
 
-![preview](https://github.com/MATF-RG17/RG061-find-your-way/blob/master/sample/28-01-2018.gif) 
+![preview](https://github.com/MATF-RG17/RG061-find-your-way/blob/master/sample/01-02-2018.gif) 
 
 ## Progress reports and change log:
 **TODO:** 
@@ -157,5 +157,13 @@ Ubuntu:
 * Added passing textures via command line arguments,
 * Some refatoring of model classes,
 * Added convenience script for running program.
+
+### Version 0.9.2:
+**Date:** 01-02-2018   
+**Progress made:**
+* Improved textures. They now scale accordingly to the model and look the same on all models,
+* Changed node names in JSON map parser,
+* Improved lantern light.
+
 
 
