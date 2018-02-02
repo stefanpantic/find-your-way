@@ -57,6 +57,10 @@ namespace eRG
 			static const int TIMER_BLINK{1};
 			static const int TIMER_BLINK_INTERVAL{320};
 
+			/* Bonus timers */
+			static const int TIMER_RAVE{2};
+			static const int TIMER_RAVE_INTERVAL{200};
+
 		/* Private member variables */
 		private:
 			/* Window width and height */

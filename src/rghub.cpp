@@ -50,6 +50,28 @@ namespace eRG
 		/* Set key repeat */
 		glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
 
+		/* Initialize fog */
+		glEnable(GL_FOG);
+		glFogf(GL_FOG_START, 9);
+		glFogf(GL_FOG_END, 20);
+		glFogf(GL_FOG_DENSITY, 0.09);
+
+		/* Light setup */
+		glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHT0);
+		glEnable(GL_NORMALIZE);
+
+		/* Light parameters */
+		std::array<float, 4> position{{2, 2, 2, 1}};
+		std::array<float, 4> ambient{{0.1, 0.1, 0.1, 1}};
+		std::array<float, 4> specular{{0.5, 0.5, 0.5, 1}};
+		std::array<float, 4> diffuse{{170/265.0f, 160/256.0f, 150/256.0f, 1}};
+
+		glLightfv(GL_LIGHT0, GL_POSITION, position.data());
+		glLightfv(GL_LIGHT0, GL_AMBIENT, ambient.data());
+		glLightfv(GL_LIGHT0, GL_SPECULAR, specular.data());
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse.data());
+
 		/* Initialize the View */
 		mview.set_move_speed(0.1f);
 		mview.set_look_sensitivity(util::pi/180.0f);
@@ -72,31 +94,9 @@ namespace eRG
 		} else {
 			/* Enable color material */
 			glEnable(GL_COLOR_MATERIAL);
-			glEnable(GL_NORMALIZE);
 		}
 
 		mscene.read_map(argv[1]);
-
-		/* Initialize fog */
-		glEnable(GL_FOG);
-		glFogf(GL_FOG_START, 8);
-		glFogf(GL_FOG_END, 20);
-		glFogf(GL_FOG_DENSITY, 0.09);
-
-		/* Light setup */
-		glEnable(GL_LIGHTING);
-		glEnable(GL_LIGHT0);
-
-		/* Light parameters */
-		std::array<float, 4> position{{2, 2, 2, 1}};
-		std::array<float, 4> ambient{{0.1, 0.1, 0.1, 1}};
-		std::array<float, 4> specular{{0.5, 0.5, 0.5, 1}};
-		std::array<float, 4> diffuse{{170/265.0f, 160/256.0f, 150/256.0f, 1}};
-
-		glLightfv(GL_LIGHT0, GL_POSITION, position.data());
-		glLightfv(GL_LIGHT0, GL_AMBIENT, ambient.data());
-		glLightfv(GL_LIGHT0, GL_SPECULAR, specular.data());
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse.data());
 	}
 	/* @} */
 
@@ -126,7 +126,7 @@ namespace eRG
 		glLoadIdentity();
 
 		/* Set perspective */
-		gluPerspective(70.0f, (float)w/h, 0.1f, 100.0f);
+		gluPerspective(70.0f, static_cast<float>(w)/h, 0.1f, 100.0f);
 
 		/* Enter modelview */
 		glMatrixMode(GL_MODELVIEW);
@@ -196,6 +196,11 @@ namespace eRG
 			case ' ':
 				mview.set_move_parameter(opt::Move::up, util::pi/50);
 				break;
+			case 'r':
+				mview.look_at(	{3, 3, 3,},
+								{1, 0, 1},
+								{0, 1, 0});
+				break;
 		}
 	}
 
@@ -232,9 +237,11 @@ namespace eRG
 		{
 			case GLUT_KEY_UP:
 				mview.set_move_parameter(opt::Move::forward, 1);
+				mview.set_move_parameter(opt::Move::forwardy, 0);
 				break;
 			case GLUT_KEY_DOWN:
 				mview.set_move_parameter(opt::Move::forward, -1);
+				mview.set_move_parameter(opt::Move::forwardy, 0);
 				break;
 			case GLUT_KEY_LEFT:
 				mview.set_move_parameter(opt::Move::strafe, 1);
@@ -266,28 +273,6 @@ namespace eRG
 		}
 	}
 	/* @} */
-
-	/* Mouse callbacks: */
-	/* @{ */
-	/*
-	* TODO: Implement mouse function.
-	*/
-	void Hub::mouse(int key, int state, int x, int y)
-	{
-		static_cast<void>(key);
-		static_cast<void>(state);
-		static_cast<void>(x);
-		static_cast<void>(y);
-	}
-
-	/*
-	* TODO: Implement motion function.
-	*/
-	void Hub::motion(int x, int y)
-	{
-		static_cast<void>(x);
-		static_cast<void>(y);
-	}
 
 	/*
 	* @brief Move center point with mouse.
@@ -342,6 +327,13 @@ namespace eRG
 			case TIMER_BLINK:
 				mview.set_move_parameter(opt::Move::forward, 0);
 				break;
+			case TIMER_RAVE:
+				glClearColor(	static_cast<float>(std::rand())/RAND_MAX,
+								static_cast<float>(std::rand())/RAND_MAX,
+								static_cast<float>(std::rand())/RAND_MAX,
+								1);
+				glutTimerFunc(TIMER_RAVE_INTERVAL, Hub::timer, TIMER_RAVE);
+				break;
 		}
 	}
 
@@ -363,6 +355,13 @@ namespace eRG
 	{
 		/* Get player box */
 		auto eye{mview.get_eye()};
+
+		/* You won */
+		if(eye.y > 20) {
+			glDisable(GL_FOG);
+			glutTimerFunc(TIMER_RAVE_INTERVAL, Hub::timer, TIMER_RAVE);
+		}
+
 		auto pbox{util::pbox(eye, 1.5)};
 
 		/* Jumping */
