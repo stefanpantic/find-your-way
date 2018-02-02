@@ -20,7 +20,7 @@ namespace eRG
 		public:
 			/* Construction */
 			Window(	int &argc, char **argv, int display_mode,
-					size_t width = 100, size_t height = 100,
+					size_t width = 1024, size_t height = 768,
 					size_t x = 100, size_t y = 100);
 
 			/* Show window */
