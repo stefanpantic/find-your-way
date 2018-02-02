@@ -246,7 +246,7 @@ namespace eRG
 	void View::__eyef()
 	{
 		eye_.x += mspd_ * dforward_.x * std::sin(theta_);
-		//eye_.y += mspd_ * dforward_.y * std::cos(phi_);
+		eye_.y += mspd_ * dforward_.y * std::cos(phi_);
 		eye_.z += mspd_ * dforward_.z * std::cos(theta_);
 	}
 
