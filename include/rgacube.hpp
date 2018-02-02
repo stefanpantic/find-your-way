@@ -12,9 +12,9 @@ namespace eRG
 	/* ACube declaration: */
 	/* @{ */
 	/*
-	* @brief Class representing a moving model.
+	* @brief Class representing a moving cube.
 	*
-	* @inherit Cube Abstract class that eRG::Scene works with.
+	* @inherit Cube class used for representing stationary cubes.
 	*/
 	class ACube : public Cube
 	{
@@ -27,21 +27,17 @@ namespace eRG
 							const std::vector<std::string> &paths = {});
 			explicit ACube(const ACube &other);
 			explicit ACube(ACube &&other);
-			~ACube();
 
 			/* Draw */
 			void draw() override;
+
+			/* Get delta */
+			glm::vec3 get_delta() const override;
 
 		/* Private member variables */
 		private:
 			/* Points of movement */
 			std::vector<glm::vec3> points_;
-
-			/* Display list handle */
-			size_t dlist_;
-
-			/* Translation factor */
-			glm::vec3 translate_;
 
 			/* Direction of movement */
 			glm::vec3 delta_;

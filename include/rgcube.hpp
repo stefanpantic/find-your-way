@@ -32,6 +32,9 @@ namespace eRG
 			/* Draw */
 			virtual void draw();
 
+			/* Get delta */
+			virtual glm::vec3 get_delta() const;
+
 		/* Protected member variables */
 		protected:
 			/* Stored corners */
@@ -47,6 +50,7 @@ namespace eRG
 			/* Texture handles and coords */
 			std::vector<GLuint> handles_;
 			std::vector<std::vector<glm::vec2>> tex_;
+			bool use_tex_;
 
 			/* Indices */
 			static const std::vector<std::vector<int>> indices_;
