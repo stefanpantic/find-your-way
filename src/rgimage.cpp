@@ -184,8 +184,9 @@ namespace eRG::util
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 
-		/* Return teexture handles */
+		/* Return texture handles */
 		return handles;
 	}
 	/* @} */
-}
+
+}; /* namespace eRG::util */

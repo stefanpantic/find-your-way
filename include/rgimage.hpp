@@ -51,5 +51,5 @@ namespace eRG::util
 	GLuint generate_texture(const std::string &path);
 	std::vector<GLuint> generate_texture_array(const std::vector<std::string>& paths);
 	/* @} */
-}
 
+}; /* namespace eRG::util */
