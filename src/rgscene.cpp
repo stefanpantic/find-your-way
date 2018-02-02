@@ -41,13 +41,13 @@ namespace eRG
 			auto model{e->position()};
 
 			/* The boxes intersect on the X plane */
-			bool xintersect{bpoint.x >= model.first.x && bpoint.x <= model.second.x};
+			bool xintersect{bpoint.x >= model.first.x - 0.5 && bpoint.x <= model.second.x + 0.5};
 
 			/* The boxes intersect on the Y plane */
 			bool yintersect{bpoint.y >= model.second.y};
 
 			/* The boxes intersect on the Z plane */
-			bool zintersect{bpoint.z >= model.first.z && bpoint.z <= model.second.z};
+			bool zintersect{bpoint.z >= model.first.z - 0.5 && bpoint.z <= model.second.z + 0.5};
 
 			/* If all conditions are met return the model */
 			if(	xintersect && zintersect && yintersect) {
@@ -141,7 +141,6 @@ namespace eRG
 		if(root.empty()) {
 			return;
 		}
-
 		/* Iterate through the entire tree */
 		for(auto &&e : root)
 		{
