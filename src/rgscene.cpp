@@ -62,8 +62,11 @@ namespace eRG
 	/*
 	* @brief Colision detection using AABB.
 	*/
-	const Cube* Scene::aabb(Box pbox) const
+	std::vector<const Cube*> Scene::aabb(Box pbox) const
 	{
+		/* Colided models */
+		std::vector<const Cube*> colided;
+
 		for(auto &&e : models_)
 		{
 			/* Get the model box */
@@ -83,12 +86,12 @@ namespace eRG
 
 			/* If the boxes intersect on all axis, a colision has occured */
 			if(xintersect && yintersect && zintersect) {
-				return e.get();
+				colided.push_back(e.get());
 			}
 		}
 
 		/* A colision hasn't occured */
-		return nullptr;
+		return colided;
 	}
 	/* @} */
 

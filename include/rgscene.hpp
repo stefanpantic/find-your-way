@@ -28,7 +28,7 @@ namespace eRG
 
 			/* Get model */
 			const Cube* below(Box pbox) const;
-			const Cube* aabb(Box pbox) const;
+			std::vector<const Cube*> aabb(Box pbox) const;
 
 			/* Read map from file */
 			void read_map(std::string path);
