@@ -156,7 +156,6 @@ namespace eRG
 		mview.look_at();
 
 		/* World rendering */
-		glColor3f(1, 1, 0);
 		mscene.render();
 
 		/* Swap buffers */
@@ -185,10 +184,10 @@ namespace eRG
 				mview.set_look_parameter(opt::Look::vertical, 1);
 				break;
 			case 'a':
-				mview.set_look_parameter(opt::Look::horizontal, -1);
+				mview.set_look_parameter(opt::Look::horizontal, 1);
 				break;
 			case 'd':
-				mview.set_look_parameter(opt::Look::horizontal, 1);
+				mview.set_look_parameter(opt::Look::horizontal, -1);
 				break;
 			case 'b':
 				mview.set_move_parameter(opt::Move::forward, 10);
@@ -310,10 +309,17 @@ namespace eRG
 		mview.set_look_parameter(opt::Look::horizontal, (dx_ - x)/3.0f);
 		mview.set_look_parameter(opt::Look::vertical, (dy_ - y)/3.0f);
 
+		auto forward{mview.dforward_}, strafe{mview.dstrafe_};
+		mview.set_move_parameter(opt::Move::forward, 0);
+		mview.set_move_parameter(opt::Move::strafe, 0);
+
 		mview.reposition();
 
 		mview.set_look_parameter(opt::Look::horizontal, 0);
 		mview.set_look_parameter(opt::Look::vertical, 0);
+
+		mview.dstrafe_ = strafe;
+		mview.dforward_ = forward;
 
 		dx_ = x;
 		dy_ = y;
@@ -377,30 +383,47 @@ namespace eRG
 
 		/* Walls */
 		auto aabb{mscene.aabb(pbox)};
-		if(aabb && aabb != model) {
+		if(0 != aabb.size()) {
 
-			/* Get model box */
-			auto mbox{aabb->position()};
+			/* Check all colided models */
+			for(auto &&e : aabb) {
 
-			/* Get colision points */
-			auto package{util::handle_colision(pbox, mbox)};
+				/* Get movement vectors */
+				auto dforward{mview.dforward_}, dstrafe{mview.dstrafe_};
 
-			if(opt::Move::up != package.first) {
+				if(e != model) {
 
-				/* TODO: workaround */
-				float 	front{(package.first == opt::Move::forwardx) ? -mview.dforward_.x : -mview.dforward_.z},
-						strafe{(package.second == opt::Move::strafex) ? -mview.dstrafe_.x : -mview.dstrafe_.z};
+					/* Get model box */
+					auto mbox{e->position()};
 
-				/* Set appropriate move parameters */
-				mview.set_move_parameter(package.first, front);
-				mview.set_move_parameter(package.second, strafe);
+					/* Get colision points */
+					auto package{util::handle_colision(pbox, mbox)};
 
-				/* Reposition the view */
-				mview.reposition();
+					if(opt::Move::up != package.first) {
 
-				/* Stop motion */
-				mview.set_move_parameter(package.first, 0);
-				mview.set_move_parameter(package.second, 0);
+						/* Stop motion */
+						mview.set_move_parameter(package.first, 0);
+						mview.set_move_parameter(package.second, 0);
+
+						/* Reposition the view */
+						mview.reposition();
+
+						/* TODO: workaround */
+						float 	front{(package.first == opt::Move::forwardx) ? -dforward.x : -dforward.z},
+								strafe{(package.second == opt::Move::strafex) ? -dstrafe.x : -dstrafe.z};
+
+						/* Set appropriate move parameters */
+						mview.set_move_parameter(package.first, front);
+						mview.set_move_parameter(package.second, strafe);
+
+						/* Reposition the view */
+						mview.reposition();
+
+						/* Stop motion */
+						mview.set_move_parameter(package.first, 0);
+						mview.set_move_parameter(package.second, 0);
+					}
+				}
 			}
 		}
 	}
