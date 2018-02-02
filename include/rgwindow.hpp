@@ -40,11 +40,6 @@ namespace eRG
 							size_t width, size_t height,
 							size_t x, size_t y)
 	{
-		/* Check command line arguments */
-		if(argc < 5) {
-			throw std::runtime_error{"Invalid command line arguments..."};
-		}
-
 		/* Initialize GLUT */
 		glutInit(&argc, argv);
 		glutInitDisplayMode(display_mode);
