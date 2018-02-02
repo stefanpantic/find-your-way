@@ -23,7 +23,7 @@ namespace eRG
 			dtheta_{0.0f}, dphi_{0.0f},
 			dforward_{0.0f}, dstrafe_{0.0f}, dup_{0.0f},
 			mspd_{0.0f}, lsen_{0.0f},
-			y_base_{0.0f}, jump_base_{0.0f}, jump_{0.0f}, gravity_{0.0f}
+			y_base_{0.0f}, jump_base_{0.0f}, jump_{0.0f}, gravity_{util::pi/50}
 	{
 		std::clog << "eRG::View: Default contructor" << std::endl;
 	}
@@ -246,7 +246,7 @@ namespace eRG
 	void View::__eyef()
 	{
 		eye_.x += mspd_ * dforward_.x * std::sin(theta_);
-		eye_.y += mspd_ * dforward_.y * std::cos(phi_);
+		//eye_.y += mspd_ * dforward_.y * std::cos(phi_);
 		eye_.z += mspd_ * dforward_.z * std::cos(theta_);
 	}
 
