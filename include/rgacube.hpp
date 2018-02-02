@@ -21,7 +21,7 @@ namespace eRG
 		/* Public member functions */
 		public:
 			/* Construction */
-			explicit ACube(glm::vec3 lln = {0, 0, 0},
+			explicit ACube(	glm::vec3 lln = {0, 0, 0},
 							glm::vec3 urf = {1, 1, 1},
 							std::vector<glm::vec3> &&points = {},
 							const std::vector<std::string> &paths = {});

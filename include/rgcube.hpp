@@ -19,8 +19,8 @@ namespace eRG
 		/* Public member functions */
 		public:
 			/* Construction */
-			explicit Cube( glm::vec3 lower_left_near = {0, 0, 0},
-							glm::vec3 upper_right_far = {1, 1, 1},
+			explicit Cube( 	glm::vec3 lln = {0, 0, 0},
+							glm::vec3 urf = {1, 1, 1},
 							const std::vector<std::string> &paths = {});
 			explicit Cube(const Cube &other);
 			explicit Cube(Cube &&other);
