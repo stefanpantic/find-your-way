@@ -61,8 +61,6 @@ namespace eRG
 		glutSpecialUpFunc(RGHub::special_up);
 
 		/* Mouse callbacks */
-		glutMouseFunc(RGHub::mouse);
-		glutMotionFunc(RGHub::motion);
 		glutPassiveMotionFunc(RGHub::passive_motion);
 
 		/* Timer registration */
