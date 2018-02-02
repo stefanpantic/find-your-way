@@ -20,7 +20,7 @@ namespace eRG
 	* TODO: Implement scene constructor.
 	*/
 	Scene::Scene()
-		:	models_{std::vector<std::unique_ptr<Cube>>{}}
+		:	models_{}
 	{
 		std::clog << "eRG::Scene: Default constructor" << std::endl;
 	}
@@ -41,13 +41,13 @@ namespace eRG
 			auto model{e->position()};
 
 			/* The boxes intersect on the X plane */
-			bool xintersect{bpoint.x >= model.first.x - 0.5 && bpoint.x <= model.second.x + 0.5};
+			bool xintersect{bpoint.x >= model.first.x - 1 && bpoint.x <= model.second.x + 1};
 
 			/* The boxes intersect on the Y plane */
 			bool yintersect{bpoint.y >= model.second.y};
 
 			/* The boxes intersect on the Z plane */
-			bool zintersect{bpoint.z >= model.first.z - 0.5 && bpoint.z <= model.second.z + 0.5};
+			bool zintersect{bpoint.z >= model.first.z - 1 && bpoint.z <= model.second.z + 1};
 
 			/* If all conditions are met return the model */
 			if(	xintersect && zintersect && yintersect) {
@@ -90,7 +90,7 @@ namespace eRG
 			}
 		}
 
-		/* A colision hasn't occured */
+		/* Colisions */
 		return colided;
 	}
 	/* @} */
