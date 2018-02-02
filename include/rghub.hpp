@@ -55,7 +55,7 @@ namespace eRG
 
 			/* Ability timers */
 			static const int TIMER_BLINK{1};
-			static const int TIMER_BLINK_INTERVAL{160};
+			static const int TIMER_BLINK_INTERVAL{320};
 
 		/* Private member variables */
 		private:

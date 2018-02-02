@@ -1,6 +1,7 @@
 #include <iostream>
 #include <array>
 #include <cmath>
+#include <cassert>
 #include <GL/glut.h>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
@@ -29,12 +30,13 @@ namespace eRG
 	/* Initializer: */
 	/* @{ */
 	/*
-	* TODO: @brief decription
+	* @brief Initialize eRG::Hub and its static members.
 	*/
 	void Hub::initialize(const int &argc, char **argv)
 	{
-		/* Basic OpenGL initializers: */
-		/* @{ */
+		/* Check command line arguments */
+		assert(argc > 1);
+
 		/* Set clear color */
 		glClearColor(0, 0, 0.1, 1);
 
@@ -42,61 +44,59 @@ namespace eRG
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LEQUAL);
 
-		/* Enable textures */
-		glEnable(GL_TEXTURE_2D);
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
 		/* Hide cursor */
 		glutSetCursor(GLUT_CURSOR_NONE);
 
 		/* Set key repeat */
 		glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
-		/* @} */
 
-		/* Initialize the View: */
-		/* @{ */
+		/* Initialize the View */
 		mview.set_move_speed(0.1f);
 		mview.set_look_sensitivity(util::pi/180.0f);
 		mview.set_floor(2.0f);
-		/* @} */
 
-		/* Initialize the Scene: */
-		/* @{ */
-		std::vector<std::string> tmp;
-		for(int i = 2; i < argc; ++i) {
-			tmp.push_back(argv[i]);
+		/* Initialize the Scene */
+		if(argc > 2) {
+			/* Enable textures */
+			glEnable(GL_TEXTURE_2D);
+			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+			/* Get texture paths */
+			std::vector<std::string> tmp;
+			for(int i = 2; i < argc; ++i) {
+				tmp.push_back(argv[i]);
+			}
+
+			/* Give paths to Scene */
+			mscene.set_textures(tmp);
+		} else {
+			/* Enable color material */
+			glEnable(GL_COLOR_MATERIAL);
+			glEnable(GL_NORMALIZE);
 		}
 
-		mscene.set_textures(tmp);
 		mscene.read_map(argv[1]);
-		/* @} */
 
 		/* Initialize fog */
-		/* @{ */
 		glEnable(GL_FOG);
-		glFogf(GL_FOG_START, 10);
+		glFogf(GL_FOG_START, 8);
 		glFogf(GL_FOG_END, 20);
-		glFogf(GL_FOG_DENSITY, 0.07);
-		/* @} */
+		glFogf(GL_FOG_DENSITY, 0.09);
 
-		/* Temporary light setup: */
-		/* @{ */
+		/* Light setup */
 		glEnable(GL_LIGHTING);
 		glEnable(GL_LIGHT0);
-		glEnable(GL_NORMALIZE);
-		glEnable(GL_COLOR_MATERIAL);
 
 		/* Light parameters */
 		std::array<float, 4> position{{2, 2, 2, 1}};
 		std::array<float, 4> ambient{{0.1, 0.1, 0.1, 1}};
 		std::array<float, 4> specular{{0.5, 0.5, 0.5, 1}};
-		std::array<float, 4> diffuse{{110/265.0f, 110/256.0f, 150/256.0f, 1}};
+		std::array<float, 4> diffuse{{170/265.0f, 160/256.0f, 150/256.0f, 1}};
 
 		glLightfv(GL_LIGHT0, GL_POSITION, position.data());
 		glLightfv(GL_LIGHT0, GL_AMBIENT, ambient.data());
 		glLightfv(GL_LIGHT0, GL_SPECULAR, specular.data());
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse.data());
-		/* @} */
 	}
 	/* @} */
 
@@ -133,7 +133,7 @@ namespace eRG
 	}
 
 	/*
-	* TODO: @brief decription
+	* @brief Function in charge od redrawing the scene.
 	*/
 	void Hub::display()
 	{
@@ -156,6 +156,7 @@ namespace eRG
 		mview.look_at();
 
 		/* World rendering */
+		glColor3f(1, 1, 0);
 		mscene.render();
 
 		/* Swap buffers */
@@ -166,7 +167,7 @@ namespace eRG
 	/* Keyboard callbacks: */
 	/* @{ */
 	/*
-	* TODO: @brief decription
+	* @brief Move camera with wasd and jump with space.
 	*/
 	void Hub::keyboard(unsigned char key, int x, int y)
 	{
@@ -190,8 +191,7 @@ namespace eRG
 				mview.set_look_parameter(opt::Look::horizontal, 1);
 				break;
 			case 'b':
-				mview.set_move_parameter(opt::Move::forward, 30);
-				mview.set_move_parameter(opt::Move::up, util::pi/50);
+				mview.set_move_parameter(opt::Move::forward, 10);
 				glutTimerFunc(TIMER_BLINK_INTERVAL, timer, TIMER_BLINK);
 				break;
 			case ' ':
@@ -201,7 +201,7 @@ namespace eRG
 	}
 
 	/*
-	* TODO: @brief decription
+	* @brief Stop camera motion on release of wasd keys.
 	*/
 	void Hub::keyboard_up(unsigned char key, int x, int y)
 	{
@@ -233,11 +233,9 @@ namespace eRG
 		{
 			case GLUT_KEY_UP:
 				mview.set_move_parameter(opt::Move::forward, 1);
-				mview.set_move_parameter(opt::Move::forwardy, 0);
 				break;
 			case GLUT_KEY_DOWN:
 				mview.set_move_parameter(opt::Move::forward, -1);
-				mview.set_move_parameter(opt::Move::forwardy, 0);
 				break;
 			case GLUT_KEY_LEFT:
 				mview.set_move_parameter(opt::Move::strafe, 1);
@@ -299,6 +297,7 @@ namespace eRG
 	{
 		y = height_ - y;
 
+		/* Keep pointer in window */
 		if (std::sqrt(std::pow(x - width_/2, 2) + std::pow(y - height_/2, 2)) > width_/4) {
 			dx_ = width_/2;
 			dy_ = height_/2;
@@ -307,8 +306,9 @@ namespace eRG
 			return;
 		}
 
-		mview.set_look_parameter(opt::Look::horizontal, (dx_ - x)/2.0f);
-		mview.set_look_parameter(opt::Look::vertical, (dy_ - y)/2.0f);
+		/* Move center point according to mouse movement */
+		mview.set_look_parameter(opt::Look::horizontal, (dx_ - x)/3.0f);
+		mview.set_look_parameter(opt::Look::vertical, (dy_ - y)/3.0f);
 
 		mview.reposition();
 
@@ -356,12 +356,21 @@ namespace eRG
 	void Hub::__colision()
 	{
 		/* Get player box */
-		auto pbox{util::pbox(mview.get_eye(), 1.5)};
+		auto eye{mview.get_eye()};
+		auto pbox{util::pbox(eye, 1.5)};
 
 		/* Jumping */
 		auto model{mscene.below(pbox)};
 		if(model) {
-			mview.set_floor(model->position().second.y + 2);
+
+			auto base{model->position().second.y};
+			mview.set_floor(base + 2);
+
+			/* If we are standing on a moving model, move us with it */
+			if(eye.y == base + 2) {
+				mview.eye_ += model->get_delta();
+			}
+
 		} else {
 			mview.set_floor(-100);
 		}
