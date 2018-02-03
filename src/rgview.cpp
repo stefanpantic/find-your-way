@@ -33,23 +33,37 @@ namespace eRG
 	/*
 	* @brief Set gluLookAt with stored parameters.
 	*/
-	void View::look_at()
+	void View::look_at() const
 	{
 		gluLookAt(	eye_.x, eye_.y, eye_.z,
 					eye_.x + center_.x, eye_.y + center_.y, eye_.z + center_.z,
 					normal_.x, normal_.y, normal_.z);
 	}
+	/* @} */
+
+	/* Set look at parameters: */
+	/*
+	* @brief Set eye point.
+	*/
+	void View::set_eye(glm::vec3 eye)
+	{
+		eye_ = std::move(eye);
+	}
 
 	/*
-	* @brief Set gluLookAt with passed parameters.
+	* @brief Set center point.
 	*/
-	void View::look_at(glm::vec3 eye, glm::vec3 center, glm::vec3 normal)
+	void View::set_center(glm::vec3 center)
 	{
-		eye_ = eye;
-		center_ = center;
-		normal_ = normal;
+		center_ = std::move(center);
+	}
 
-		look_at();
+	/*
+	* @brief Set normal vector.
+	*/
+	void View::set_normal(glm::vec3 normal)
+	{
+		normal_ = std::move(normal);
 	}
 	/* @} */
 
@@ -58,7 +72,7 @@ namespace eRG
 	/*
 	* @brief Get stored eye point.
 	*/
-	const glm::vec3& View::get_eye() const
+	const glm::vec3& View::eye() const
 	{
 		return eye_;
 	}
@@ -66,7 +80,7 @@ namespace eRG
 	/*
 	* @brief Get stored center point.
 	*/
-	const glm::vec3& View::get_center() const
+	const glm::vec3& View::center() const
 	{
 		return center_;
 	}
@@ -74,7 +88,7 @@ namespace eRG
 	/*
 	* @brief Get stored normal vector.
 	*/
-	const glm::vec3& View::get_normal() const
+	const glm::vec3& View::normal() const
 	{
 		return normal_;
 	}
@@ -85,7 +99,7 @@ namespace eRG
 	/*
 	* @brief Get stored movement speed.
 	*/
-	const float& View::get_move_speed() const
+	const float& View::move_speed() const
 	{
 		return mspd_;
 	}
@@ -93,7 +107,7 @@ namespace eRG
 	/*
 	* @brief Get stored movement speed.
 	*/
-	const float& View::get_look_sensitivity() const
+	const float& View::look_sensitivity() const
 	{
 		return lsen_;
 	}
@@ -192,21 +206,21 @@ namespace eRG
 	void View::reposition()
 	{
 		if(dphi_ || dtheta_) {
-			__center();
+			center();
 		}
 
 		if(dforward_.x || dforward_.y || dforward_.z) {
-			__eyef();
+			eyef();
 		}
 
 		if(dstrafe_.x || dstrafe_.y || dstrafe_.z) {
-			__eyes();
+			eyes();
 		}
 
 		if(dup_) {
-			__eyev();
+			eyev();
 		} else {
-			__gravity();
+			gravity();
 		}
 	}
 	/* @} */
@@ -216,7 +230,7 @@ namespace eRG
 	/*
 	* @brief Move center point on imaginary sphere with eye as center of sphere.
 	*/
-	void View::__center()
+	void View::center()
 	{
 		/* Update @theta and bind it to [0, 2*pi] */
 		theta_ += lsen_ * dtheta_;
@@ -243,7 +257,7 @@ namespace eRG
 	/*
 	* @brief Translate eye front/back.
 	*/
-	void View::__eyef()
+	void View::eyef()
 	{
 		eye_.x += mspd_ * dforward_.x * std::sin(theta_);
 		eye_.y += mspd_ * dforward_.y * std::cos(phi_);
@@ -253,7 +267,7 @@ namespace eRG
 	/*
 	* @brief Translate eye left/right.
 	*/
-	void View::__eyes()
+	void View::eyes()
 	{
 		eye_.x += mspd_ * dstrafe_.x * std::cos(theta_);
 		eye_.z += mspd_ * dstrafe_.z * -std::sin(theta_);
@@ -264,7 +278,7 @@ namespace eRG
 	*
 	* TODO: A detailed explanation.
 	*/
-	void View::__eyev()
+	void View::eyev()
 	{
 		if(jump_base_ != y_base_ && eye_.y <= y_base_) {
 			eye_.y = jump_base_ = y_base_;
@@ -281,7 +295,7 @@ namespace eRG
 	/*
 	* @brief Apply gravity to view.
 	*/
-	void View::__gravity()
+	void View::gravity()
 	{
 		if(eye_.y > y_base_) {
 			/* Aproximate sin(x) = x for gravity */

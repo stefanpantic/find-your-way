@@ -35,17 +35,21 @@ namespace eRG
 							glm::vec3 normal = {0, 1, 0});	/* Normal vector */
 
 			/* Set look at */
-			void look_at();
-			void look_at(glm::vec3 eye, glm::vec3 center, glm::vec3 normal);
+			void look_at() const;
+
+			/* Set look at parameters */
+			void set_eye(glm::vec3 eye);
+			void set_center(glm::vec3 center);
+			void set_normal(glm::vec3 normal);
 
 			/* Get camera position parameters */
-			const glm::vec3& get_eye() const;
-			const glm::vec3& get_center() const;
-			const glm::vec3& get_normal() const;
+			const glm::vec3& eye() const;
+			const glm::vec3& center() const;
+			const glm::vec3& normal() const;
 
 			/* Get look and movement parameters */
-			const float& get_look_sensitivity() const;
-			const float& get_move_speed() const;
+			const float& look_sensitivity() const;
+			const float& move_speed() const;
 
 			/* Set look and movement parameters */
 			void set_look_parameter(opt::Look opt, float val);
@@ -61,11 +65,11 @@ namespace eRG
 
 		/* Private member functions */
 		private:
-			void __center();
-			void __eyef();
-			void __eyes();
-			void __eyev();
-			void __gravity();
+			void center();
+			void eyef();
+			void eyes();
+			void eyev();
+			void gravity();
 
 		/* Private member variables */
 		private:
