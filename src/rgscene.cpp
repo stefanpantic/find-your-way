@@ -159,9 +159,9 @@ namespace eRG
 					}
 
 					/* Create the model */
-					models_.push_back(std::unique_ptr<Cube>{	new Cube{	glm::vec3{tmp[0], tmp[1], tmp[2]},
-																			glm::vec3{tmp[3], tmp[4], tmp[5]},
-																			textures_}});
+					models_.push_back(std::make_unique<Cube>(Cube{	glm::vec3{tmp[0], tmp[1], tmp[2]},
+																	glm::vec3{tmp[3], tmp[4], tmp[5]},
+																	textures_}));
 				}
 			} else if("acube" == e.first) { /* ACube node */
 
@@ -188,10 +188,10 @@ namespace eRG
 					}
 
 					/* Create the model */
-					models_.push_back(std::unique_ptr<Cube>{	new ACube{	glm::vec3{tmp[0], tmp[1], tmp[2]},
-																			glm::vec3{tmp[3], tmp[4], tmp[5]},
-																			std::move(tmp1),
-																			textures_}});
+					models_.push_back(std::make_unique<ACube>(ACube{	glm::vec3{tmp[0], tmp[1], tmp[2]},
+																	glm::vec3{tmp[3], tmp[4], tmp[5]},
+																	std::move(tmp1),
+																	textures_}));
 				}
 			} else { /* Go with the flow */
 				traverse_ptree(e.second);
