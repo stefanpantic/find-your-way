@@ -1,9 +1,9 @@
-#include "rgcolision.hpp"
+#include "rgcollision.hpp"
 
 namespace eRG::util
 {
 
-	/* Helper functions for colision detection and handling: */
+	/* Helper functions for collision detection and handling: */
 	/* @{ */
 	/*
 	* @brief Return player box from eye point.
@@ -14,9 +14,9 @@ namespace eRG::util
 	}
 
 	/*
-	* @brief Handle a colision.
+	* @brief Handle a collision.
 	*/
-	std::pair<opt::Move, opt::Move> handle_colision(const Box &pbox, const Box &mbox)
+	Collision handle_collision(const Box &pbox, const Box &mbox)
 	{
 		if(pbox.second.x <= mbox.second.x && pbox.first.x >= mbox.first.x) {
 

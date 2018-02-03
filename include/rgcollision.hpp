@@ -9,9 +9,10 @@ namespace eRG::util
 
 	/* Convenience: */
 	using Box = std::pair<glm::vec3, glm::vec3>;
+	using Collision = std::pair<opt::Move, opt::Move>;
 
-	/* Helper functions for colision detection and handling */
+	/* Helper functions for collision detection and handling */
 	Box pbox(glm::vec3 eye, float h);
-	std::pair<opt::Move, opt::Move> handle_colision(const Box &pbox, const Box &mbox);
+	Collision handle_collision(const Box &pbox, const Box &mbox);
 
 }; /* namespace eRG::util */
