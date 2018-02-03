@@ -60,7 +60,7 @@ namespace eRG
 	/*
 	* @brief Get movement delta.
 	*/
-	glm::vec3 ACube::get_delta() const
+	glm::vec3 ACube::delta() const
 	{
 		return glm::vec3(delta_);
 	}

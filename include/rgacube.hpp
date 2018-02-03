@@ -32,7 +32,7 @@ namespace eRG
 			void draw() override;
 
 			/* Get delta */
-			glm::vec3 get_delta() const override;
+			glm::vec3 delta() const override;
 
 		/* Private member variables */
 		private:

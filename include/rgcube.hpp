@@ -33,7 +33,7 @@ namespace eRG
 			virtual void draw();
 
 			/* Get delta */
-			virtual glm::vec3 get_delta() const;
+			virtual glm::vec3 delta() const;
 
 		/* Protected member variables */
 		protected:
