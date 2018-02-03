@@ -44,8 +44,8 @@ namespace eRG
 
 		/* Private member functions */
 		private:
-			/* Handle colisions between mview and mscene */
-			static void __colision();
+			/* Handle collisions between mview and mscene */
+			static void collision();
 
 		/* Public member variables */
 		public:
@@ -59,7 +59,7 @@ namespace eRG
 
 			/* Bonus timers */
 			static const int TIMER_RAVE{2};
-			static const int TIMER_RAVE_INTERVAL{200};
+			static const int TIMER_RAVE_INTERVAL{1000};
 
 		/* Private member variables */
 		private:

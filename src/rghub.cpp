@@ -10,7 +10,7 @@
 #include "rgscene.hpp"
 #include "rgcube.hpp"
 #include "rgdefines.hpp"
-#include "rgcolision.hpp"
+#include "rgcollision.hpp"
 #include "rgoption.hpp"
 #include "debug.hpp"
 
@@ -144,11 +144,11 @@ namespace eRG
 		/* Reset all matrix transformations */
 		glLoadIdentity();
 
-		/* Colision handling */
-		Hub::__colision();
+		/* Collision handling */
+		Hub::collision();
 
 		/* Update lantern */
-		auto eye{mview.get_eye()};
+		auto eye{mview.eye()};
 		glLightfv(GL_LIGHT0, GL_POSITION, std::array<float, 4>{{eye.x, eye.y, eye.z, 1}}.data());
 
 		/* Reposition camera and set look at */
@@ -197,9 +197,7 @@ namespace eRG
 				mview.set_move_parameter(opt::Move::up, util::pi/50);
 				break;
 			case 'r':
-				mview.look_at(	{3, 3, 3,},
-								{1, 0, 1},
-								{0, 1, 0});
+				mview.set_eye({3, 3, 3});
 				break;
 		}
 	}
@@ -346,15 +344,15 @@ namespace eRG
 	}
 	/* @} */
 
-	/* Handle colisions between mview and mscene */
+	/* Handle collisions between mview and mscene */
 	/* @{ */
 	/*
-	* @brief Wrapper function for colision handing.
+	* @brief Wrapper function for collision handing.
 	*/
-	void Hub::__colision()
+	void Hub::collision()
 	{
 		/* Get player box */
-		auto eye{mview.get_eye()};
+		auto eye{mview.eye()};
 
 		/* You won */
 		if(eye.y > 20) {
@@ -373,7 +371,7 @@ namespace eRG
 
 			/* If we are standing on a moving model, move us with it */
 			if(eye.y == base + 2) {
-				mview.eye_ += model->get_delta();
+				mview.eye_ += model->delta();
 			}
 
 		} else {
@@ -395,8 +393,8 @@ namespace eRG
 					/* Get model box */
 					auto mbox{e->position()};
 
-					/* Get colision points */
-					auto package{util::handle_colision(pbox, mbox)};
+					/* Get collision points */
+					auto package{util::handle_collision(pbox, mbox)};
 
 					if(opt::Move::up != package.first) {
 
