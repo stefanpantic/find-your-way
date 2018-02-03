@@ -60,7 +60,7 @@ namespace eRG
 	}
 
 	/*
-	* @brief Colision detection using AABB.
+	* @brief Collision detection using AABB.
 	*/
 	std::vector<const Cube*> Scene::aabb(Box pbox) const
 	{
@@ -84,13 +84,13 @@ namespace eRG
 			bool zintersect{(pbox.first.z <= model.first.z && model.first.z <= pbox.second.z) ||
 							(model.first.z <= pbox.first.z && pbox.first.z <= model.second.z)};
 
-			/* If the boxes intersect on all axis, a colision has occured */
+			/* If the boxes intersect on all axis, a collision has occured */
 			if(xintersect && yintersect && zintersect) {
 				colided.push_back(e.get());
 			}
 		}
 
-		/* Colisions */
+		/* Collisions */
 		return colided;
 	}
 	/* @} */
