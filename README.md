@@ -40,6 +40,7 @@ Ubuntu:
 | `space` | Jump |
 | `b` | Blink/dash |
 | :mouse2: or `wasd` | Look around |
+| `r` | Reset |
 | `Esc` | Exit |
 
 
