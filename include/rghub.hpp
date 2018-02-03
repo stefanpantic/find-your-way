@@ -11,6 +11,9 @@ namespace eRG
 	/* Forward declaration of eRG::Scene */
 	class Scene;
 
+	/* Forward declaration of eRG::Cube */
+	class Cube;
+
 	/* Hub declaration: */
 	/* @{ */
 	/*
@@ -53,13 +56,17 @@ namespace eRG
 			static const int TIMER_REDISPLAY{0};
 			static const int TIMER_REDISPLAY_INTERVAL{16};
 
-			/* Ability timers */
+			/* Ability timer */
 			static const int TIMER_BLINK{1};
-			static const int TIMER_BLINK_INTERVAL{320};
+			static const int TIMER_BLINK_INTERVAL{20*TIMER_REDISPLAY_INTERVAL};
 
-			/* Bonus timers */
-			static const int TIMER_RAVE{2};
-			static const int TIMER_RAVE_INTERVAL{1000};
+			/* Update timer */
+			static const int TIMER_UPDATE{2};
+			static const int TIMER_UPDATE_INTERVAL{TIMER_REDISPLAY_INTERVAL/2};
+
+			/* Bonus timer */
+			static const int TIMER_RAVE{3};
+			static const int TIMER_RAVE_INTERVAL{100*TIMER_REDISPLAY_INTERVAL};
 
 		/* Private member variables */
 		private:
@@ -74,6 +81,9 @@ namespace eRG
 
 			/* Scene */
 			static Scene mscene;
+
+			/* Model underneath player */
+			static const Cube *mcube;
 	}; /* class Hub */
 	/* @} */
 

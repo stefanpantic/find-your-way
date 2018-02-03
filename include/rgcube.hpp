@@ -29,11 +29,14 @@ namespace eRG
 			/* Position */
 			virtual std::pair<glm::vec3, glm::vec3> position() const;
 
-			/* Draw */
-			virtual void draw();
-
 			/* Get delta */
 			virtual glm::vec3 delta() const;
+
+			/* Draw */
+			virtual void draw() const;
+
+			/* Update */
+			virtual void update();
 
 		/* Protected member variables */
 		protected:

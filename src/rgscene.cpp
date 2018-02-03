@@ -200,6 +200,19 @@ namespace eRG
 	}
 	/* @} */
 
+	/* Update scene */
+	/* @{ */
+	/*
+	* @brief Updates all stored models.
+	*/
+	void Scene::update()
+	{
+		for(auto &e : models_) {
+			e->update();
+		}
+	}
+	/* @} */
+
 	/* Render scene */
 	/* @{ */
 	/*

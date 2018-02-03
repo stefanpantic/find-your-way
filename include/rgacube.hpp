@@ -28,8 +28,8 @@ namespace eRG
 			explicit ACube(const ACube &other);
 			explicit ACube(ACube &&other);
 
-			/* Draw */
-			void draw() override;
+			/* Update */
+			void update() override;
 
 			/* Get delta */
 			glm::vec3 delta() const override;

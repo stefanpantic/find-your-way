@@ -66,14 +66,14 @@ namespace eRG
 	}
 	/* @} */
 
-	/* Draw: */
-	/* @{ */
+	/* Update position: */
 	/*
-	* @brief Draw moving model.
+	* @brief Update model state.
 	*
 	* TODO: detailed description.
 	*/
-	void ACube::draw()
+	/* @{ */
+	void ACube::update()
 	{
 		auto center{(lln_ + urf_)/2.0f};
 
@@ -92,11 +92,8 @@ namespace eRG
 		for(auto &&e : vertices_) {
 			e += delta_;
 		}
-
-		Cube::draw();
 	}
 	/* @} */
-
 	/* @@} */
 
 }; /* namespace eRG */

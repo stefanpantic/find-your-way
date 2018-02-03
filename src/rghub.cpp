@@ -25,6 +25,7 @@ namespace eRG
 	int Hub::dx_{0}, Hub::dy_{0};
 	View Hub::mview{glm::vec3{2, 2, 2}};
 	Scene Hub::mscene{};
+	const Cube *Hub::mcube{nullptr};
 	/* @} */
 
 	/* Initializer: */
@@ -96,7 +97,11 @@ namespace eRG
 			glEnable(GL_COLOR_MATERIAL);
 		}
 
+		/* Read map */
 		mscene.read_map(argv[1]);
+
+		/* Set scene update timer */
+		glutTimerFunc(TIMER_UPDATE_INTERVAL, Hub::timer, TIMER_UPDATE);
 	}
 	/* @} */
 
@@ -277,6 +282,7 @@ namespace eRG
 	*/
 	void Hub::passive_motion(int x, int y)
 	{
+		/* Make y start from lower left corner */
 		y = height_ - y;
 
 		/* Keep pointer in window */
@@ -292,18 +298,23 @@ namespace eRG
 		mview.set_look_parameter(opt::Look::horizontal, (dx_ - x)/3.0f);
 		mview.set_look_parameter(opt::Look::vertical, (dy_ - y)/3.0f);
 
+		/* Save movement parameters */
 		auto forward{mview.dforward_}, strafe{mview.dstrafe_};
 		mview.set_move_parameter(opt::Move::forward, 0);
 		mview.set_move_parameter(opt::Move::strafe, 0);
 
+		/* Reposition view */
 		mview.reposition();
 
+		/* Stop camera lookaround */
 		mview.set_look_parameter(opt::Look::horizontal, 0);
 		mview.set_look_parameter(opt::Look::vertical, 0);
 
+		/* Reset the movement parameters */
 		mview.dstrafe_ = strafe;
 		mview.dforward_ = forward;
 
+		/* Capture mouse coords */
 		dx_ = x;
 		dy_ = y;
 	}
@@ -324,6 +335,16 @@ namespace eRG
 				break;
 			case TIMER_BLINK:
 				mview.set_move_parameter(opt::Move::forward, 0);
+				break;
+			case TIMER_UPDATE:
+				/* If we are standing on a moving model, move us with it */
+				if(mcube && mview.eye().y == mcube->position().second.y + 2) {
+					mview.eye_ += mcube->delta();
+				}
+
+				/* Update the scene */
+				mscene.update();
+				glutTimerFunc(TIMER_UPDATE_INTERVAL, Hub::timer, TIMER_UPDATE);
 				break;
 			case TIMER_RAVE:
 				glClearColor(	static_cast<float>(std::rand())/RAND_MAX,
@@ -360,20 +381,14 @@ namespace eRG
 			glutTimerFunc(TIMER_RAVE_INTERVAL, Hub::timer, TIMER_RAVE);
 		}
 
+		/* Get player box */
 		auto pbox{util::pbox(eye, 1.5)};
 
 		/* Jumping */
-		auto model{mscene.below(pbox)};
-		if(model) {
-
-			auto base{model->position().second.y};
-			mview.set_floor(base + 2);
-
-			/* If we are standing on a moving model, move us with it */
-			if(eye.y == base + 2) {
-				mview.eye_ += model->delta();
-			}
-
+		mcube = mscene.below(pbox);
+		if(mcube) {
+			/* Set base */
+			mview.set_floor(mcube->position().second.y + 2);
 		} else {
 			mview.set_floor(-100);
 		}
@@ -388,7 +403,7 @@ namespace eRG
 				/* Get movement vectors */
 				auto dforward{mview.dforward_}, dstrafe{mview.dstrafe_};
 
-				if(e != model) {
+				if(e != mcube) {
 
 					/* Get model box */
 					auto mbox{e->position()};

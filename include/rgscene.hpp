@@ -36,6 +36,9 @@ namespace eRG
 			/* Set textures */
 			void set_textures(std::vector<std::string> path);
 
+			/* Update scene */
+			void update();
+
 			/* Render scene */
 			void render() const;
 

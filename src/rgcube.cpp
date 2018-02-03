@@ -108,7 +108,7 @@ namespace eRG
 	/*
 	* @brief Draw the model.
 	*/
-	void Cube::draw()
+	void Cube::draw() const
 	{
 		/* Cube center point */
 		auto center_{(urf_ + lln_)/2.0f};
@@ -138,6 +138,15 @@ namespace eRG
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 	}
+	/* @} */
+
+	/* Update position: */
+	/*
+	* @brief Update model state.
+	*/
+	/* @{ */
+	void Cube::update()
+	{}
 	/* @} */
 	/* @@} */
 
