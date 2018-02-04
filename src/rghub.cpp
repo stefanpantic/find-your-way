@@ -91,7 +91,7 @@ namespace eRG
 			}
 
 			/* Give paths to Scene */
-			mscene.set_textures(tmp);
+			mscene.set_textures(std::move(tmp));
 		} else {
 			/* Enable color material */
 			glEnable(GL_COLOR_MATERIAL);
@@ -300,8 +300,12 @@ namespace eRG
 
 		/* Save movement parameters */
 		auto forward{mview.dforward_}, strafe{mview.dstrafe_};
+		float up{mview.dup_};
+
+		/* Stop movement */
 		mview.set_move_parameter(opt::Move::forward, 0);
 		mview.set_move_parameter(opt::Move::strafe, 0);
+		mview.set_move_parameter(opt::Move::up, 0);
 
 		/* Reposition view */
 		mview.reposition();
@@ -313,6 +317,7 @@ namespace eRG
 		/* Reset the movement parameters */
 		mview.dstrafe_ = strafe;
 		mview.dforward_ = forward;
+		mview.dup_ = up;
 
 		/* Capture mouse coords */
 		dx_ = x;
