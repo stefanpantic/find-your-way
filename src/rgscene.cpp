@@ -107,7 +107,6 @@ namespace eRG
 		{
 			boost::property_tree::ptree root;
 			boost::property_tree::read_json(path, root);
-
 			traverse_ptree(root);
 		} catch (const std::exception &e) {
 			std::cerr << e.what() << std::endl;
@@ -159,9 +158,9 @@ namespace eRG
 					}
 
 					/* Create the model */
-					models_.push_back(std::make_unique<Cube>(Cube{	glm::vec3{tmp[0], tmp[1], tmp[2]},
-																	glm::vec3{tmp[3], tmp[4], tmp[5]},
-																	textures_}));
+					models_.push_back(std::make_unique<Cube>(	glm::vec3{tmp[0], tmp[1], tmp[2]},
+																glm::vec3{tmp[3], tmp[4], tmp[5]},
+																textures_));
 				}
 			} else if("acube" == e.first) { /* ACube node */
 
@@ -188,10 +187,10 @@ namespace eRG
 					}
 
 					/* Create the model */
-					models_.push_back(std::make_unique<ACube>(ACube{	glm::vec3{tmp[0], tmp[1], tmp[2]},
-																	glm::vec3{tmp[3], tmp[4], tmp[5]},
-																	std::move(tmp1),
-																	textures_}));
+					models_.push_back(std::make_unique<ACube>(	glm::vec3{tmp[0], tmp[1], tmp[2]},
+																glm::vec3{tmp[3], tmp[4], tmp[5]},
+																std::move(tmp1),
+																textures_));
 				}
 			} else { /* Go with the flow */
 				traverse_ptree(e.second);
@@ -207,7 +206,7 @@ namespace eRG
 	*/
 	void Scene::update()
 	{
-		for(auto &e : models_) {
+		for(auto &&e : models_) {
 			e->update();
 		}
 	}
@@ -221,7 +220,7 @@ namespace eRG
 	void Scene::render() const
 	{
 		/* N. M. is the Zodiac Killer */
-		for(auto &e : models_) {
+		for(auto &&e : models_) {
 			e->draw();
 		}
 	}
