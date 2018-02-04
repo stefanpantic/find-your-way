@@ -117,7 +117,7 @@ namespace eRG::util
 			fclose(file);
 		}
 	}
-	/* @{ */
+	/* @} */
 
 	/* Generate textures */
 	/* @{ */
@@ -148,6 +148,9 @@ namespace eRG::util
 						GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
 
 		glBindTexture(GL_TEXTURE_2D, 0);
+
+		/* Clear the image */
+		image_done(image);
 
 		/* Return handle */
 		return handle;
@@ -183,6 +186,9 @@ namespace eRG::util
 
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
+
+		/* Clear the image */
+		image_done(image);
 
 		/* Return texture handles */
 		return handles;
