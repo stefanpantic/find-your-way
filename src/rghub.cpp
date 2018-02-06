@@ -298,26 +298,12 @@ namespace eRG
 		mview.set_look_parameter(opt::Look::horizontal, (dx_ - x)/3.0f);
 		mview.set_look_parameter(opt::Look::vertical, (dy_ - y)/3.0f);
 
-		/* Save movement parameters */
-		auto forward{mview.dforward_}, strafe{mview.dstrafe_};
-		float up{mview.dup_};
-
-		/* Stop movement */
-		mview.set_move_parameter(opt::Move::forward, 0);
-		mview.set_move_parameter(opt::Move::strafe, 0);
-		mview.set_move_parameter(opt::Move::up, 0);
-
-		/* Reposition view */
-		mview.reposition();
+		/* Recalculate center point position */
+		mview.center();
 
 		/* Stop camera lookaround */
 		mview.set_look_parameter(opt::Look::horizontal, 0);
 		mview.set_look_parameter(opt::Look::vertical, 0);
-
-		/* Reset the movement parameters */
-		mview.dstrafe_ = strafe;
-		mview.dforward_ = forward;
-		mview.dup_ = up;
 
 		/* Capture mouse coords */
 		dx_ = x;
