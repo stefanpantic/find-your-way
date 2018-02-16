@@ -23,7 +23,7 @@ Alternatively you can run <code>make -j</code> and run with your own map/texture
 Arch Linux:
 <pre>sudo pacman -S boost freeglut glm</pre>
 Ubuntu:
-<pre>sudo apt-get install boost freeglut3-dev binutils-gold glm</pre>
+<pre>sudo apt-get install libboost-all-dev freeglut3-dev binutils-gold libglm-dev</pre>
 
 * **Tested C++ compiler (others may work as well)**:   
     * g++ 7.2.0+,
