@@ -18,12 +18,12 @@ classes. Done in C++.
 Just run <code>./start.sh</code> from the project directory. This will compile the project if needed and then start it with the default map/textures.   
 Alternatively you can run <code>make -j</code> and run with your own map/textures.   
 ## :computer: Requirements:
- * **Boost, OpenGL/GLUT, GLM:**  
+ * **OpenGL/GLUT, GLM:**  
 
 Arch Linux:
-<pre>sudo pacman -S boost freeglut glm</pre>
+<pre>sudo pacman -S freeglut glm</pre>
 Ubuntu:
-<pre>sudo apt-get install libboost-all-dev freeglut3-dev binutils-gold libglm-dev</pre>
+<pre>sudo apt-get install freeglut3-dev binutils-gold libglm-dev</pre>
 
 * **Tested C++ compiler (others may work as well)**:   
     * g++ 7.2.0+,
