@@ -2,7 +2,6 @@
 
 #include <vector>
 #include <memory>
-#include <boost/property_tree/ptree.hpp>
 #include <glm/vec3.hpp>
 
 namespace eRG
@@ -41,11 +40,6 @@ namespace eRG
 
 			/* Render scene */
 			void render() const;
-
-		/* Private member functions */
-		private:
-			/* Traverse property tree */
-			void traverse_ptree(const boost::property_tree::ptree &root);
 
 		/* Private member variables */
 		private:

@@ -1,10 +1,9 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/property_tree/ptree.hpp>
 #include <GL/glut.h>
 #include <glm/vec3.hpp>
+#include "external/nlohmann/json.hpp"
 #include "rgscene.hpp"
 #include "rgcube.hpp"
 #include "rgacube.hpp"
@@ -102,14 +101,46 @@ namespace eRG
 	*/
 	void Scene::read_map(std::string path)
 	{
-		/* Try to contruuct the property tree and traverse it*/
+		/* Try to construct the JSON file tree and traverse it*/
 		try
 		{
-			boost::property_tree::ptree root;
-			boost::property_tree::read_json(path, root);
-			traverse_ptree(root);
+			/* Construct the JSON file tree */
+			/* NOTE: the use of '=' here is intentional */
+			nlohmann::json tree = nlohmann::json::parse(std::ifstream(path));
+
+			/* Start traversal from root */
+			for(auto &&scene : tree.at("scene"))
+			{
+				for(auto &&e : scene)
+				{
+					/* Get the corner points */
+					glm::vec3 lln{e.at("x1"), e.at("y1"), e.at("z1")};
+					glm::vec3 urf{e.at("x2"), e.at("y2"), e.at("z2")};
+
+					/* Movement points */
+					std::vector<glm::vec3> movement;
+
+					/* If there are movement points place them in a vector */
+					if(e.end() != e.find("movement")) {
+						for(auto &&tripple : e.at("movement")) {
+							movement.push_back(glm::vec3{tripple[0], tripple[1], tripple[2]});
+						}
+					}
+
+					if(0 != movement.size()) { /* There are movement points, construct a movinc cube */
+						models_.push_back(std::make_unique<ACube>(	std::move(lln), std::move(urf),
+																	std::move(movement),
+																	textures_));
+					} else { /* There are no movement points, construct a stationary cube */
+						models_.push_back(std::make_unique<Cube>(	std::move(lln), std::move(urf),
+																	textures_));
+					}
+				}
+			}
+
 		} catch (const std::exception &e) {
-			std::cerr << e.what() << std::endl;
+			/* Tree construction failed */
+			std::cerr << "\x1b[31mTree construction failed: " << e.what() << "\x1b[0m" << std::endl;
 			std::exit(1);
 		}
 
@@ -128,73 +159,6 @@ namespace eRG
 	{
 		if(3 == paths.size()) {
 			textures_ = std::move(paths);
-		}
-	}
-	/* @} */
-
-	/* Traverse property tree */
-	/* @{ */
-	/*
-	* @brief Traverse property tree constructed by boost JSON parser.
-	*/
-	void Scene::traverse_ptree(const boost::property_tree::ptree &root)
-	{
-		/* If the tree is empty we don't go any further */
-		if(root.empty()) {
-			return;
-		}
-		/* Iterate through the entire tree */
-		for(auto &&e : root)
-		{
-			if("pcube" == e.first) { /* Cube node */
-
-				/* Get all the boxes from the node */
-				for(auto &&e1 : e.second)
-				{
-					int i{0};
-					std::array<float, 6> tmp;
-					for(auto &&e2 : e1.second) {
-						tmp[i++] = std::stof(e2.second.data());
-					}
-
-					/* Create the model */
-					models_.push_back(std::make_unique<Cube>(	glm::vec3{tmp[0], tmp[1], tmp[2]},
-																glm::vec3{tmp[3], tmp[4], tmp[5]},
-																textures_));
-				}
-			} else if("acube" == e.first) { /* ACube node */
-
-				/* Get all the boxes and movement points from the node */
-				for(auto &&e1 : e.second)
-				{
-					std::vector<float> tmp;
-					for(auto &&e2: e1.second) {
-						if("" != e2.second.data()) {
-							tmp.push_back(std::stof(e2.second.data()));
-						} else {
-							for(auto &&e3 : e2.second) {
-								for(auto &&e4 : e3.second) {
-									tmp.push_back(std::stof(e4.second.data()));
-								}
-							}
-						}
-					}
-
-					/* Get the movement points */
-					std::vector<glm::vec3> tmp1;
-					for(auto &&it = tmp.begin() + 6; it < tmp.end(); it += 3) {
-						tmp1.push_back(glm::vec3{*it, *(it + 1), *(it + 2)});
-					}
-
-					/* Create the model */
-					models_.push_back(std::make_unique<ACube>(	glm::vec3{tmp[0], tmp[1], tmp[2]},
-																glm::vec3{tmp[3], tmp[4], tmp[5]},
-																std::move(tmp1),
-																textures_));
-				}
-			} else { /* Go with the flow */
-				traverse_ptree(e.second);
-			}
 		}
 	}
 	/* @} */
