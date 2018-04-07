@@ -25,8 +25,6 @@ namespace eRG
 							glm::vec3 urf = {1, 1, 1},
 							std::vector<glm::vec3> &&points = {},
 							const std::vector<std::string> &paths = {});
-			explicit ACube(const ACube &other);
-			explicit ACube(ACube &&other);
 
 			/* Update */
 			void update() override;

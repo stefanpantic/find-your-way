@@ -34,43 +34,9 @@ namespace eRG
 						{urf_.x, urf_.y, urf_.z},
 						{urf_.x, urf_.y, lln_.z}},
 			handles_{eRG::util::generate_texture_array(paths)},
-			tex_{	{{0, 0}, {vertices_[1].z - vertices_[0].z, 0},
-					{vertices_[1].z - vertices_[0].z, vertices_[4].y - vertices_[0].y}, {0, vertices_[4].y - vertices_[0].y}},
-					{{0, 0}, {vertices_[3].x - vertices_[0].x, 0},
-					{vertices_[3].x - vertices_[0].x, vertices_[4].y - vertices_[0].y}, {0, vertices_[4].y - vertices_[0].y}},
-					{{0, 0}, {vertices_[1].z - vertices_[0].z, 0},
-					{vertices_[1].z - vertices_[0].z, vertices_[3].x - vertices_[0].x}, {0, vertices_[3].x - vertices_[0].x}}},
+			tex_{eRG::util::texture_coords(vertices_[0], vertices_[1], vertices_[3], vertices_[4])},
 			use_tex_{(handles_.size() >= 3) ? true : false}
-	{
-		std::clog << "eRG::Cube: Default constructor" << std::endl;
-	}
-
-	/*
-	* @brief Copy constructor.
-	*/
-	Cube::Cube(const Cube &other)
-		:	lln_{other.lln_}, urf_{other.urf_},
-			vertices_{other.vertices_},
-			handles_{other.handles_},
-			tex_{other.tex_},
-			use_tex_{other.use_tex_}
-
-	{
-		std::clog << "eRG::Cube: Copy constructor" << std::endl;
-	}
-
-	/*
-	* @brief Move constructor.
-	*/
-	Cube::Cube(Cube &&other)
-		:	lln_{std::move(other.lln_)}, urf_{std::move(other.urf_)},
-			vertices_{std::move(other.vertices_)},
-			handles_{std::move(other.handles_)},
-			tex_{std::move(other.tex_)},
-			use_tex_{std::move(other.use_tex_)}
-	{
-		std::clog << "eRG::Cube: Move constructor" << std::endl;
-	}
+	{ std::clog << "eRG::Cube: Default constructor" << std::endl; }
 
 	/*
 	* @brief Destructor.

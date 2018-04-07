@@ -22,8 +22,6 @@ namespace eRG
 			explicit Cube( 	glm::vec3 lln = {0, 0, 0},
 							glm::vec3 urf = {1, 1, 1},
 							const std::vector<std::string> &paths = {});
-			explicit Cube(const Cube &other);
-			explicit Cube(Cube &&other);
 			~Cube();
 
 			/* Position */
