@@ -13,18 +13,6 @@ namespace eRG
 
 	/* Scene implementation: */
 	/* @@{ */
-	/* Construction: */
-	/* @{ */
-	/*
-	* TODO: Implement scene constructor.
-	*/
-	Scene::Scene()
-		:	models_{}
-	{
-		std::clog << "eRG::Scene: Default constructor" << std::endl;
-	}
-	/* @} */
-
 	/* Get model: */
 	/* @{ */
 	/*
@@ -34,7 +22,7 @@ namespace eRG
 	{
 		auto bpoint{((pbox.second + pbox.first)/2.0f)};
 
-		for(auto &&e : models_)
+		for(const auto &e : models_)
 		{
 			/* Get the model box */
 			auto model{e->position()};
@@ -66,7 +54,7 @@ namespace eRG
 		/* Colided models */
 		std::vector<const Cube*> colided;
 
-		for(auto &&e : models_)
+		for(const auto &e : models_)
 		{
 			/* Get the model box */
 			auto model{e->position()};
@@ -109,9 +97,9 @@ namespace eRG
 			nlohmann::json tree = nlohmann::json::parse(std::ifstream(path));
 
 			/* Start traversal from root */
-			for(auto &&scene : tree.at("scene"))
+			for(const auto &scene : tree.at("scene"))
 			{
-				for(auto &&e : scene)
+				for(const auto &e : scene)
 				{
 					/* Get the corner points */
 					glm::vec3 lln{e.at("x1"), e.at("y1"), e.at("z1")};
@@ -122,7 +110,7 @@ namespace eRG
 
 					/* If there are movement points place them in a vector */
 					if(e.end() != e.find("movement")) {
-						for(auto &&tripple : e.at("movement")) {
+						for(const auto &tripple : e.at("movement")) {
 							movement.push_back(glm::vec3{tripple[0], tripple[1], tripple[2]});
 						}
 					}
@@ -146,7 +134,7 @@ namespace eRG
 
 		/* Sort all models by y coordinate descending */
 		std::sort(	models_.begin(), models_.end(),
-					[] (auto &&lhs, auto &&rhs) { return lhs->position().second.y > rhs->position().second.y; });
+					[] (const auto &lhs, const auto &rhs) { return lhs->position().second.y > rhs->position().second.y; });
 	}
 	/* @} */
 
@@ -170,7 +158,7 @@ namespace eRG
 	*/
 	void Scene::update()
 	{
-		for(auto &&e : models_) {
+		for(const auto &e : models_) {
 			e->update();
 		}
 	}
@@ -184,7 +172,7 @@ namespace eRG
 	void Scene::render() const
 	{
 		/* N. M. is the Zodiac Killer */
-		for(auto &&e : models_) {
+		for(const auto &e : models_) {
 			e->draw();
 		}
 	}

@@ -7,7 +7,7 @@
 namespace eRG
 {
 
-	/* Forward declaration of eRG::Cube */
+	/* Forward declaration: */
 	class Cube;
 
 	/* Scene declaration: */
@@ -22,9 +22,6 @@ namespace eRG
 
 		/* Public member functions */
 		public:
-			/* Construction */
-			explicit Scene();
-
 			/* Get model */
 			const Cube* below(Box pbox) const;
 			std::vector<const Cube*> aabb(Box pbox) const;
