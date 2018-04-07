@@ -126,7 +126,7 @@ namespace eRG::util
 	*/
 	GLuint generate_texture(const std::string &path)
 	{
-		/* Generate texture handler */
+		/* Generate texture handle */
 		GLuint handle{0};
 		glGenTextures(1, &handle);
 

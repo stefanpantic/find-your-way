@@ -24,9 +24,7 @@ namespace eRG
 			dforward_{0.0f}, dstrafe_{0.0f}, dup_{0.0f},
 			mspd_{0.0f}, lsen_{0.0f},
 			y_base_{0.0f}, jump_base_{0.0f}, jump_{0.0f}, gravity_{util::pi/50}
-	{
-		std::clog << "eRG::View: Default contructor" << std::endl;
-	}
+	{ std::clog << "eRG::View: Default contructor" << std::endl; }
 
 	/* Set look at: */
 	/* @{ */
