@@ -1,18 +1,16 @@
 #pragma once
 
-#include <string>
+#include <iostream>
 
 namespace eRG
 {
 
-	/* Forward declaration of eRG::View */
+	/* Forward declarations: */
+	/* @{ */
 	class View;
-
-	/* Forward declaration of eRG::Scene */
 	class Scene;
-
-	/* Forward declaration of eRG::Cube */
 	class Cube;
+	/* @} */
 
 	/* Hub declaration: */
 	/* @{ */
