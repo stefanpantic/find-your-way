@@ -1,4 +1,4 @@
-# &#955;: Find Your Way (RG061)
+# &#955;: Find Your Way
 
 **TL;DR:** Independent project in Computer Graphics college course using OpenGL/GLUT and some GLM convenience   
 classes. Done in C++.  
@@ -8,7 +8,7 @@ classes. Done in C++.
 ## :movie_camera: Preview:
 **Date:** 01-02-2018  
 
-![preview](https://github.com/MATF-RG17/RG061-find-your-way/blob/master/sample/01-02-2018.gif) 
+![preview](https://github.com/stefanpantic/find-your-way/blob/master/sample/01-02-2018.gif) 
 
 ## :computer: Installation:
 Just run <code>./start.sh</code> from the project directory. This will compile the project if needed and then start it with the default map/textures.   
