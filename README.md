@@ -1,13 +1,9 @@
 # &#955;: Find Your Way (RG061)
 
-## :information_source: About:
-**Author:** Stefan Pantic.  
-**Contact:** stefanpantic13@gmail.com   
-<br>
 **TL;DR:** Independent project in Computer Graphics college course using OpenGL/GLUT and some GLM convenience   
 classes. Done in C++.  
-<br>
-**Description:** *Find Your Way* is a platformer styled first person game. The goal is to find a way to the end of each level using several abilities at your disposal that include slowing down time, blinking and super jump. At one point I'm hoping to add mobs that will try to hinder your progess, as well as abilities to fend them off. The project is being written in C++ using older OpenGL/GLUT and some GLM classes for convenience. If time allows it, a port to modern OpenGL is not out of the question. This is my first larger C++ project. Any criticism and/or suggestions are more than welcome. :)  
+
+*Find Your Way* is a platformer styled first person game. The goal is to find a way to the end of each level using several abilities at your disposal that include slowing down time, blinking and super jump. At one point I'm hoping to add mobs that will try to hinder your progess, as well as abilities to fend them off. The project is being written in C++ using older OpenGL/GLUT and some GLM classes for convenience. If time allows it, a port to modern OpenGL is not out of the question. This is my first larger C++ project. Any criticism and/or suggestions are more than welcome. :)  
 
 ## :movie_camera: Preview:
 **Date:** 01-02-2018  
@@ -48,4 +44,6 @@ Ubuntu:
 **NOTE:** This section has been moved to the [wiki page](https://github.com/MATF-RG17/RG061-find-your-way/wiki/Progress-reports-and-change-log).
 
 
-
+## :information_source: About me:
+**Author:** Stefan Pantic.  
+**Contact:** stefanpantic13@gmail.com   
