@@ -41,7 +41,7 @@ Ubuntu:
 
 
 ## :clock1030: Progress reports and change log:
-**NOTE:** This section has been moved to the [wiki page](https://github.com/MATF-RG17/RG061-find-your-way/wiki/Progress-reports-and-change-log).
+**NOTE:** This section has been moved to the [wiki page](https://github.com/stefanpantic/find-your-way/wiki/Progress-reports-and-change-logs).
 
 
 ## :information_source: About me:
