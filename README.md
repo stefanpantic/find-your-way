@@ -1,8 +1,5 @@
 # &#955;: Find Your Way
 
-**TL;DR:** Independent project in Computer Graphics college course using OpenGL/GLUT and some GLM convenience   
-classes. Done in C++.  
-
 *Find Your Way* is a platformer styled first person game. The goal is to find a way to the end of each level using several abilities at your disposal that include slowing down time, blinking and super jump. At one point I'm hoping to add mobs that will try to hinder your progess, as well as abilities to fend them off. The project is being written in C++ using older OpenGL/GLUT and some GLM classes for convenience. If time allows it, a port to modern OpenGL is not out of the question. This is my first larger C++ project. Any criticism and/or suggestions are more than welcome. :)  
 
 ## :movie_camera: Preview:
